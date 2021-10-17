@@ -6,7 +6,7 @@
     android:background="@drawable/bottom_sheet_round"
     android:orientation="vertical"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="50dp"
+    app:behavior_peekHeight="55dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <RelativeLayout
@@ -17,8 +17,22 @@
         <RelativeLayout
             android:id="@+id/bottom_sheet_title_bar"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
-
+            android:layout_height="55dp">
+            <Button
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/bottom_play_default"
+                android:layout_centerInParent="true"/>
+            <Button
+                android:id="@+id/bottom_upanddown"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/bottom_up"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="30dp"/>
         </RelativeLayout>
 
         <View
@@ -28,7 +42,7 @@
             android:layout_below="@+id/bottom_sheet_title_bar" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/sheetlist"
+            android:id="@+id/bottom_recyclerview"
             android:layout_below="@+id/vivi"
             android:layout_width="wrap_content"
             android:layout_height="300dp"/>

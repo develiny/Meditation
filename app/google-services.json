@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "118034236743",
+    "project_id": "meditation-7c5e1",
+    "storage_bucket": "meditation-7c5e1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118034236743:android:ef4d4549a17dba2197b862",
+        "android_client_info": {
+          "package_name": "com.develiny.meditation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "118034236743-tb4g5oftcgn8a85dlfjuib0bo6c16a8e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.develiny.meditation",
+            "certificate_hash": "8cdb44d6b40aef1da81704b09ca631279ca78e6a"
+          }
+        },
+        {
+          "client_id": "118034236743-sp6h0rc40bqstk3use3sbtpeaujq19vf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNcsQyc_atZZJDHxv24tkSigy3WYzDhZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "118034236743-sp6h0rc40bqstk3use3sbtpeaujq19vf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
