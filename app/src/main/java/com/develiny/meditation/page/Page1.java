@@ -1,5 +1,6 @@
 package com.develiny.meditation.page;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.develiny.meditation.R;
+import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.page.adapter.PageAdapter;
 import com.develiny.meditation.page.item.PageItem;
 
@@ -23,7 +25,7 @@ public class Page1 extends Fragment {
     RecyclerView recyclerView;
     ArrayList<PageItem> arrayList = new ArrayList<>();
     RecyclerView.LayoutManager layoutManager;
-    PageItem pageItem;
+    DatabaseHandler databaseHandler;
 
     @Nullable
     @Override
@@ -41,15 +43,9 @@ public class Page1 extends Fragment {
     }
 
     private void setRecyclerView() {
-        arrayList.add(pageItem);
-        arrayList.add(pageItem);
-        arrayList.add(pageItem);
-        arrayList.add(pageItem);
-        arrayList.add(pageItem);
-        arrayList.add(pageItem);
-        arrayList.add(pageItem);
-        arrayList.add(pageItem);
-        arrayList.add(pageItem);
+        databaseHandler.setDB(getActivity());
+        databaseHandler = new DatabaseHandler(getActivity());
+        arrayList = databaseHandler.page1List();
         PageAdapter adapter = new PageAdapter(arrayList);
         layoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(layoutManager);

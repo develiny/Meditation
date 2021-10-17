@@ -1,9 +1,13 @@
 package com.develiny.meditation.page.adapter;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.ToggleButton;
 
@@ -25,7 +29,7 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
 
     @NonNull
     @Override
-    public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int position) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.page_item, parent, false);
         CustomViewHolder holder = new CustomViewHolder(view);
 
@@ -34,7 +38,9 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
 
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
-
+        Bitmap bitmap = BitmapFactory.decodeByteArray(arrayList.get(position).getImg(), 0, arrayList.get(position).getImg().length);
+        holder.button.setImageBitmap(bitmap);
+        holder.seekBar.setProgress(arrayList.get(position).getSeek());
     }
 
     @Override
@@ -43,7 +49,7 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
     }
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
-        ToggleButton button;
+        ImageView button;
         SeekBar seekBar;
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
