@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
@@ -15,8 +16,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.page.Page1;
 import com.develiny.meditation.page.Page2;
+import com.develiny.meditation.page.adapter.BottomSheetAdapter;
+import com.develiny.meditation.page.item.PageItem;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.io.IOException;
@@ -31,17 +35,27 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout bottomSheetTitleBar;
     BottomSheetBehavior bottomSheetBehavior;
     LinearLayout linearLayout;
-    Button upAndDown;
-    RecyclerView bottomRecyclerView;
+    Button upAndDown, deletePlayingList;
+    public static RecyclerView bottomRecyclerView;
+    public static BottomSheetAdapter bottomSheetAdapter;
+    public static ArrayList<PageItem> playingList = new ArrayList<>();
+    RecyclerView.LayoutManager layoutManager;
+    DatabaseHandler databaseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setDatabaseHandler();
         setViewPager();
         setButtonSheet();
 
+    }
+
+    private void setDatabaseHandler() {
+        databaseHandler.setDB(MainActivity.this);
+        databaseHandler = new DatabaseHandler(MainActivity.this);
     }
 
     private void setViewPager() {
@@ -94,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
     private void setButtonSheet() {
         this.bottomSheetTitleBar = findViewById(R.id.bottom_sheet_title_bar);
         this.upAndDown = findViewById(R.id.bottom_upanddown);
+        this.deletePlayingList = findViewById(R.id.bottom_delete_playing_list);
         this.bottomRecyclerView = findViewById(R.id.bottom_recyclerview);
         linearLayout = findViewById(R.id.bottom_sheet_id);
         bottomSheetBehavior = BottomSheetBehavior.from(linearLayout);
@@ -121,6 +136,19 @@ public class MainActivity extends AppCompatActivity {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     upAndDown.setBackgroundResource(R.drawable.bottom_down);
                 }
+            }
+        });
+
+        playingList = databaseHandler.playingList();
+        bottomSheetAdapter = new BottomSheetAdapter(playingList, MainActivity.this);
+        layoutManager = new LinearLayoutManager(MainActivity.this);
+        bottomRecyclerView.setLayoutManager(layoutManager);
+        bottomRecyclerView.setAdapter(bottomSheetAdapter);
+
+        deletePlayingList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                databaseHandler.deletePlayingList();
             }
         });
     }

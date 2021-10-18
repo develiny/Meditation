@@ -1,11 +1,15 @@
 package com.develiny.meditation.databasehandler;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
+import com.develiny.meditation.MainActivity;
+import com.develiny.meditation.page.adapter.BottomSheetAdapter;
 import com.develiny.meditation.page.item.PageItem;
 
 import java.io.File;
@@ -30,13 +34,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public static final String COLUMN_PAGE = "page";
     public static final String COLUMN_POSITION = "position";
-    public static final String COLUMN_IMAGE = "image";
+    public static final String COLUMN_IMGDEFAULT = "imgdefault";
+    public static final String COLUMN_IMAGE = "img";
     public static final String COLUMN_SEEK = "seek";
+    public static final String COLUMN_ISPLAY = "isplay";
 
-    private static final String FAV_TEAM = "create table if not exists " + FAV_TABLE_NAME + "(" + COLUMN_PAGE + " INTEGER," + COLUMN_POSITION + " INTEGER," + COLUMN_IMAGE + " BLOB," + COLUMN_SEEK + " INTEGER" + ");";
-    private static final String PLAYING_TEAM = "create table if not exists " + PLAYING_TABLE_NAME + "(" + COLUMN_PAGE + " INTEGER," + COLUMN_POSITION + " INTEGER," + COLUMN_IMAGE + " BLOB," + COLUMN_SEEK + " INTEGER" + ");";
-    private static final String RAIN_TEAM = "create table if not exists " + RAIN_TABLE_NAME + "(" + COLUMN_PAGE + " INTEGER," + COLUMN_POSITION + " INTEGER," + COLUMN_IMAGE + " BLOB," + COLUMN_SEEK + " INTEGER" + ");";
-    private static final String WIND_TEAM = "create table if not exists " + WIND_TABLE_NAME + "(" + COLUMN_PAGE + " INTEGER," + COLUMN_POSITION + " INTEGER," + COLUMN_IMAGE + " BLOB," + COLUMN_SEEK + " INTEGER" + ");";
+    private static final String FAV_TEAM = "create table if not exists " + FAV_TABLE_NAME + "(" + COLUMN_PAGE + " INTEGER," + COLUMN_POSITION + " INTEGER," + COLUMN_IMGDEFAULT + " BLOB," + COLUMN_IMAGE + " BLOB," + COLUMN_SEEK + " INTEGER," + COLUMN_ISPLAY + " INTEGER" + ");";
+    private static final String PLAYING_TEAM = "create table if not exists " + FAV_TABLE_NAME + "(" + COLUMN_PAGE + " INTEGER," + COLUMN_POSITION + " INTEGER," + COLUMN_IMGDEFAULT + " BLOB," + COLUMN_IMAGE + " BLOB," + COLUMN_SEEK + " INTEGER," + COLUMN_ISPLAY + " INTEGER" + ");";
+    private static final String RAIN_TEAM = "create table if not exists " + FAV_TABLE_NAME + "(" + COLUMN_PAGE + " INTEGER," + COLUMN_POSITION + " INTEGER," + COLUMN_IMGDEFAULT + " BLOB," + COLUMN_IMAGE + " BLOB," + COLUMN_SEEK + " INTEGER," + COLUMN_ISPLAY + " INTEGER" + ");";
+    private static final String WIND_TEAM = "create table if not exists " + FAV_TABLE_NAME + "(" + COLUMN_PAGE + " INTEGER," + COLUMN_POSITION + " INTEGER," + COLUMN_IMGDEFAULT + " BLOB," + COLUMN_IMAGE + " BLOB," + COLUMN_SEEK + " INTEGER," + COLUMN_ISPLAY + " INTEGER" + ");";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -101,6 +107,52 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
     }
 
+    public ArrayList<PageItem> playingList() {
+        PageItem pageItem = null;
+        ArrayList<PageItem> pageItems = new ArrayList<>();
+
+        openDatabase();
+        String sql = "SELECT * FROM playing";
+        Cursor cursor = sqLiteDatabase.rawQuery(sql, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            pageItem = new PageItem(cursor.getInt(0), cursor.getInt(1), cursor.getBlob(2), cursor.getBlob(3), cursor.getInt(4), cursor.getInt(5));
+            pageItems.add(pageItem);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        closeDatabse();
+        return pageItems;
+    }
+
+    public void deletePlayingList() {
+        sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.execSQL("delete from playing");
+    }
+
+    //기존 isplay를 1로 바꾸기
+    public void setPlay1(int page, int position) {
+        sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.execSQL("update " + getPageName(page) + " set isplay = 1 where isplay = 2");
+        setPlay2(page, position);
+    }
+
+    //재생시킬 isplay를 2로 바꾸기
+    public void setPlay2(int page, int position) {
+        sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.execSQL("update " + getPageName(page) + " set isplay = 2 where position = " + position);
+    }
+
+    //재생시킬거를 playing table에 넣기
+    public void setPlay3(int page, int position) {
+        sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.execSQL("insert into playing select * from " + getPageName(page) + " where position = " + position);
+        MainActivity.playingList.clear();
+        MainActivity.playingList = playingList();
+//        MainActivity.bottomRecyclerView.invalidate();
+        MainActivity.bottomSheetAdapter.notifyDataSetChanged();
+    }
+
     public ArrayList<PageItem> rainList() {
         PageItem pageItem = null;
         ArrayList<PageItem> pageItems = new ArrayList<>();
@@ -110,7 +162,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = sqLiteDatabase.rawQuery(sql, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            pageItem = new PageItem(cursor.getInt(0), cursor.getInt(1), cursor.getBlob(2), cursor.getInt(3), cursor.getInt(4));
+            pageItem = new PageItem(cursor.getInt(0), cursor.getInt(1), cursor.getBlob(2), cursor.getBlob(3), cursor.getInt(4), cursor.getInt(5));
             pageItems.add(pageItem);
             cursor.moveToNext();
         }
@@ -128,12 +180,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = sqLiteDatabase.rawQuery(sql, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            pageItem = new PageItem(cursor.getInt(0), cursor.getInt(1), cursor.getBlob(2), cursor.getInt(3), cursor.getInt(4));
+            pageItem = new PageItem(cursor.getInt(0), cursor.getInt(1), cursor.getBlob(2), cursor.getBlob(3), cursor.getInt(4), cursor.getInt(5));
             pageItems.add(pageItem);
             cursor.moveToNext();
         }
         cursor.close();
         closeDatabse();
         return pageItems;
+    }
+
+    String getPageName(int page) {
+        if(page == 1) {
+            return "rain";
+        } else if (page == 2) {
+            return "wind";
+        } else {
+            return "nul";
+        }
     }
 }

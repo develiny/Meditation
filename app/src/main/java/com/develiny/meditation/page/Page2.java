@@ -48,7 +48,7 @@ public class Page2 extends Fragment {
 
     private void setRecyclerView() {
         arrayList = databaseHandler.windList();
-        PageAdapter adapter = new PageAdapter(arrayList);
+        PageAdapter adapter = new PageAdapter(arrayList, getActivity());
         layoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);

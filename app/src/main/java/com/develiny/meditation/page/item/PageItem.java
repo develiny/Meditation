@@ -3,6 +3,7 @@ package com.develiny.meditation.page.item;
 public class PageItem {
     int page;
     int position;
+    byte[] imgdefault;
     byte[] img;
     int seek;
     int isplay;
@@ -11,9 +12,10 @@ public class PageItem {
 
     }
 
-    public PageItem(int page, int position, byte[] img, int seek, int isplay) {
+    public PageItem(int page, int position, byte[] imgdefault, byte[] img, int seek, int isplay) {
         this.page = page;
         this.position = position;
+        this.imgdefault = imgdefault;
         this.img = img;
         this.seek = seek;
         this.isplay = isplay;
@@ -58,5 +60,13 @@ public class PageItem {
 
     public void setIsplay(int isplay) {
         this.isplay = isplay;
+    }
+
+    public byte[] getImgdefault() {
+        return imgdefault;
+    }
+
+    public void setImgdefault(byte[] imgdefault) {
+        this.imgdefault = imgdefault;
     }
 }
