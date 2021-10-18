@@ -8,11 +8,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="30dp"
-        android:background="#E8BBBB">
+        android:background="@drawable/page_container"
+        android:elevation="15dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/page1_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"/>
     </RelativeLayout>
 </RelativeLayout>

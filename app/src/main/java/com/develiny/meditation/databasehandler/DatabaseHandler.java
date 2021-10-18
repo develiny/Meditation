@@ -23,13 +23,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "list.sqlite";
     public static final String DBLOCATION = "/data/data/com.develiny.meditation/databases/";
 
-    private static final String TABLE_NAME = "list1";
+    private static final String FAV_TABLE_NAME = "fav";
+    private static final String PLAYING_TABLE_NAME = "playing";
+    private static final String RAIN_TABLE_NAME = "rain";
+    private static final String WIND_TABLE_NAME = "wind";
 
-    public static final String COLUMN_INDEX = "position";
+    public static final String COLUMN_PAGE = "page";
+    public static final String COLUMN_POSITION = "position";
     public static final String COLUMN_IMAGE = "image";
     public static final String COLUMN_SEEK = "seek";
 
-    private static final String PAGE1_TEAM = "create table if not exists " + TABLE_NAME + "(" + COLUMN_INDEX + " INTEGER," + COLUMN_IMAGE + " BLOB," + COLUMN_SEEK + " INTEGER" + ");";
+    private static final String FAV_TEAM = "create table if not exists " + FAV_TABLE_NAME + "(" + COLUMN_PAGE + " INTEGER," + COLUMN_POSITION + " INTEGER," + COLUMN_IMAGE + " BLOB," + COLUMN_SEEK + " INTEGER" + ");";
+    private static final String PLAYING_TEAM = "create table if not exists " + PLAYING_TABLE_NAME + "(" + COLUMN_PAGE + " INTEGER," + COLUMN_POSITION + " INTEGER," + COLUMN_IMAGE + " BLOB," + COLUMN_SEEK + " INTEGER" + ");";
+    private static final String RAIN_TEAM = "create table if not exists " + RAIN_TABLE_NAME + "(" + COLUMN_PAGE + " INTEGER," + COLUMN_POSITION + " INTEGER," + COLUMN_IMAGE + " BLOB," + COLUMN_SEEK + " INTEGER" + ");";
+    private static final String WIND_TEAM = "create table if not exists " + WIND_TABLE_NAME + "(" + COLUMN_PAGE + " INTEGER," + COLUMN_POSITION + " INTEGER," + COLUMN_IMAGE + " BLOB," + COLUMN_SEEK + " INTEGER" + ");";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -59,18 +66,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 fo.close();
             } else {
             }
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(PAGE1_TEAM);
+        sqLiteDatabase.execSQL(FAV_TEAM);
+        sqLiteDatabase.execSQL(PLAYING_TEAM);
+        sqLiteDatabase.execSQL(RAIN_TEAM);
+        sqLiteDatabase.execSQL(WIND_TEAM);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE " + TABLE_NAME);
-        sqLiteDatabase.execSQL(PAGE1_TEAM);
+        sqLiteDatabase.execSQL("DROP TABLE " + FAV_TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE " + PLAYING_TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE " + RAIN_TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE " + WIND_TABLE_NAME);
+        sqLiteDatabase.execSQL(RAIN_TEAM);
     }
 
     public void openDatabase() {
@@ -82,21 +96,39 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void closeDatabse() {
-        if(sqLiteDatabase != null) {
+        if (sqLiteDatabase != null) {
             sqLiteDatabase.close();
         }
     }
 
-    public ArrayList<PageItem> page1List() {
+    public ArrayList<PageItem> rainList() {
         PageItem pageItem = null;
         ArrayList<PageItem> pageItems = new ArrayList<>();
 
         openDatabase();
-        String sql = "SELECT * FROM list1";
+        String sql = "SELECT * FROM rain";
         Cursor cursor = sqLiteDatabase.rawQuery(sql, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            pageItem = new PageItem(cursor.getInt(0), cursor.getBlob(1), cursor.getInt(2));
+            pageItem = new PageItem(cursor.getInt(0), cursor.getInt(1), cursor.getBlob(2), cursor.getInt(3), cursor.getInt(4));
+            pageItems.add(pageItem);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        closeDatabse();
+        return pageItems;
+    }
+
+    public ArrayList<PageItem> windList() {
+        PageItem pageItem = null;
+        ArrayList<PageItem> pageItems = new ArrayList<>();
+
+        openDatabase();
+        String sql = "SELECT * FROM wind";
+        Cursor cursor = sqLiteDatabase.rawQuery(sql, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            pageItem = new PageItem(cursor.getInt(0), cursor.getInt(1), cursor.getBlob(2), cursor.getInt(3), cursor.getInt(4));
             pageItems.add(pageItem);
             cursor.moveToNext();
         }

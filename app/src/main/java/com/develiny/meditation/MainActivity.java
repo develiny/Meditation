@@ -103,8 +103,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    upAndDown.setBackgroundResource(R.drawable.bottom_up);
                 } else if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    upAndDown.setBackgroundResource(R.drawable.bottom_down);
                 }
             }
         });
@@ -122,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
         ArrayList<Fragment> items = new ArrayList<Fragment>();

@@ -7,13 +7,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#BDBDBD"
-        android:layout_margin="30dp">
+        android:layout_margin="30dp"
+        android:background="@drawable/page_container"
+        android:elevation="15dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="fragment2" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/page2_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"/>
     </RelativeLayout>
 </RelativeLayout>

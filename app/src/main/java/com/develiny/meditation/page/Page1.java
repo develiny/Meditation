@@ -33,6 +33,7 @@ public class Page1 extends Fragment {
         final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.page1, container, false);
 
         setInit(rootView);
+        setDatabaseHandler();
         setRecyclerView();
 
         return rootView;
@@ -42,10 +43,13 @@ public class Page1 extends Fragment {
         recyclerView = rootView.findViewById(R.id.page1_recyclerview);
     }
 
-    private void setRecyclerView() {
+    private void setDatabaseHandler() {
         databaseHandler.setDB(getActivity());
         databaseHandler = new DatabaseHandler(getActivity());
-        arrayList = databaseHandler.page1List();
+    }
+
+    private void setRecyclerView() {
+        arrayList = databaseHandler.rainList();
         PageAdapter adapter = new PageAdapter(arrayList);
         layoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(layoutManager);
