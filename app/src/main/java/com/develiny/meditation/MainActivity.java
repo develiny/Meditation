@@ -113,8 +113,6 @@ public class MainActivity extends AppCompatActivity {
         linearLayout = findViewById(R.id.bottom_sheet_id);
         bottomSheetBehavior = BottomSheetBehavior.from(linearLayout);
 
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);//열어놓기
-
         bottomSheetTitleBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

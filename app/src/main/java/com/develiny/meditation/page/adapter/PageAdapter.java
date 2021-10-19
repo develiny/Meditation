@@ -67,13 +67,11 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                     MainActivity.playingList.add(arrayList.get(positions));
                     databaseHandler.setPlay1(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
                     MainActivity.bottomSheetAdapter.notifyItemInserted(MainActivity.playingList.size());
-                    Log.d(">>>", Integer.toString(MainActivity.playingList.size()));
                 } else {
                     databaseHandler.deletePlayingList(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
                     MainActivity.playingList.remove(arrayList.get(positions));
-                    MainActivity.bottomSheetAdapter.notifyItemRemoved(MainActivity.playingList.indexOf(arrayList.get(positions)));
+                    MainActivity.bottomSheetAdapter.notifyDataSetChanged();
                     arrayList.get(positions).setIsplay(1);
-                    Log.d(">>>", Integer.toString(MainActivity.playingList.size()));
                 }
             }
         });
