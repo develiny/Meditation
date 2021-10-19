@@ -3,6 +3,7 @@ package com.develiny.meditation.page.item;
 public class PageItem {
     int page;
     int position;
+    String pnp;
     byte[] imgdefault;
     byte[] img;
     int seek;
@@ -12,9 +13,10 @@ public class PageItem {
 
     }
 
-    public PageItem(int page, int position, byte[] imgdefault, byte[] img, int seek, int isplay) {
+    public PageItem(int page, int position, String pnp, byte[] imgdefault, byte[] img, int seek, int isplay) {
         this.page = page;
         this.position = position;
+        this.pnp = pnp;
         this.imgdefault = imgdefault;
         this.img = img;
         this.seek = seek;
@@ -68,5 +70,13 @@ public class PageItem {
 
     public void setImgdefault(byte[] imgdefault) {
         this.imgdefault = imgdefault;
+    }
+
+    public String getPnp() {
+        return pnp;
+    }
+
+    public void setPnp(String pnp) {
+        this.pnp = pnp;
     }
 }

@@ -14,6 +14,7 @@ import android.widget.SeekBar;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.develiny.meditation.R;
@@ -75,5 +76,14 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
             this.seekBar = itemView.findViewById(R.id.playing_item_seekbar);
             this.btn = itemView.findViewById(R.id.playing_item_btn);
         }
+    }
+
+    public void updateBottomSheetAdapter(ArrayList<PageItem> lists) {
+        final MyDiffUtilCallBack myDiffUtilCallBack = new MyDiffUtilCallBack(this.arrayList, lists);
+        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(myDiffUtilCallBack);
+
+        this.arrayList.clear();
+        this.arrayList.addAll(lists);
+        diffResult.dispatchUpdatesTo(this);
     }
 }

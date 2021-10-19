@@ -16,6 +16,7 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.page.item.PageItem;
@@ -52,13 +53,28 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                databaseHandler = new DatabaseHandler(context);
                 if (arrayList.get(positions).getIsplay() == 1) {
-                    databaseHandler = new DatabaseHandler(context);
-                    databaseHandler.setPlay3(arrayList.get(positions).getPage(),
-                            arrayList.get(positions).getPosition());
+                    for(int i = 0; i < arrayList.size(); i++) {
+                        int isplay = arrayList.get(i).getIsplay();
+                        if (isplay == 2) {
+                            MainActivity.playingList.remove(arrayList.get(i));
+                            MainActivity.bottomSheetAdapter.notifyItemRemoved(MainActivity.playingList.indexOf(arrayList.get(i)));
+                            arrayList.get(i).setIsplay(1);
+                        }
+                    }
+                    arrayList.get(positions).setIsplay(2);
+                    MainActivity.playingList.add(arrayList.get(positions));
+                    databaseHandler.setPlay1(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
+                    MainActivity.bottomSheetAdapter.notifyItemInserted(MainActivity.playingList.size());
+                    Log.d(">>>", Integer.toString(MainActivity.playingList.size()));
+                } else {
+                    databaseHandler.deletePlayingList(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
+                    MainActivity.playingList.remove(arrayList.get(positions));
+                    MainActivity.bottomSheetAdapter.notifyItemRemoved(MainActivity.playingList.indexOf(arrayList.get(positions)));
+                    arrayList.get(positions).setIsplay(1);
+                    Log.d(">>>", Integer.toString(MainActivity.playingList.size()));
                 }
-//                byte[] b = arrayList.get(positions).getImgdefault();
-//                Log.d(">>>", "position: " + b);
             }
         });
     }
