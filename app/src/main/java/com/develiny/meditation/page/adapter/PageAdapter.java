@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
+import com.develiny.meditation.audiocontroller.AudioController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.page.item.PageItem;
 
@@ -58,8 +59,9 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                     for(int i = 0; i < arrayList.size(); i++) {
                         int isplay = arrayList.get(i).getIsplay();
                         if (isplay == 2) {
+                            int index = MainActivity.playingList.indexOf(arrayList.get(i));
                             MainActivity.playingList.remove(arrayList.get(i));
-                            MainActivity.bottomSheetAdapter.notifyItemRemoved(MainActivity.playingList.indexOf(arrayList.get(i)));
+                            MainActivity.bottomSheetAdapter.notifyItemRemoved(index);
                             arrayList.get(i).setIsplay(1);
                         }
                     }
@@ -67,10 +69,12 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                     MainActivity.playingList.add(arrayList.get(positions));
                     databaseHandler.setPlay1(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
                     MainActivity.bottomSheetAdapter.notifyItemInserted(MainActivity.playingList.size());
+//                    AudioController.startTrack(context, arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
                 } else {
+                    int index = MainActivity.playingList.indexOf(arrayList.get(positions));
                     databaseHandler.deletePlayingList(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
                     MainActivity.playingList.remove(arrayList.get(positions));
-                    MainActivity.bottomSheetAdapter.notifyDataSetChanged();
+                    MainActivity.bottomSheetAdapter.notifyItemRemoved(index);
                     arrayList.get(positions).setIsplay(1);
                 }
             }
