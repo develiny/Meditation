@@ -1,6 +1,7 @@
 package com.develiny.meditation.page;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,9 @@ import java.util.ArrayList;
 
 public class Page1 extends Fragment {
 
+    public static MediaPlayer p1p1_1, p1p1_2;
+    public static MediaPlayer p1p2_1, p1p2_2;
+
     RecyclerView recyclerView;
     ArrayList<PageItem> arrayList = new ArrayList<>();
     RecyclerView.LayoutManager layoutManager;
@@ -32,11 +36,20 @@ public class Page1 extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.page1, container, false);
 
+        setAudio();
+
         setInit(rootView);
         setDatabaseHandler();
         setRecyclerView();
 
         return rootView;
+    }
+
+    private void setAudio() {
+        p1p1_1 = MediaPlayer.create(getActivity(), R.raw.p1p1);
+        p1p1_2 = MediaPlayer.create(getActivity(), R.raw.p1p1);
+        p1p2_1 = MediaPlayer.create(getActivity(), R.raw.p1p2);
+        p1p2_2 = MediaPlayer.create(getActivity(), R.raw.p1p2);
     }
 
     private void setInit(ViewGroup rootView) {

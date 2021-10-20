@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
 import com.develiny.meditation.audiocontroller.AudioController;
+import com.develiny.meditation.audiocontroller.P1Controller;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.page.item.PageItem;
 
@@ -69,13 +70,14 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                     MainActivity.playingList.add(arrayList.get(positions));
                     databaseHandler.setPlay1(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
                     MainActivity.bottomSheetAdapter.notifyItemInserted(MainActivity.playingList.size());
-//                    AudioController.startTrack(context, arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
+                    AudioController.startTrack(context, arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
                 } else {
                     int index = MainActivity.playingList.indexOf(arrayList.get(positions));
                     databaseHandler.deletePlayingList(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
                     MainActivity.playingList.remove(arrayList.get(positions));
                     MainActivity.bottomSheetAdapter.notifyItemRemoved(index);
                     arrayList.get(positions).setIsplay(1);
+                    stopPage(arrayList.get(positions).getPage());
                 }
             }
         });
@@ -94,6 +96,12 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
             super(itemView);
             this.button = itemView.findViewById(R.id.page_item_toggle_button);
             this.seekBar = itemView.findViewById(R.id.page_item_seekbar);
+        }
+    }
+
+    private void stopPage(int page) {
+        if (page == 1) {
+            P1Controller.stopPage1();
         }
     }
 }

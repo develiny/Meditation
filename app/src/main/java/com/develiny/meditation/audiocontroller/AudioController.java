@@ -5,20 +5,18 @@ import android.media.MediaPlayer;
 
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
+import com.develiny.meditation.notification.NotificationService;
+import com.develiny.meditation.page.Page1;
 import com.develiny.meditation.page.adapter.BottomSheetAdapter;
 
 public class AudioController {
 
     public static void startTrack(Context context, int page, int position) {
 
-        MediaPlayer p1p1 = MediaPlayer.create(context, R.raw.p1p1);
-        MediaPlayer p1p2 = MediaPlayer.create(context, R.raw.p1p2);
-        MediaPlayer p2p1 = MediaPlayer.create(context, R.raw.p2p1);
-        MediaPlayer p2p2 = MediaPlayer.create(context, R.raw.p2p2);
-
         if (page == 1) {
             if (position == 1) {
-//                p1p1.start();
+                Page1.p1p1_1.start();
+                new P1Controller.p1p1t1().start();
             } else if (position == 2) {
 
             }
@@ -37,5 +35,9 @@ public class AudioController {
         } else {
             return false;
         }
+    }
+
+    public void openNotification(Context context, int page, int position) {
+
     }
 }

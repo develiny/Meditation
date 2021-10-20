@@ -46,7 +46,7 @@ public class NotificationService extends Service {
         super.onDestroy();
     }
 
-    public void startForgroundService (Context context) {
+    public void startForgroundService(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             MediaSessionCompat mediaSessionCompat = new MediaSessionCompat(context, "tag");
             Bitmap icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.main_head);
