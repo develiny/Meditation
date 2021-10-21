@@ -16,8 +16,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.develiny.meditation.audiocontroller.AudioController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
+import com.develiny.meditation.notification.DefaultNofitication;
 import com.develiny.meditation.notification.NotificationService;
 import com.develiny.meditation.page.Page1;
 import com.develiny.meditation.page.Page2;
@@ -27,6 +30,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout bottomSheetTitleBar;
     BottomSheetBehavior bottomSheetBehavior;
     LinearLayout linearLayout;
-    Button upAndDown, deletePlayingList;
+    Button pands, upAndDown, deletePlayingList;
     public static RecyclerView bottomRecyclerView;
     public static BottomSheetAdapter bottomSheetAdapter;
     public static ArrayList<PageItem> playingList = new ArrayList<>();
@@ -109,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setButtonSheet() {
         this.bottomSheetTitleBar = findViewById(R.id.bottom_sheet_title_bar);
+        this.pands = findViewById(R.id.bottom_sheet_pands);
         this.upAndDown = findViewById(R.id.bottom_upanddown);
         this.deletePlayingList = findViewById(R.id.bottom_delete_playing_list);
         this.bottomRecyclerView = findViewById(R.id.bottom_recyclerview);
@@ -124,6 +129,37 @@ public class MainActivity extends AppCompatActivity {
                 } else if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     upAndDown.setBackgroundResource(R.drawable.bottom_down);
+                }
+            }
+        });
+
+        pands.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (MainActivity.playingList.size() == 0) {
+                    Toast.makeText(MainActivity.this, "null play list", Toast.LENGTH_SHORT).show();
+                } else {
+                    if(NotificationService.isPlaying) {
+                        List<Integer> page = new ArrayList<>();
+                        for (int i = 0; i < MainActivity.playingList.size(); i++) {
+                            page.add(MainActivity.playingList.get(i).getPage());
+                            if(i == MainActivity.playingList.size() - 1) {
+                                Intent intent = new Intent(MainActivity.this, NotificationService.class);
+                                stopService(intent);
+                                NotificationService.stopPlayingList(page);
+                                DefaultNofitication.defauleNotification(MainActivity.this);
+                            }
+                        }
+                    } else {
+                        List<String> pp = new ArrayList<>();
+                        for (int i = 0; i < MainActivity.playingList.size(); i++) {
+                            pp.add(MainActivity.playingList.get(i).getPnp());
+                            if (i == MainActivity.playingList.size() - 1) {
+                                //playinglist start
+                                AudioController.startPlayingList(MainActivity.this, pp);
+                            }
+                        }
+                    }
                 }
             }
         });
