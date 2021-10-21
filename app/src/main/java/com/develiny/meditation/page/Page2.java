@@ -1,5 +1,6 @@
 package com.develiny.meditation.page;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,9 @@ import java.util.ArrayList;
 
 public class Page2 extends Fragment {
 
+    public static MediaPlayer p2p1_1, p2p1_2;
+    public static MediaPlayer p2p2_1, p2p2_2;
+
     RecyclerView recyclerView;
     ArrayList<PageItem> arrayList = new ArrayList<>();
     RecyclerView.LayoutManager layoutManager;
@@ -30,11 +34,20 @@ public class Page2 extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.page2, container, false);
 
+        setAudio();
+
         setInit(rootView);
         setDatabaseHandler();
         setRecyclerView();
 
         return rootView;
+    }
+
+    private void setAudio() {
+        p2p1_1 = MediaPlayer.create(getActivity(), R.raw.p2p1);
+        p2p1_2 = MediaPlayer.create(getActivity(), R.raw.p2p1);
+        p2p2_1 = MediaPlayer.create(getActivity(), R.raw.p2p2);
+        p2p2_2 = MediaPlayer.create(getActivity(), R.raw.p2p2);
     }
 
     private void setInit(ViewGroup rootView) {

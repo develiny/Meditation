@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.develiny.meditation.databasehandler.DatabaseHandler;
+import com.develiny.meditation.notification.NotificationService;
 import com.develiny.meditation.page.Page1;
 import com.develiny.meditation.page.Page2;
 import com.develiny.meditation.page.adapter.BottomSheetAdapter;
@@ -148,7 +150,10 @@ public class MainActivity extends AppCompatActivity {
         deletePlayingList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                databaseHandler.deleteAllPlayingList();
+                if (NotificationService.isPlaying) {
+                    Intent intent = new Intent(MainActivity.this, NotificationService.class);
+                    stopService(intent);
+                }
             }
         });
     }
