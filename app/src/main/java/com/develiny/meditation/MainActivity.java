@@ -154,6 +154,9 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this, NotificationService.class);
                     stopService(intent);
                 }
+                if(playingList.size() != 0) {
+                    databaseHandler.deleteAllPlayingList();
+                }
             }
         });
     }

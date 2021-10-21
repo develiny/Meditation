@@ -76,6 +76,7 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                     databaseHandler.setPlay1(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
                     MainActivity.bottomSheetAdapter.notifyItemInserted(MainActivity.playingList.size());
                     AudioController.startTrack(context, arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
+                    checkOpenService();
                 } else {
                     int index = MainActivity.playingList.indexOf(arrayList.get(positions));
                     databaseHandler.deletePlayingList(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
@@ -83,6 +84,7 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                     MainActivity.bottomSheetAdapter.notifyItemRemoved(index);
                     arrayList.get(positions).setIsplay(1);
                     stopPage(arrayList.get(positions).getPage());
+                    stopServiceWhenPlaylistZero(context);
                 }
             }
         });
@@ -113,12 +115,20 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
     }
 
     private void checkOpenService() {
-        if (NotificationService.isPlaying) {
+        if (!NotificationService.isPlaying) {
             Intent intent = new Intent(context, NotificationService.class);
             if (Build.VERSION.SDK_INT >= 26) {
                 context.startForegroundService(intent);
             } else {
                 context.startService(intent);
+            }
+        }
+    }
+
+    private void stopServiceWhenPlaylistZero(Context context) {
+        if (MainActivity.playingList.size() == 0){
+            if (NotificationService.isPlaying) {
+                context.stopService(new Intent(context, NotificationService.class));
             }
         }
     }

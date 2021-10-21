@@ -37,6 +37,7 @@ public class NotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         isPlaying = true;
+        startForgroundService(getApplicationContext());
         return super.onStartCommand(intent, flags, startId);
     }
 
