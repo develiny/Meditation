@@ -89,8 +89,8 @@ public class NotificationService extends Service {
             notification.setOnlyAlertOnce(true);//show notification for only first time
             notification.setShowWhen(false);
 
-            notification.addAction(R.drawable.bottom_play, "Play", pendingIntentPlay);
-            notification.addAction(R.drawable.bottom_up, "close", pendingIntentClose);
+            notification.addAction(R.drawable.bottom_pause, "Play", pendingIntentPlay);
+            notification.addAction(R.drawable.notification_close, "close", pendingIntentClose);
 
             notification.setContentIntent(pIntent);
             notification.setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setShowActionsInCompactView(0, 1).
@@ -106,7 +106,7 @@ public class NotificationService extends Service {
         }
     }
 
-    public static void stopPlayingList(List<Integer> page) {
+    public static void stopPlayingList(List<Integer> page) {//playinglist에 있는 목록만 stop(page)
         for (int i = 0; i < page.size(); i++) {
             if (page.get(i) == 1) {
                 P1Controller.stopPage1();

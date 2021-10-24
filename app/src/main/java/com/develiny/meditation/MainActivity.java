@@ -11,6 +11,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -41,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout bottomSheetTitleBar;
     BottomSheetBehavior bottomSheetBehavior;
     LinearLayout linearLayout;
-    Button pands, upAndDown, deletePlayingList;
+    public static Button pands;
+    Button upAndDown, deletePlayingList;
     public static RecyclerView bottomRecyclerView;
     public static BottomSheetAdapter bottomSheetAdapter;
     public static ArrayList<PageItem> playingList = new ArrayList<>();
@@ -139,18 +141,19 @@ public class MainActivity extends AppCompatActivity {
                 if (MainActivity.playingList.size() == 0) {
                     Toast.makeText(MainActivity.this, "null play list", Toast.LENGTH_SHORT).show();
                 } else {
-                    if(NotificationService.isPlaying) {
+                    checkOpenService();
+                    if (AudioController.checkIsPlaying(playingList.get(0).getPnp())) {//재생중
+                        pands.setBackgroundResource(R.drawable.bottom_play);
                         List<Integer> page = new ArrayList<>();
                         for (int i = 0; i < MainActivity.playingList.size(); i++) {
                             page.add(MainActivity.playingList.get(i).getPage());
-                            if(i == MainActivity.playingList.size() - 1) {
-                                Intent intent = new Intent(MainActivity.this, NotificationService.class);
-                                stopService(intent);
+                            if (i == MainActivity.playingList.size() - 1) {
                                 NotificationService.stopPlayingList(page);
                                 DefaultNofitication.defauleNotification(MainActivity.this);
                             }
                         }
-                    } else {
+                    } else {//재생중 아님
+                        pands.setBackgroundResource(R.drawable.bottom_pause);
                         List<String> pp = new ArrayList<>();
                         for (int i = 0; i < MainActivity.playingList.size(); i++) {
                             pp.add(MainActivity.playingList.get(i).getPnp());
@@ -190,25 +193,40 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this, NotificationService.class);
                     stopService(intent);
                 }
-                if(playingList.size() != 0) {
+                if (playingList.size() != 0) {
                     databaseHandler.deleteAllPlayingList();
                 }
             }
         });
     }
 
+    private void checkOpenService() {
+        if (!NotificationService.isPlaying) {
+            Intent intent = new Intent(MainActivity.this, NotificationService.class);
+            if (Build.VERSION.SDK_INT >= 26) {
+                MainActivity.this.startForegroundService(intent);
+            } else {
+                MainActivity.this.startService(intent);
+            }
+        }
+    }
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
         ArrayList<Fragment> items = new ArrayList<Fragment>();
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
+
         public void addItem(Fragment item) {
             items.add(item);
         }
+
         @Override
         public Fragment getItem(int i) {
             return items.get(i);
         }
+
         @Override
         public int getCount() {
             return items.size();

@@ -62,7 +62,7 @@ public class DefaultNofitication {
             notification.setShowWhen(false);
 
             notification.addAction(R.drawable.bottom_play, "Play", pendingIntentPlay);
-            notification.addAction(R.drawable.bottom_up, "close", pendingIntentClose);
+            notification.addAction(R.drawable.notification_close, "close", pendingIntentClose);
 
             notification.setContentIntent(pIntent);
             notification.setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setShowActionsInCompactView(0, 1).

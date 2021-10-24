@@ -26,6 +26,7 @@
         </activity>
 
         <service android:name=".notification.NotificationService"/>
+        <receiver android:name=".notification.NotificationActionService"/>
     </application>
 
 </manifest>

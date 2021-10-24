@@ -24,6 +24,7 @@ import com.develiny.meditation.audiocontroller.AudioController;
 import com.develiny.meditation.audiocontroller.P1Controller;
 import com.develiny.meditation.audiocontroller.P2Controller;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
+import com.develiny.meditation.notification.DefaultNofitication;
 import com.develiny.meditation.notification.NotificationService;
 import com.develiny.meditation.page.item.PageItem;
 
@@ -71,6 +72,8 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                             stopPage(arrayList.get(positions).getPage());
                         }
                     }
+                    //add
+                    MainActivity.pands.setBackgroundResource(R.drawable.bottom_pause);
                     arrayList.get(positions).setIsplay(2);
                     MainActivity.playingList.add(arrayList.get(positions));
                     databaseHandler.setPlay1(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
@@ -78,6 +81,7 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                     AudioController.startTrack(context, arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
                     checkOpenService();
                 } else {
+                    //remove
                     int index = MainActivity.playingList.indexOf(arrayList.get(positions));
                     databaseHandler.deletePlayingList(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
                     MainActivity.playingList.remove(arrayList.get(positions));
@@ -127,6 +131,7 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
 
     private void stopServiceWhenPlaylistZero(Context context) {
         if (MainActivity.playingList.size() == 0){
+            MainActivity.pands.setBackgroundResource(R.drawable.bottom_play);
             if (NotificationService.isPlaying) {
                 context.stopService(new Intent(context, NotificationService.class));
             }
