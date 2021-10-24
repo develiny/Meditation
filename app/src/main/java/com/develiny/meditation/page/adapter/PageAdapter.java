@@ -53,8 +53,13 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
         int positions = position;
-        Bitmap bitmap = BitmapFactory.decodeByteArray(arrayList.get(position).getImgdefault(), 0, arrayList.get(position).getImgdefault().length);
-        holder.button.setImageBitmap(bitmap);
+        Bitmap bitmap1 = BitmapFactory.decodeByteArray(arrayList.get(position).getImgdefault(), 0, arrayList.get(position).getImgdefault().length);
+        Bitmap bitmap2 = BitmapFactory.decodeByteArray(arrayList.get(position).getImg(), 0, arrayList.get(position).getImg().length);
+        if (arrayList.get(position).getIsplay() == 1) {
+            holder.button.setImageBitmap(bitmap1);
+        } else {
+            holder.button.setImageBitmap(bitmap2);
+        }
         holder.seekBar.setProgress(arrayList.get(position).getSeek());
 
         holder.button.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +67,8 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
             public void onClick(View view) {
                 databaseHandler = new DatabaseHandler(context);
                 if (arrayList.get(positions).getIsplay() == 1) {
+                    Bitmap bitmapremove = BitmapFactory.decodeByteArray(arrayList.get(positions).getImg(), 0, arrayList.get(positions).getImg().length);
+                    holder.button.setImageBitmap(bitmapremove);
                     for(int i = 0; i < arrayList.size(); i++) {
                         int isplay = arrayList.get(i).getIsplay();
                         if (isplay == 2) {
@@ -82,6 +89,8 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                     checkOpenService();
                 } else {
                     //remove
+                    Bitmap bitmapadd = BitmapFactory.decodeByteArray(arrayList.get(positions).getImgdefault(), 0, arrayList.get(positions).getImgdefault().length);
+                    holder.button.setImageBitmap(bitmapadd);
                     databaseHandler.deletePlayingList(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
                     for(int i = 0; i < MainActivity.playingList.size(); i++) {
                         if (MainActivity.playingList.get(i).getPnp().equals(arrayList.get(positions).getPnp())) {
