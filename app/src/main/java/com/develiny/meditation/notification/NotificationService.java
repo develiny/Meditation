@@ -102,7 +102,7 @@ public class NotificationService extends Service {
             startForeground(1, notification.build());
 //            stopForeground(true);
 //            stopSelf();
-            Log.d(">>>", "open foreground");
+//            Log.d(">>>", "open foreground");
         }
     }
 
