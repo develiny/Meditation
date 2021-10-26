@@ -1,6 +1,8 @@
 package com.develiny.meditation.page;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.develiny.meditation.R;
+import com.develiny.meditation.audiocontroller.AudioController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.page.adapter.PageAdapter;
 import com.develiny.meditation.page.item.PageItem;
@@ -27,7 +30,8 @@ public class Page1 extends Fragment {
     public static MediaPlayer p1p2_1, p1p2_2;
 
     RecyclerView recyclerView;
-    ArrayList<PageItem> arrayList = new ArrayList<>();
+    public static PageAdapter adapter;
+    public static ArrayList<PageItem> arrayList = new ArrayList<>();
     RecyclerView.LayoutManager layoutManager;
     DatabaseHandler databaseHandler;
 
@@ -63,9 +67,16 @@ public class Page1 extends Fragment {
 
     private void setRecyclerView() {
         arrayList = databaseHandler.rainList();
-        PageAdapter adapter = new PageAdapter(arrayList, getActivity());
+        adapter = new PageAdapter(arrayList, getActivity());
         layoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
+        setPage1Volumn();
+    }
+
+    private void setPage1Volumn() {
+        AudioController.setVolumn("1-1", arrayList.get(0).getSeek());
+        AudioController.setVolumn("1-2", arrayList.get(1).getSeek());
     }
 }

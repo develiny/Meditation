@@ -21,7 +21,7 @@
         android:id="@+id/playing_item_btn"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="@drawable/bottom_play_default"
+        android:background="@drawable/delete_playinglist"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"/>
 

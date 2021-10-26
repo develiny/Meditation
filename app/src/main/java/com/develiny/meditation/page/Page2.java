@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.develiny.meditation.R;
+import com.develiny.meditation.audiocontroller.AudioController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.page.adapter.PageAdapter;
 import com.develiny.meditation.page.item.PageItem;
@@ -25,7 +26,8 @@ public class Page2 extends Fragment {
     public static MediaPlayer p2p2_1, p2p2_2;
 
     RecyclerView recyclerView;
-    ArrayList<PageItem> arrayList = new ArrayList<>();
+    public static ArrayList<PageItem> arrayList = new ArrayList<>();
+    public static PageAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
     DatabaseHandler databaseHandler;
 
@@ -61,9 +63,16 @@ public class Page2 extends Fragment {
 
     private void setRecyclerView() {
         arrayList = databaseHandler.windList();
-        PageAdapter adapter = new PageAdapter(arrayList, getActivity());
+        adapter = new PageAdapter(arrayList, getActivity());
         layoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
+        setPage2Volumn();
+    }
+
+    private void setPage2Volumn() {
+        AudioController.setVolumn("2-1", arrayList.get(0).getSeek());
+        AudioController.setVolumn("2-2", arrayList.get(1).getSeek());
     }
 }

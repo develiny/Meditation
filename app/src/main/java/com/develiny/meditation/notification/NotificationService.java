@@ -83,6 +83,7 @@ public class NotificationService extends Service {
             } else {
                 notification = new NotificationCompat.Builder(context);
             }
+            notification.setSilent(true);
             notification.setSmallIcon(R.drawable.bottom_play);
             notification.setContentTitle("meditation title");//.setContentText(track.getName())
             notification.setLargeIcon(icon);

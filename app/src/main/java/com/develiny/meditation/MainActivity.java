@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
     ViewPager viewPager;
     SectionsPagerAdapter sectionsPagerAdapter;
+    AudioManager audioManager;
+    public static int maxVolumn;
 
     //bottom sheet
     RelativeLayout bottomSheetTitleBar;
@@ -56,10 +59,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setAudioManager();
+
         setDatabaseHandler();
         setViewPager();
         setButtonSheet();
 
+    }
+
+    private void setAudioManager() {
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        maxVolumn = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
     }
 
     private void setDatabaseHandler() {

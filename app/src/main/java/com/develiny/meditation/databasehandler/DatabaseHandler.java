@@ -183,6 +183,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("insert into playing select * from " + getPageName(page) + " where position = " + position);
     }
 
+    public void updateVolumn(int page, int position) {
+        sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.execSQL("update " + getPageName(page) + " set seek where posision = " + position);
+    }
+
     String getPageName(int page) {
         if(page == 1) {
             return "rain";

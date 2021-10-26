@@ -1,9 +1,11 @@
 package com.develiny.meditation.page.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +19,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
+import com.develiny.meditation.audiocontroller.AudioController;
+import com.develiny.meditation.audiocontroller.P1Controller;
+import com.develiny.meditation.audiocontroller.P2Controller;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
+import com.develiny.meditation.notification.NotificationService;
+import com.develiny.meditation.page.Page1;
+import com.develiny.meditation.page.Page2;
 import com.develiny.meditation.page.item.PageItem;
 
 import java.util.ArrayList;
@@ -49,21 +58,37 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
+        int positions = position;
         Bitmap bitmap = BitmapFactory.decodeByteArray(arrayList.get(position).getImg(), 0, arrayList.get(position).getImg().length);
         holder.button.setImageBitmap(bitmap);
         holder.seekBar.setProgress(arrayList.get(position).getSeek());
 
+        holder.btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(arrayList.size() == 1) {
 
+                }
+                int getposition = arrayList.get(positions).getPosition();
+                int getpage = arrayList.get(positions).getPage();
+                int index = arrayList.indexOf(arrayList.get(positions));
+                databaseHandler.deletePlayingList(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
+                AudioController.stopPage(arrayList.get(positions).getPage());
+//                MainActivity.playingList.remove(index);
+                arrayList.remove(index);
+                MainActivity.bottomSheetAdapter.notifyItemRemoved(index);
+                if (MainActivity.playingList.size() == 0) {
+                    stopServiceWhenPlaylistZero(context);
+                }
+                changePageItemBackground(getpage, getposition);
+                Log.d(">>>", "size: " + arrayList.size());
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return arrayList.size();
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return super.getItemId(position);
+        return arrayList != null ? arrayList.size() : 0;
     }
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
@@ -75,6 +100,25 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
             this.button = itemView.findViewById(R.id.playing_item_img);
             this.seekBar = itemView.findViewById(R.id.playing_item_seekbar);
             this.btn = itemView.findViewById(R.id.playing_item_btn);
+        }
+    }
+
+    private void stopServiceWhenPlaylistZero(Context context) {
+        if (MainActivity.playingList.size() == 0){
+            MainActivity.pands.setBackgroundResource(R.drawable.bottom_play);
+            if (NotificationService.isPlaying) {
+                context.stopService(new Intent(context, NotificationService.class));
+            }
+        }
+    }
+
+    private void changePageItemBackground(int page, int position) {
+        if (page == 1) {
+            Page1.arrayList.get(position - 1).setIsplay(1);
+            Page1.adapter.notifyItemChanged(position - 1);
+        } else if (page == 2) {
+            Page2.arrayList.get(position - 1).setIsplay(1);
+            Page2.adapter.notifyItemChanged(position - 1);
         }
     }
 }

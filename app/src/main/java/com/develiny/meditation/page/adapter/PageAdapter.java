@@ -26,6 +26,7 @@ import com.develiny.meditation.audiocontroller.P2Controller;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.notification.DefaultNofitication;
 import com.develiny.meditation.notification.NotificationService;
+import com.develiny.meditation.page.Page1;
 import com.develiny.meditation.page.item.PageItem;
 
 import java.util.ArrayList;
@@ -35,6 +36,8 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
     ArrayList<PageItem> arrayList;
     Context context;
     DatabaseHandler databaseHandler;
+
+    private final static int MAX_VOLUME = 16;
 
     public PageAdapter(ArrayList<PageItem> arrayList, Context context) {
         this.arrayList = arrayList;
@@ -76,7 +79,7 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                             MainActivity.playingList.remove(arrayList.get(i));
                             MainActivity.bottomSheetAdapter.notifyItemRemoved(index);
                             arrayList.get(i).setIsplay(1);
-                            stopPage(arrayList.get(positions).getPage());
+                            AudioController.stopPage(arrayList.get(positions).getPage());
                         }
                     }
                     //add
@@ -99,9 +102,31 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                         }
                     }
                     arrayList.get(positions).setIsplay(1);
-                    stopPage(arrayList.get(positions).getPage());
+                    AudioController.stopPage(arrayList.get(positions).getPage());
                     stopServiceWhenPlaylistZero(context);
                 }
+            }
+        });
+
+        holder.seekBar.setMax(MainActivity.maxVolumn);
+        holder.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                float volume = (float) (1 - (Math.log(MAX_VOLUME - i) / Math.log(MAX_VOLUME)));
+                String pp = arrayList.get(positions).getPnp();
+                changeVolumn(pp, volume);
+//                databaseHandler.updateVolumn(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
+                Log.d(">>>1", "onProgressChanged");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                Log.d(">>>2", "onStartTrackingTouch");
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Log.d(">>>3", "onStopTrackingTouch");
             }
         });
     }
@@ -111,22 +136,14 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
         return arrayList.size();
     }
 
-    public class CustomViewHolder extends RecyclerView.ViewHolder {
-        ImageView button;
+    public static class CustomViewHolder extends RecyclerView.ViewHolder {
+        public ImageView button;
         SeekBar seekBar;
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
             this.button = itemView.findViewById(R.id.page_item_toggle_button);
             this.seekBar = itemView.findViewById(R.id.page_item_seekbar);
-        }
-    }
-
-    private void stopPage(int page) {
-        if (page == 1) {
-            P1Controller.stopPage1();
-        } else if (page == 2) {
-            P2Controller.stopPage2();
         }
     }
 
@@ -148,5 +165,10 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                 context.stopService(new Intent(context, NotificationService.class));
             }
         }
+    }
+
+    private void changeVolumn(String pp, float volumn) {
+        AudioController.playingListindex0_1(pp).setVolume(volumn, volumn);
+        AudioController.playingListindex0_2(pp).setVolume(volumn, volumn);
     }
 }
