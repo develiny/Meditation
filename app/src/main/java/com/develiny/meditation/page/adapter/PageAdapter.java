@@ -74,11 +74,13 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                     holder.button.setImageBitmap(bitmapremove);
                     for(int i = 0; i < arrayList.size(); i++) {
                         int isplay = arrayList.get(i).getIsplay();
-                        if (isplay == 2) {
+                        if (isplay == 2) {//여기서 지워지는 item background 다시 바꾸기
                             int index = MainActivity.playingList.indexOf(arrayList.get(i));
                             MainActivity.playingList.remove(arrayList.get(i));
                             MainActivity.bottomSheetAdapter.notifyItemRemoved(index);
                             arrayList.get(i).setIsplay(1);
+                            notifyItemChanged(i);
+                            notifyDataSetChanged();
                             AudioController.stopPage(arrayList.get(positions).getPage());
                         }
                     }
@@ -99,6 +101,7 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                         if (MainActivity.playingList.get(i).getPnp().equals(arrayList.get(positions).getPnp())) {
                             MainActivity.playingList.remove(i);
                             MainActivity.bottomSheetAdapter.notifyItemRemoved(i);
+                            MainActivity.bottomSheetAdapter.notifyDataSetChanged();
                         }
                     }
                     arrayList.get(positions).setIsplay(1);

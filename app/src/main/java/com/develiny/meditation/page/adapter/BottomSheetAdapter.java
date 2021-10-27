@@ -32,7 +32,7 @@ import com.develiny.meditation.page.item.PageItem;
 
 import java.util.ArrayList;
 
-public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.CustomViewHolder>{
+public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.CustomViewHolder> {
 
     Context context;
     ArrayList<PageItem> arrayList;
@@ -66,9 +66,6 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
         holder.btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(arrayList.size() == 1) {
-
-                }
                 int getposition = arrayList.get(positions).getPosition();
                 int getpage = arrayList.get(positions).getPage();
                 int index = arrayList.indexOf(arrayList.get(positions));
@@ -77,6 +74,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 //                MainActivity.playingList.remove(index);
                 arrayList.remove(index);
                 MainActivity.bottomSheetAdapter.notifyItemRemoved(index);
+                MainActivity.bottomSheetAdapter.notifyDataSetChanged();
                 if (MainActivity.playingList.size() == 0) {
                     stopServiceWhenPlaylistZero(context);
                 }
@@ -95,6 +93,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
         ImageView button;
         SeekBar seekBar;
         Button btn;
+
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
             this.button = itemView.findViewById(R.id.playing_item_img);
@@ -104,7 +103,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
     }
 
     private void stopServiceWhenPlaylistZero(Context context) {
-        if (MainActivity.playingList.size() == 0){
+        if (MainActivity.playingList.size() == 0) {
             MainActivity.pands.setBackgroundResource(R.drawable.bottom_play);
             if (NotificationService.isPlaying) {
                 context.stopService(new Intent(context, NotificationService.class));
