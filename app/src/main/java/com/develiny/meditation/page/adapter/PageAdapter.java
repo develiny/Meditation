@@ -74,7 +74,7 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                     holder.button.setImageBitmap(bitmapremove);
                     for(int i = 0; i < arrayList.size(); i++) {
                         int isplay = arrayList.get(i).getIsplay();
-                        if (isplay == 2) {//여기서 지워지는 item background 다시 바꾸기
+                        if (isplay == 2) {//change
                             int index = MainActivity.playingList.indexOf(arrayList.get(i));
                             MainActivity.playingList.remove(arrayList.get(i));
                             MainActivity.bottomSheetAdapter.notifyItemRemoved(index);

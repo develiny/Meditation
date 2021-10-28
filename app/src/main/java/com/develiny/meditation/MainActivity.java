@@ -25,6 +25,7 @@ import com.develiny.meditation.audiocontroller.AudioController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.notification.DefaultNofitication;
 import com.develiny.meditation.notification.NotificationService;
+import com.develiny.meditation.page.FavPage;
 import com.develiny.meditation.page.Page1;
 import com.develiny.meditation.page.Page2;
 import com.develiny.meditation.page.adapter.BottomSheetAdapter;
@@ -83,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
         sectionsPagerAdapter.addItem(page1);
         Page2 page2 = new Page2();
         sectionsPagerAdapter.addItem(page2);
+        FavPage favPage = new FavPage();
+        sectionsPagerAdapter.addItem(favPage);
         viewPager = findViewById(R.id.main_viewpager);
         viewPager.setAdapter(sectionsPagerAdapter);
     }
