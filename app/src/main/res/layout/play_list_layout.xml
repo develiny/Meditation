@@ -32,6 +32,14 @@
                 android:background="@drawable/bottom_play_default"
                 android:layout_centerInParent="true"/>
             <Button
+                android:id="@+id/bottom_sheet_add_fav"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:text="add"
+                android:layout_toLeftOf="@+id/bottom_upanddown"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"/>
+            <Button
                 android:id="@+id/bottom_upanddown"
                 android:layout_width="30dp"
                 android:layout_height="30dp"

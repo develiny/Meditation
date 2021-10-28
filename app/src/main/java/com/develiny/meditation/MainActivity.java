@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.develiny.meditation.audiocontroller.AudioController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
+import com.develiny.meditation.dialog.AddTitleDialog;
 import com.develiny.meditation.notification.DefaultNofitication;
 import com.develiny.meditation.notification.NotificationService;
 import com.develiny.meditation.page.FavPage;
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     BottomSheetBehavior bottomSheetBehavior;
     LinearLayout linearLayout;
     public static Button pands;
-    Button upAndDown, deletePlayingList;
+    Button upAndDown, deletePlayingList, addfav;
     public static RecyclerView bottomRecyclerView;
     public static BottomSheetAdapter bottomSheetAdapter;
     public static ArrayList<PageItem> playingList = new ArrayList<>();
@@ -80,12 +81,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void setViewPager() {
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        FavPage favPage = new FavPage();
+        sectionsPagerAdapter.addItem(favPage);
         Page1 page1 = new Page1();
         sectionsPagerAdapter.addItem(page1);
         Page2 page2 = new Page2();
         sectionsPagerAdapter.addItem(page2);
-        FavPage favPage = new FavPage();
-        sectionsPagerAdapter.addItem(favPage);
         viewPager = findViewById(R.id.main_viewpager);
         viewPager.setAdapter(sectionsPagerAdapter);
     }
@@ -131,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
         this.bottomSheetTitleBar = findViewById(R.id.bottom_sheet_title_bar);
         this.pands = findViewById(R.id.bottom_sheet_pands);
         this.upAndDown = findViewById(R.id.bottom_upanddown);
+        this.addfav = findViewById(R.id.bottom_sheet_add_fav);
         this.deletePlayingList = findViewById(R.id.bottom_delete_playing_list);
         this.bottomRecyclerView = findViewById(R.id.bottom_recyclerview);
         linearLayout = findViewById(R.id.bottom_sheet_id);
@@ -191,6 +193,13 @@ public class MainActivity extends AppCompatActivity {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     upAndDown.setBackgroundResource(R.drawable.bottom_down);
                 }
+            }
+        });
+
+        addfav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddTitleDialog.addTitleDialog(MainActivity.this);
             }
         });
 
