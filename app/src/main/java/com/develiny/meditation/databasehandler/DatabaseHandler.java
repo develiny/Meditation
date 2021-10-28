@@ -24,6 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
@@ -357,33 +358,61 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         cursor.close();
         closeDatabse();
-        addFavTitleList(context, title, titles);
+        if (titles.contains(title)) {
+            Toast.makeText(context, "같은이름", Toast.LENGTH_SHORT).show();
+        } else {
+            checkSameFavList(context, title);
+        }
     }
 
-    public void addFavTitleList(Context context, String title1, List<String> titles) {
-        if (!titles.contains(title1)) {
-            FavTitleItem favTitleItem = null;
-            sqLiteDatabase = this.getWritableDatabase();
-            favTitleItem = new FavTitleItem(title1, 1);
-            if (NotificationService.isPlaying) {
-                sqLiteDatabase.execSQL("insert into favtitle values (" + "'" + title1 + "'" + "," + 2 + ")");
-            } else {
-                sqLiteDatabase.execSQL("insert into favtitle values (" + "'" + title1 + "'" + "," + 1 + ")");
+    public void checkSameFavList(Context context, String title) {
+        ArrayList<String> pnpInPlayinglist = new ArrayList<>();
+        for (int i = 0; i < MainActivity.playingList.size(); i++) {
+            pnpInPlayinglist.add(MainActivity.playingList.get(i).getPnp());
+            if (i == MainActivity.playingList.size() - 1) {
+                for (int ii = 1; ii < 21; ii++) {
+                    boolean isNotSame = true;
+                    if (listEqualsIgnoreOrder(fav01to20(ii), pnpInPlayinglist)) {
+                        isNotSame = false;
+                    }
+                    if (ii == 20) {
+                        if (isNotSame) {
+                            addFavTitleList(title);
+                        } else {
+                            Toast.makeText(context, "같은 리스트", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
             }
-            FavPage.favTitleItemArrayList.add(favTitleItem);
-            FavPage.adapter.notifyItemInserted(FavPage.favTitleItemArrayList.size() - 1);
-            FavPage.adapter.notifyDataSetChanged();
-            if (AddTitleDialog.alertDialog.isShowing()) {
-                AddTitleDialog.alertDialog.dismiss();
-            }
-        } else {
-            Toast.makeText(context, "already have same title in fav list", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public static <T> boolean listEqualsIgnoreOrder(List<T> list1, List<T> list2) {
+        return new HashSet<>(list1).equals(new HashSet<>(list2));
+    }
+
+    public void addFavTitleList(String title1) {
+        FavTitleItem favTitleItem = null;
+        sqLiteDatabase = this.getWritableDatabase();
+        if (NotificationService.isPlaying) {
+            sqLiteDatabase.execSQL("insert into favtitle values (" + "'" + title1 + "'" + "," + 2 + ")");
+            favTitleItem = new FavTitleItem(title1, 2);
+        } else {
+            sqLiteDatabase.execSQL("insert into favtitle values (" + "'" + title1 + "'" + "," + 1 + ")");
+            favTitleItem = new FavTitleItem(title1, 1);
+        }
+        FavPage.favTitleItemArrayList.add(favTitleItem);
+        FavPage.adapter.notifyItemInserted(FavPage.favTitleItemArrayList.size() - 1);
+        FavPage.adapter.notifyDataSetChanged();
+        if (AddTitleDialog.alertDialog.isShowing()) {
+            AddTitleDialog.alertDialog.dismiss();
+        }
+
     }
 
     public void addFavList(int index) {
         sqLiteDatabase = this.getWritableDatabase();
-        for(int i = 0; i < MainActivity.playingList.size(); i++) {
+        for (int i = 0; i < MainActivity.playingList.size(); i++) {
             sqLiteDatabase.execSQL("insert into " + getNextFav(index) + " select * from " + getPageName(MainActivity.playingList.get(i).getPage()) + " where position = " + MainActivity.playingList.get(i).getPosition());
             if (i == MainActivity.playingList.size() - 1) {
                 int where = FavPage.favTitleItemArrayList.size();
@@ -456,15 +485,38 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
     }
 
-
-
     String getPageName(int page) {
-        if(page == 1) {
+        if (page == 1) {
             return "rain";
         } else if (page == 2) {
             return "wind";
         } else {
             return "nul";
         }
+    }
+
+    public ArrayList<String> fav01to20(int i) {
+        String favNum;
+        if (i < 10) {
+            favNum = "fav0" + Integer.toString(i);
+        } else {
+            favNum = "fav" + Integer.toString(i);
+        }
+
+        String pnpInFav;
+        ArrayList<String> pnpInFavs = new ArrayList<>();
+
+        openDatabase();
+        String sql = "SELECT pnp FROM " + favNum;
+        Cursor cursor = sqLiteDatabase.rawQuery(sql, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            pnpInFav = new String(cursor.getString(0));
+            pnpInFavs.add(pnpInFav);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        closeDatabse();
+        return pnpInFavs;
     }
 }

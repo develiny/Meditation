@@ -41,9 +41,12 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
     @Override
     public void onBindViewHolder(@NonNull FavTitleAdapter.CustomViewHolder holder, int position) {
         int i = position;
-//        if (arrayList.get(position).getTitle() != null) {
-//            holder.title.setText(arrayList.get(position).getIndexx());
-//        }
+
+        if (arrayList.get(i).getIsplay() == 1) {
+            holder.pands.setBackgroundResource(R.drawable.bottom_play);
+        } else {
+            holder.pands.setBackgroundResource(R.drawable.bottom_pause);
+        }
 
         holder.title.setText(arrayList.get(position).getTitle());
 
