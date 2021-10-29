@@ -10,12 +10,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.develiny.meditation.MainActivity;
+import com.develiny.meditation.audiocontroller.AudioController;
 import com.develiny.meditation.dialog.AddTitleDialog;
 import com.develiny.meditation.notification.NotificationService;
 import com.develiny.meditation.page.FavPage;
 import com.develiny.meditation.page.adapter.BottomSheetAdapter;
 import com.develiny.meditation.page.adapter.PageAdapter;
-import com.develiny.meditation.page.item.FavItem;
+import com.develiny.meditation.page.item.FavListItem;
 import com.develiny.meditation.page.item.FavTitleItem;
 import com.develiny.meditation.page.item.PageItem;
 
@@ -24,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -72,6 +74,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String FAV_TITLE_TABLE_NAME = "favtitle";
     public static final String COLUMN_FAV_TITLE = "title";
     public static final String COLUMN_FAV_ISPLAY = "isplay";
+    private static final String FAV_LIST_TABLE_NAME = "favlist";
+    public static final String COLUMN_FAVTITLENAME = "favtitlename";
 
     private static final String FAV_TEAM1 = "create table if not exists " + FAV_TABLE_NAME1 + "(" + COLUMN_PAGE + " INTEGER," + COLUMN_POSITION + " INTEGER," + COLUMN_PNP + " TEXT, " + COLUMN_IMGDEFAULT + " BLOB," + COLUMN_IMAGE + " BLOB," + COLUMN_SEEK + " INTEGER," + COLUMN_ISPLAY + " INTEGER" + ");";
     private static final String FAV_TEAM2 = "create table if not exists " + FAV_TABLE_NAME2 + "(" + COLUMN_PAGE + " INTEGER," + COLUMN_POSITION + " INTEGER," + COLUMN_PNP + " TEXT, " + COLUMN_IMGDEFAULT + " BLOB," + COLUMN_IMAGE + " BLOB," + COLUMN_SEEK + " INTEGER," + COLUMN_ISPLAY + " INTEGER" + ");";
@@ -98,6 +102,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String WIND_TEAM = "create table if not exists " + WIND_TABLE_NAME + "(" + COLUMN_PAGE + " INTEGER," + COLUMN_POSITION + " INTEGER," + COLUMN_PNP + " TEXT, " + COLUMN_IMGDEFAULT + " BLOB," + COLUMN_IMAGE + " BLOB," + COLUMN_SEEK + " INTEGER," + COLUMN_ISPLAY + " INTEGER" + ");";
 
     private static final String FAV_TITLE_TEAM = "create table if not exists " + FAV_TITLE_TABLE_NAME + "(" + COLUMN_FAV_TITLE + " TEXT," + COLUMN_FAV_ISPLAY + " INTEGER" + ");";
+    private static final String FAV_LIST_TEAM = "create table if not exists " + WIND_TABLE_NAME + "(" + COLUMN_PAGE + " INTEGER," + COLUMN_POSITION + " INTEGER," + COLUMN_PNP + " TEXT, " + COLUMN_IMGDEFAULT + " BLOB," + COLUMN_IMAGE + " BLOB," + COLUMN_SEEK + " INTEGER," + COLUMN_ISPLAY + " INTEGER," +  COLUMN_FAVTITLENAME + " INTEGER" + ");";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -157,6 +162,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(RAIN_TEAM);
         sqLiteDatabase.execSQL(WIND_TEAM);
         sqLiteDatabase.execSQL(FAV_TITLE_TEAM);
+        sqLiteDatabase.execSQL(FAV_LIST_TEAM);
     }
 
     @Override
@@ -185,6 +191,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE " + RAIN_TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE " + WIND_TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE " + FAV_TITLE_TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE " + FAV_LIST_TABLE_NAME);
         sqLiteDatabase.execSQL(FAV_TEAM1);
         sqLiteDatabase.execSQL(FAV_TEAM2);
         sqLiteDatabase.execSQL(FAV_TEAM3);
@@ -209,6 +216,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(RAIN_TEAM);
         sqLiteDatabase.execSQL(WIND_TEAM);
         sqLiteDatabase.execSQL(FAV_TITLE_TEAM);
+        sqLiteDatabase.execSQL(FAV_LIST_TEAM);
     }
 
     public void openDatabase() {
@@ -304,7 +312,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 //        sqLiteDatabase.execSQL("delete from playing");
 //        sqLiteDatabase.execSQL("update rain set isplay = 1");
 //        sqLiteDatabase.execSQL("update wind set isplay = 1");
-        sqLiteDatabase.execSQL("update favtitle set title = null");
+//        sqLiteDatabase.execSQL("update favtitle set title = null");
         sqLiteDatabase.execSQL("delete from fav01");
         sqLiteDatabase.execSQL("delete from fav02");
         sqLiteDatabase.execSQL("delete from fav03");
@@ -325,6 +333,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("delete from fav18");
         sqLiteDatabase.execSQL("delete from fav19");
         sqLiteDatabase.execSQL("delete from fav20");
+        sqLiteDatabase.execSQL("delete from favlist");
+        sqLiteDatabase.execSQL("delete from favtitle");
     }
 
     public void deletePlayingList(int page, int position) {
@@ -361,78 +371,93 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (titles.contains(title)) {
             Toast.makeText(context, "같은이름", Toast.LENGTH_SHORT).show();
         } else {
-            checkSameFavList(context, title);
+//            checkSameFavList(context, title);
+            addFavTitleList(title);
         }
     }
 
     public void checkSameFavList(Context context, String title) {
-        ArrayList<String> pnpInPlayinglist = new ArrayList<>();
+        Log.d(">>>check", "4");
+        List<String> nowPnps = new ArrayList<>();//현제 playinglist의 pnp list
         for (int i = 0; i < MainActivity.playingList.size(); i++) {
-            pnpInPlayinglist.add(MainActivity.playingList.get(i).getPnp());
+            nowPnps.add(MainActivity.playingList.get(i).getPnp());
             if (i == MainActivity.playingList.size() - 1) {
-                for (int ii = 1; ii < 21; ii++) {
-                    boolean isNotSame = true;
-                    if (listEqualsIgnoreOrder(fav01to20(ii), pnpInPlayinglist)) {
-                        isNotSame = false;
-                    }
-                    if (ii == 20) {
-                        if (isNotSame) {
-                            addFavTitleList(title);
-                        } else {
-                            Toast.makeText(context, "같은 리스트", Toast.LENGTH_SHORT).show();
-                        }
-                    }
+                sqLiteDatabase = this.getWritableDatabase();
+                List<String> favtitles = new ArrayList<>();//현제 favtitle들의 title list
+                Cursor cursor = sqLiteDatabase.rawQuery("select title from favtitle", null);
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    favtitles.add(cursor.getString(0));
                 }
+
+
+//                if (favtitles.size() != 0) {//여기서 error
+//                    if (haveSame(nowPnps, favtitles)) {
+//                        Toast.makeText(context, "same already", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        addFavTitleList(title);
+//                    }
+//                } else {
+//                    addFavTitleList(title);
+//                }
+                addFavTitleList(title);
             }
         }
     }
 
-    public static <T> boolean listEqualsIgnoreOrder(List<T> list1, List<T> list2) {
+    public static <T> boolean listEqualsIgnoreOrder(List<T> list1, List<T> list2) {//순서 무시 똑같으면 true
         return new HashSet<>(list1).equals(new HashSet<>(list2));
     }
 
     public void addFavTitleList(String title1) {
         FavTitleItem favTitleItem = null;
         sqLiteDatabase = this.getWritableDatabase();
-        if (NotificationService.isPlaying) {
-            sqLiteDatabase.execSQL("insert into favtitle values (" + "'" + title1 + "'" + "," + 2 + ")");
-            favTitleItem = new FavTitleItem(title1, 2);
-        } else {
-            sqLiteDatabase.execSQL("insert into favtitle values (" + "'" + title1 + "'" + "," + 1 + ")");
-            favTitleItem = new FavTitleItem(title1, 1);
-        }
-        FavPage.favTitleItemArrayList.add(favTitleItem);
-        FavPage.adapter.notifyItemInserted(FavPage.favTitleItemArrayList.size() - 1);
-        FavPage.adapter.notifyDataSetChanged();
-        if (AddTitleDialog.alertDialog.isShowing()) {
-            AddTitleDialog.alertDialog.dismiss();
-        }
 
+        if (MainActivity.playingList.size() != 0) {
+            String pnp = MainActivity.playingList.get(0).getPnp();
+            if (AudioController.playingListindex0_1(pnp).isPlaying() || AudioController.playingListindex0_2(pnp).isPlaying()) {
+                sqLiteDatabase.execSQL("insert into favtitle values (" + "'" + title1 + "'" + "," + 2 + ")");
+                favTitleItem = new FavTitleItem(title1, 2);
+            } else {
+                sqLiteDatabase.execSQL("insert into favtitle values (" + "'" + title1 + "'" + "," + 1 + ")");
+                favTitleItem = new FavTitleItem(title1, 1);
+            }
+            FavPage.favTitleItemArrayList.add(favTitleItem);
+            FavPage.adapter.notifyItemInserted(FavPage.favTitleItemArrayList.size() - 1);
+            FavPage.adapter.notifyDataSetChanged();
+            if (AddTitleDialog.alertDialog.isShowing()) {
+                AddTitleDialog.alertDialog.dismiss();
+            }
+            addFavList(title1);
+        }
     }
 
-    public void addFavList(int index) {
+    public void addFavList(String title) {
         sqLiteDatabase = this.getWritableDatabase();
+
         for (int i = 0; i < MainActivity.playingList.size(); i++) {
-            sqLiteDatabase.execSQL("insert into " + getNextFav(index) + " select * from " + getPageName(MainActivity.playingList.get(i).getPage()) + " where position = " + MainActivity.playingList.get(i).getPosition());
-            if (i == MainActivity.playingList.size() - 1) {
-                int where = FavPage.favTitleItemArrayList.size();
-                FavPage.adapter.notifyItemInserted(where);
-                FavPage.adapter.notifyDataSetChanged();
-                if (AddTitleDialog.alertDialog.isShowing()) {
-                    AddTitleDialog.alertDialog.dismiss();
-                }
-            }
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("page", MainActivity.playingList.get(i).getPage());
+            contentValues.put("position", MainActivity.playingList.get(i).getPosition());
+            contentValues.put("pnp", MainActivity.playingList.get(i).getPnp());
+            contentValues.put("imagedefault", MainActivity.playingList.get(i).getImgdefault());
+            contentValues.put("img", MainActivity.playingList.get(i).getImg());
+            contentValues.put("seek", MainActivity.playingList.get(i).getSeek());
+            contentValues.put("isplay", MainActivity.playingList.get(i).getIsplay());
+            contentValues.put("favtitlename", title);
+            sqLiteDatabase.insert("favlist", null, contentValues);
         }
     }
 
     public void removeFavList(String title) {
         sqLiteDatabase = this.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("select _rowid_ from favtitle where title = " + "'" + title + "'", null);
+        Cursor cursor = sqLiteDatabase.rawQuery("select _rowid_ from favtitle where title = " + title, null);
         cursor.moveToFirst();
-        int i = cursor.getInt(0);
-        sqLiteDatabase.execSQL("delete from favtitle where title = " + "'" + title + "'");
-        FavPage.favTitleItemArrayList.remove(i - 1);
-        FavPage.adapter.notifyItemRemoved(i - 1);
+        int rowid = cursor.getInt(0);
+        sqLiteDatabase.execSQL("delete from favtitle where _rowid_ = " + rowid);
+        sqLiteDatabase.execSQL("delete from favlist where favtitlename = " + rowid);
+        FavPage.favTitleItemArrayList.remove(rowid - 1);
+        FavPage.adapter.notifyItemRemoved(rowid - 1);
         FavPage.adapter.notifyDataSetChanged();
         sqLiteDatabase.execSQL("vacuum");
         cursor.close();
@@ -483,6 +508,45 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         } else {
             return null;
         }
+    }
+
+    boolean haveSame(List<String> nowPnps, List<String> favtitles) {
+        boolean isSame = false;
+        sqLiteDatabase = this.getWritableDatabase();
+        List<String> checkWithThisList = new ArrayList<>();
+        for (int i = 0; i < favtitles.size(); i++) {
+            Cursor cursor = sqLiteDatabase.rawQuery("select pnp from favlist where title = " + "'" + favtitles.get(i) + "'", null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                checkWithThisList.add(cursor.getString(0));
+            }
+            if (listEqualsIgnoreOrder(checkWithThisList, nowPnps)) {
+                isSame = true;
+                break;
+            } else {
+                isSame = false;
+            }
+        }
+        if (isSame) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    List<String> favPnps(int size, String favtitle) {
+        String pnp;
+        List<String> pnps = new ArrayList<>();
+        sqLiteDatabase = this.getWritableDatabase();
+        for (int i = 0; i < size; i++) {
+            Cursor cursor = sqLiteDatabase.rawQuery("select pnp from favlist where title = " + favtitle, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                pnp = cursor.getString(0);
+                pnps.add(pnp);
+            }
+        }
+        return pnps;
     }
 
     String getPageName(int page) {

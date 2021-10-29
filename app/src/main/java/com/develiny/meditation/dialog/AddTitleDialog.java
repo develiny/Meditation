@@ -1,17 +1,23 @@
 package com.develiny.meditation.dialog;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 public class AddTitleDialog {
 
@@ -42,6 +48,9 @@ public class AddTitleDialog {
                     for (int i = 0; i < MainActivity.playingList.size(); i++) {
                         if (editText.getText().toString().length() != 0) {
                             databaseHandler.checkTitleAlready(alertDialog.getContext(), editText.getText().toString());
+//                            databaseHandler.addFavTitleList(editText.getText().toString());
+                        } else {
+                            Toast.makeText(context, "please edit play list name", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
