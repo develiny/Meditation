@@ -311,15 +311,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         FavListItem favListItem = null;
         ArrayList<FavListItem> favListItems = new ArrayList<>();
         sqLiteDatabase = this.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("select * from favlist where = " + "'" + title + "'", null);
+        Cursor cursor = sqLiteDatabase.rawQuery("select * from favlist where favtitlename = " + "'" + title + "'", null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             favListItem = new FavListItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getBlob(3), cursor.getBlob(4), cursor.getInt(5), cursor.getInt(6), cursor.getString(7));
             favListItems.add(favListItem);
-            cursor.moveToFirst();
+            cursor.moveToNext();
         }
         cursor.close();
         closeDatabse();
+        Log.d(">>>favlist", "size: " + favListItems.size());
         return favListItems;
     }
 

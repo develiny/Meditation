@@ -3,6 +3,7 @@ package com.develiny.meditation.page.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +22,13 @@ import com.develiny.meditation.page.item.PageItem;
 import java.util.ArrayList;
 
 public class FavListAdapter extends RecyclerView.Adapter<FavListAdapter.CustomViewHolder> {
-    String title;
+//    String title;
     Context context;
     ArrayList<FavListItem> arrayList = new ArrayList<>();
     DatabaseHandler databaseHandler;
 
-    public FavListAdapter(String title, Context context) {
-        this.title = title;
+    public FavListAdapter(ArrayList<FavListItem> arrayList, Context context) {
+        this.arrayList = arrayList;
         this.context = context;
     }
 
@@ -36,15 +37,16 @@ public class FavListAdapter extends RecyclerView.Adapter<FavListAdapter.CustomVi
     public FavListAdapter.CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.playing_item, parent, false);
         FavListAdapter.CustomViewHolder holder = new FavListAdapter.CustomViewHolder(view);
-
+        Log.d(">>>FavListAdapter", "onCreateViewHolder");
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull FavListAdapter.CustomViewHolder holder, int position) {
 
-        databaseHandler = new DatabaseHandler(context);
-        arrayList = databaseHandler.getFavListItem(title);
+        Log.d(">>>FavListAdapter", "onBindViewHolder");
+//        databaseHandler = new DatabaseHandler(context);
+//        arrayList = databaseHandler.getFavListItem(title);
 
         Bitmap bitmap1 = BitmapFactory.decodeByteArray(arrayList.get(position).getImgdefault(), 0, arrayList.get(position).getImgdefault().length);
         holder.button.setImageBitmap(bitmap1);

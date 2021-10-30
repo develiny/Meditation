@@ -55,6 +55,5 @@ public class FavPage extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-        Log.d(">>>FavPage", "size: " + favTitleItemArrayList.size());
     }
 }

@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -28,6 +30,7 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
     Context context;
     DatabaseHandler databaseHandler;
     RecyclerView.LayoutManager layoutManager;
+    FavListAdapter favListAdapter;
 
     public FavTitleAdapter(ArrayList<FavTitleItem> arrayList, Context context) {
         this.arrayList = arrayList;
@@ -77,27 +80,57 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
             }
         });
 
-        holder.recyclerView.setVisibility(View.GONE);
-
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (holder.recyclerView.getVisibility() == View.VISIBLE) {
-                    Log.d(">>>FavTitleAdapter", "make gone");
-                    holder.recyclerView.setVisibility(View.GONE);
-                } else {
+                Log.d(">>>FavTitleAdapter", "onClick");
+                if (holder.recyclerView.getVisibility() == View.GONE) {
+                    databaseHandler = new DatabaseHandler(context);
+                    ArrayList<FavListItem> favListItemArrayList;
+                    favListItemArrayList = databaseHandler.getFavListItem(arrayList.get(i).getTitle());
 
-                    Log.d(">>>FavTitleAdapter", "make visible");
-                    FavListAdapter adapter = new FavListAdapter(arrayList.get(i).getTitle(), context);
+                    favListAdapter = new FavListAdapter(favListItemArrayList, context);
                     layoutManager = new LinearLayoutManager(context);
+                    holder.recyclerView.setHasFixedSize(true);
                     holder.recyclerView.setLayoutManager(layoutManager);
-                    holder.recyclerView.setAdapter(adapter);
+                    holder.recyclerView.setAdapter(favListAdapter);
 
+                    holder.uandd.setBackgroundResource(R.drawable.bottom_up);
+                    holder.uandd.setChecked(true);
                     holder.recyclerView.setVisibility(View.VISIBLE);
+                } else {
+                    holder.uandd.setBackgroundResource(R.drawable.bottom_down);
+                    holder.uandd.setChecked(true);
+                    holder.recyclerView.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        holder.uandd.setChecked(false);
+        holder.uandd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (holder.uandd.isChecked()) {
+                    databaseHandler = new DatabaseHandler(context);
+                    ArrayList<FavListItem> favListItemArrayList;
+                    favListItemArrayList = databaseHandler.getFavListItem(arrayList.get(i).getTitle());
+
+                    favListAdapter = new FavListAdapter(favListItemArrayList, context);
+                    layoutManager = new LinearLayoutManager(context);
+                    holder.recyclerView.setHasFixedSize(true);
+                    holder.recyclerView.setLayoutManager(layoutManager);
+                    holder.recyclerView.setAdapter(favListAdapter);
+
+                    holder.uandd.setBackgroundResource(R.drawable.bottom_up);
+                    holder.recyclerView.setVisibility(View.VISIBLE);
+                } else {
+                    holder.uandd.setBackgroundResource(R.drawable.bottom_down);
+                    holder.recyclerView.setVisibility(View.GONE);
                 }
             }
         });
     }
+
 
     @Override
     public int getItemCount() {
@@ -108,6 +141,7 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
 
         TextView title;
         Button pands, edit, delete;
+        CheckBox uandd;
         RecyclerView recyclerView;
         LinearLayout linearLayout;
 
@@ -117,8 +151,10 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
             this.pands = itemView.findViewById(R.id.fav_page_item_pands);
             this.edit = itemView.findViewById(R.id.fav_page_item_edit);
             this.delete = itemView.findViewById(R.id.fav_page_item_delete);
+            this.uandd = itemView.findViewById(R.id.fav_page_item_uandd);
             this.recyclerView = itemView.findViewById(R.id.fav_page_inside_recyclerview);
             this.linearLayout = itemView.findViewById(R.id.fav_page_item_linear);
+            this.recyclerView.setVisibility(View.GONE);
         }
     }
 }
