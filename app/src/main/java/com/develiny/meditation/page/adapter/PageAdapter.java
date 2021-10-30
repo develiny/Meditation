@@ -75,13 +75,15 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                     for(int i = 0; i < arrayList.size(); i++) {
                         int isplay = arrayList.get(i).getIsplay();
                         if (isplay == 2) {//change
-                            int index = MainActivity.playingList.indexOf(arrayList.get(i));
-                            MainActivity.playingList.remove(arrayList.get(i));
+                            int index = checkPlayinglistPosition(arrayList.get(i).getPage());
+                            Log.d(">>>PageAdapter", "index: " + index);
+                            MainActivity.playingList.remove(index);
                             MainActivity.bottomSheetAdapter.notifyItemRemoved(index);
                             arrayList.get(i).setIsplay(1);
                             notifyItemChanged(i);
                             notifyDataSetChanged();
                             AudioController.stopPage(arrayList.get(positions).getPage());
+                            break;
                         }
                     }
                     //add
@@ -92,6 +94,7 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                     MainActivity.bottomSheetAdapter.notifyItemInserted(MainActivity.playingList.size());
                     AudioController.startTrack(context, arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
                     checkOpenService();
+                    Log.d(">>>PageAdapter", "size: " + MainActivity.playingList.size());
                 } else {
                     //remove
                     Bitmap bitmapadd = BitmapFactory.decodeByteArray(arrayList.get(positions).getImgdefault(), 0, arrayList.get(positions).getImgdefault().length);
@@ -102,6 +105,7 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                             MainActivity.playingList.remove(i);
                             MainActivity.bottomSheetAdapter.notifyItemRemoved(i);
                             MainActivity.bottomSheetAdapter.notifyDataSetChanged();
+                            break;
                         }
                     }
                     arrayList.get(positions).setIsplay(1);
@@ -173,5 +177,15 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
     private void changeVolumn(String pp, float volumn) {
         AudioController.playingListindex0_1(pp).setVolume(volumn, volumn);
         AudioController.playingListindex0_2(pp).setVolume(volumn, volumn);
+    }
+
+    private int checkPlayinglistPosition(int page) {
+        for (int i = 0; i < MainActivity.playingList.size(); i++) {
+            int playlistpage = MainActivity.playingList.get(i).getPage();
+            if (playlistpage == page) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

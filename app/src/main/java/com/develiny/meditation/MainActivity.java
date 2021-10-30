@@ -199,7 +199,11 @@ public class MainActivity extends AppCompatActivity {
         addfav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddTitleDialog.addTitleDialog(MainActivity.this);
+                if (playingList.size() != 0) {
+                    AddTitleDialog.addTitleDialog(MainActivity.this);
+                } else {
+                    Toast.makeText(MainActivity.this, "null playinglist", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
