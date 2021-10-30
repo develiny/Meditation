@@ -1,19 +1,23 @@
 package com.develiny.meditation.page.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.develiny.meditation.R;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
+import com.develiny.meditation.page.item.FavListItem;
 import com.develiny.meditation.page.item.FavTitleItem;
 
 import java.util.ArrayList;
@@ -23,6 +27,7 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
     ArrayList<FavTitleItem> arrayList;
     Context context;
     DatabaseHandler databaseHandler;
+    RecyclerView.LayoutManager layoutManager;
 
     public FavTitleAdapter(ArrayList<FavTitleItem> arrayList, Context context) {
         this.arrayList = arrayList;
@@ -71,6 +76,27 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
                 databaseHandler.removeFavList(arrayList.get(i).getTitle());
             }
         });
+
+        holder.recyclerView.setVisibility(View.GONE);
+
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (holder.recyclerView.getVisibility() == View.VISIBLE) {
+                    Log.d(">>>FavTitleAdapter", "make gone");
+                    holder.recyclerView.setVisibility(View.GONE);
+                } else {
+
+                    Log.d(">>>FavTitleAdapter", "make visible");
+                    FavListAdapter adapter = new FavListAdapter(arrayList.get(i).getTitle(), context);
+                    layoutManager = new LinearLayoutManager(context);
+                    holder.recyclerView.setLayoutManager(layoutManager);
+                    holder.recyclerView.setAdapter(adapter);
+
+                    holder.recyclerView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     @Override
@@ -83,6 +109,7 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
         TextView title;
         Button pands, edit, delete;
         RecyclerView recyclerView;
+        LinearLayout linearLayout;
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -91,6 +118,7 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
             this.edit = itemView.findViewById(R.id.fav_page_item_edit);
             this.delete = itemView.findViewById(R.id.fav_page_item_delete);
             this.recyclerView = itemView.findViewById(R.id.fav_page_inside_recyclerview);
+            this.linearLayout = itemView.findViewById(R.id.fav_page_item_linear);
         }
     }
 }

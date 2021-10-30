@@ -307,6 +307,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return pageItems;
     }
 
+    public ArrayList<FavListItem> getFavListItem(String title) {
+        FavListItem favListItem = null;
+        ArrayList<FavListItem> favListItems = new ArrayList<>();
+        sqLiteDatabase = this.getWritableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("select * from favlist where = " + "'" + title + "'", null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            favListItem = new FavListItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getBlob(3), cursor.getBlob(4), cursor.getInt(5), cursor.getInt(6), cursor.getString(7));
+            favListItems.add(favListItem);
+            cursor.moveToFirst();
+        }
+        cursor.close();
+        closeDatabse();
+        return favListItems;
+    }
+
     public void deleteAllPlayingList() {
         sqLiteDatabase = this.getWritableDatabase();
 //        sqLiteDatabase.execSQL("delete from playing");
@@ -371,8 +387,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (titles.contains(title)) {
             Toast.makeText(context, "같은이름", Toast.LENGTH_SHORT).show();
         } else {
-//            checkSameFavList(context, title);
-            addFavTitleList(title);
+            checkSameFavList(context, title);
+//            addFavTitleList(title);
         }
     }
 
@@ -388,19 +404,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     favtitles.add(cursor.getString(0));
+                    cursor.moveToNext();
                 }
 
 
-//                if (favtitles.size() != 0) {//여기서 error
-//                    if (haveSame(nowPnps, favtitles)) {
-//                        Toast.makeText(context, "same already", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        addFavTitleList(title);
-//                    }
-//                } else {
-//                    addFavTitleList(title);
-//                }
-                addFavTitleList(title);
+                if (favtitles.size() != 0) {//여기서 error
+                    if (haveSame(nowPnps, favtitles)) {
+                        Toast.makeText(context, "same already", Toast.LENGTH_SHORT).show();
+                    } else {
+                        addFavTitleList(title);
+                    }
+                } else {
+                    addFavTitleList(title);
+                }
             }
         }
     }
@@ -515,10 +531,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         sqLiteDatabase = this.getWritableDatabase();
         List<String> checkWithThisList = new ArrayList<>();
         for (int i = 0; i < favtitles.size(); i++) {
-            Cursor cursor = sqLiteDatabase.rawQuery("select pnp from favlist where title = " + "'" + favtitles.get(i) + "'", null);
+            Cursor cursor = sqLiteDatabase.rawQuery("select pnp from favlist where favtitlename = " + "'" + favtitles.get(i) + "'", null);
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 checkWithThisList.add(cursor.getString(0));
+                cursor.moveToNext();
+                //move to next 없어서 error난걸수도있음
             }
             if (listEqualsIgnoreOrder(checkWithThisList, nowPnps)) {
                 isSame = true;
