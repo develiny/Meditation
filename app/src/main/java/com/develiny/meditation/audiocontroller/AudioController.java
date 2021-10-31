@@ -94,7 +94,7 @@ public class AudioController {
             case "1-2":
                 return Page1.p1p2_1;
             case "2-1":
-                return Page2.p2p2_1;
+                return Page2.p2p1_1;
             case "2-2":
                 return Page2.p2p2_1;
             default:
@@ -109,7 +109,7 @@ public class AudioController {
             case "1-2":
                 return Page1.p1p2_2;
             case "2-1":
-                return Page2.p2p2_2;
+                return Page2.p2p1_2;
             case "2-2":
                 return Page2.p2p2_2;
             default:

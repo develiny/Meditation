@@ -22,6 +22,8 @@ import com.develiny.meditation.R;
 import com.develiny.meditation.audiocontroller.AudioController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.dialog.EditFavTitleDialog;
+import com.develiny.meditation.page.Page1;
+import com.develiny.meditation.page.Page2;
 import com.develiny.meditation.page.item.FavListItem;
 import com.develiny.meditation.page.item.FavTitleItem;
 
@@ -59,18 +61,27 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
             @Override
             public void onClick(View view) {
                 databaseHandler = new DatabaseHandler(context);
-                if (MainActivity.playingList.size() != 0) {
-                    MainActivity.playingList.clear();
-                    MainActivity.bottomSheetAdapter.notifyItemRangeRemoved(0, MainActivity.playingList.size() - 1);
-                    MainActivity.bottomSheetAdapter.notifyDataSetChanged();
-                    databaseHandler.deleteAllPlayinglist();
-                    databaseHandler.addFavListInPlayinglist(arrayList.get(i).getTitle());
-                } else {
+                if (MainActivity.playingList.size() != 0) {//만약 playinglist에 재생목록이 있다면
+                    ArrayList<Integer> pagelist = new ArrayList<>();
+                    ArrayList<Integer> positionlist = new ArrayList<>();
+                    for (int i = 0; i < MainActivity.playingList.size(); i++) {
+                        pagelist.add(MainActivity.playingList.get(i).getPage());
+                        positionlist.add(MainActivity.playingList.get(i).getPosition());
+                        AudioController.stopPage(MainActivity.playingList.get(i).getPage());
+                        if (i == MainActivity.playingList.size() - 1) {
+                            MainActivity.playingList.clear();
+                            MainActivity.bottomSheetAdapter.notifyItemRangeRemoved(0, MainActivity.playingList.size() - 1);
+                            MainActivity.bottomSheetAdapter.notifyDataSetChanged();
+                            databaseHandler.deleteAllPlayinglist(pagelist, positionlist, arrayList.get(i).getTitle());
+                        }
+                    }
+                } else {//playinglist에 기존목록 없다면
                     databaseHandler.addFavListInPlayinglist(arrayList.get(i).getTitle());
                 }
                 ArrayList<String> pnplist = new ArrayList<>();
                 for (int i = 0; i < MainActivity.playingList.size(); i++) {
                     pnplist.add(MainActivity.playingList.get(i).getPnp());
+                    changePageImage(MainActivity.playingList.get(i).getPage(), MainActivity.playingList.get(i).getPosition() - 1);
                     if (i == MainActivity.playingList.size() - 1) {
                         AudioController.startPlayingList(context, pnplist);
                         AudioController.checkOpenService(context);
@@ -78,7 +89,7 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
                     }
                 }
             }
-        });
+        });//가끔 favlist2개 재생시키면 1개만 재생됨
 
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,6 +187,18 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
             } else {
                 this.recyclerView.setVisibility(View.GONE);
             }
+        }
+    }
+
+    private void changePageImage(int page, int position) {
+        if (page == 1) {
+            Page1.arrayList.get(position).setIsplay(2);
+            Page1.adapter.notifyItemChanged(position);
+            Page1.adapter.notifyDataSetChanged();
+        } else if (page == 2) {
+            Page2.arrayList.get(position).setIsplay(2);
+            Page2.adapter.notifyItemChanged(position);
+            Page2.adapter.notifyDataSetChanged();
         }
     }
 }

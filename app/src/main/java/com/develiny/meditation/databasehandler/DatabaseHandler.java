@@ -15,6 +15,8 @@ import com.develiny.meditation.dialog.AddTitleDialog;
 import com.develiny.meditation.dialog.EditFavTitleDialog;
 import com.develiny.meditation.notification.NotificationService;
 import com.develiny.meditation.page.FavPage;
+import com.develiny.meditation.page.Page1;
+import com.develiny.meditation.page.Page2;
 import com.develiny.meditation.page.adapter.BottomSheetAdapter;
 import com.develiny.meditation.page.adapter.PageAdapter;
 import com.develiny.meditation.page.item.FavListItem;
@@ -554,10 +556,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
     }
 
-    public void deleteAllPlayinglist() {
+    public void deleteAllPlayinglist(ArrayList<Integer> pagelist, ArrayList<Integer> positionlist, String title) {
         sqLiteDatabase = this.getWritableDatabase();
         sqLiteDatabase.execSQL("delete from playing");
+        sqLiteDatabase.execSQL("update rain set isplay = 1 where isplay = 2");
+        sqLiteDatabase.execSQL("update wind set isplay = 1 where isplay = 2");
+        for (int i = 0; i < pagelist.size(); i++) {
+            if (pagelist.get(i) == 1) {
+                sqLiteDatabase.execSQL("update rain set isplay = 2 where position = " + positionlist.get(i));
+                Page1.arrayList.get(positionlist.get(i) - 1).setIsplay(1);
+                Page1.adapter.notifyItemChanged(positionlist.get(i) - 1);
+                Page1.adapter.notifyDataSetChanged();
+            } else if (pagelist.get(i) == 2) {
+                sqLiteDatabase.execSQL("update wind set isplay = 2 where position = " + positionlist.get(i));
+                Page2.arrayList.get(positionlist.get(i) - 1).setIsplay(1);
+                Page2.adapter.notifyItemChanged(positionlist.get(i) - 1);
+                Page2.adapter.notifyDataSetChanged();
+            }
+        }
         sqLiteDatabase.execSQL("vacuum");
+
+        addFavListInPlayinglist(title);
     }
 
     public void addFavListInPlayinglist(String title) {
@@ -567,17 +586,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cursor.moveToFirst();
         int count = 0;
         while (!cursor.isAfterLast()) {
+            count += 1;
             pageItem = new PageItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getBlob(3), cursor.getBlob(4), cursor.getInt(5), 2);
             MainActivity.playingList.add(pageItem);
-            count += 1;
             ContentValues contentValues = new ContentValues();
             contentValues.put("page", cursor.getInt(0));
             contentValues.put("position", cursor.getInt(1));
             contentValues.put("pnp", cursor.getString(2));
-            contentValues.put("imagedefault", cursor.getBlob(3));
+            contentValues.put("imgdefault", cursor.getBlob(3));
             contentValues.put("img", cursor.getBlob(4));
             contentValues.put("seek", cursor.getInt(5));
             contentValues.put("isplay", 2);
+            sqLiteDatabase.insert("playing", null, contentValues);//2개 이상이여도 하나만 추가됨(error)
+            Log.d(">>>DatabaseHandler", "check, count: " + count);
             cursor.moveToNext();
         }
         MainActivity.bottomSheetAdapter.notifyItemRangeInserted(0, count);

@@ -61,6 +61,12 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
         int positions = position;
         Bitmap bitmap = BitmapFactory.decodeByteArray(arrayList.get(position).getImg(), 0, arrayList.get(position).getImg().length);
         holder.button.setImageBitmap(bitmap);
+        holder.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(">>>BottomSheetAdapter", "getposition: " + positions);
+            }
+        });
         holder.seekBar.setProgress(arrayList.get(position).getSeek());
 
         holder.btn.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +76,6 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                 int getpage = arrayList.get(positions).getPage();
                 int index = arrayList.indexOf(arrayList.get(positions));
                 databaseHandler.deletePlayingList(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
-                Log.d(">>>BottomSheetAdapter", "get page: " + arrayList.get(positions).getPage());
                 AudioController.stopPage(arrayList.get(positions).getPage());
 //                MainActivity.playingList.remove(index);
                 arrayList.remove(index);
