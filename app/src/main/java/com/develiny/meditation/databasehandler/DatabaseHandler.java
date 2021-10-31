@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.audiocontroller.AudioController;
 import com.develiny.meditation.dialog.AddTitleDialog;
+import com.develiny.meditation.dialog.EditFavTitleDialog;
 import com.develiny.meditation.notification.NotificationService;
 import com.develiny.meditation.page.FavPage;
 import com.develiny.meditation.page.adapter.BottomSheetAdapter;
@@ -324,7 +325,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return favListItems;
     }
 
-    public void deleteAllPlayingList() {
+    public void deleteAllPlayingListTest() {
         sqLiteDatabase = this.getWritableDatabase();
 //        sqLiteDatabase.execSQL("delete from playing");
 //        sqLiteDatabase.execSQL("update rain set isplay = 1");
@@ -550,6 +551,55 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public void deleteAllPlayinglist() {
+        sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.execSQL("delete from playing");
+        sqLiteDatabase.execSQL("vacuum");
+    }
+
+    public void addFavListInPlayinglist(String title) {
+        sqLiteDatabase = this.getWritableDatabase();
+        PageItem pageItem = null;
+        Cursor cursor = sqLiteDatabase.rawQuery("select * from favlist where favtitlename = " + "'" + title + "'", null);
+        cursor.moveToFirst();
+        int count = 0;
+        while (!cursor.isAfterLast()) {
+            pageItem = new PageItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getBlob(3), cursor.getBlob(4), cursor.getInt(5), 2);
+            MainActivity.playingList.add(pageItem);
+            count += 1;
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("page", cursor.getInt(0));
+            contentValues.put("position", cursor.getInt(1));
+            contentValues.put("pnp", cursor.getString(2));
+            contentValues.put("imagedefault", cursor.getBlob(3));
+            contentValues.put("img", cursor.getBlob(4));
+            contentValues.put("seek", cursor.getInt(5));
+            contentValues.put("isplay", 2);
+            cursor.moveToNext();
+        }
+        MainActivity.bottomSheetAdapter.notifyItemRangeInserted(0, count);
+        MainActivity.bottomSheetAdapter.notifyDataSetChanged();
+        cursor.close();
+        closeDatabse();
+    }
+
+    public void changeFavTitleName(String oldTitle, String newTitle) {
+        sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.execSQL("update favtitle set title = " + "'" + newTitle + "' where title = " + "'" + oldTitle + "'");
+        sqLiteDatabase.execSQL("update favlist set favtitlename = " + "'" + newTitle + "' where favtitlename = " + "'" + oldTitle + "'");
+        for (int i = 0; i < FavPage.favTitleItemArrayList.size(); i++) {
+            if (FavPage.favTitleItemArrayList.get(i).getTitle().equals(oldTitle)) {
+                FavPage.favTitleItemArrayList.get(i).setTitle(newTitle);
+                FavPage.adapter.notifyItemChanged(i);
+                FavPage.adapter.notifyDataSetChanged();
+                if (EditFavTitleDialog.alertDialog.isShowing()) {
+                    EditFavTitleDialog.alertDialog.dismiss();
+                }
+                break;
+            }
         }
     }
 

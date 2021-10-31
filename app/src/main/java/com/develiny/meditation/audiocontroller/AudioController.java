@@ -72,7 +72,7 @@ public class AudioController {
         }
     }
 
-    private static void checkOpenService(Context context) {//service 안켜져있으면 다시 시키
+    public static void checkOpenService(Context context) {//service 안켜져있으면 다시 시키
         if (!NotificationService.isPlaying) {
             Intent intent = new Intent(context, NotificationService.class);
             if (Build.VERSION.SDK_INT >= 26) {

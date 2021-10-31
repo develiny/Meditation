@@ -19,7 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
+import com.develiny.meditation.audiocontroller.AudioController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
+import com.develiny.meditation.dialog.EditFavTitleDialog;
 import com.develiny.meditation.page.item.FavListItem;
 import com.develiny.meditation.page.item.FavTitleItem;
 
@@ -56,8 +58,24 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
         holder.play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                databaseHandler = new DatabaseHandler(context);
                 if (MainActivity.playingList.size() != 0) {
-
+                    MainActivity.playingList.clear();
+                    MainActivity.bottomSheetAdapter.notifyItemRangeRemoved(0, MainActivity.playingList.size() - 1);
+                    MainActivity.bottomSheetAdapter.notifyDataSetChanged();
+                    databaseHandler.deleteAllPlayinglist();
+                    databaseHandler.addFavListInPlayinglist(arrayList.get(i).getTitle());
+                } else {
+                    databaseHandler.addFavListInPlayinglist(arrayList.get(i).getTitle());
+                }
+                ArrayList<String> pnplist = new ArrayList<>();
+                for (int i = 0; i < MainActivity.playingList.size(); i++) {
+                    pnplist.add(MainActivity.playingList.get(i).getPnp());
+                    if (i == MainActivity.playingList.size() - 1) {
+                        AudioController.startPlayingList(context, pnplist);
+                        AudioController.checkOpenService(context);
+                        MainActivity.pands.setBackgroundResource(R.drawable.bottom_pause);
+                    }
                 }
             }
         });
@@ -65,7 +83,7 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                EditFavTitleDialog.editFavTitleDialog(context, arrayList.get(i).getTitle(), i);
             }
         });
 

@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        pands.setOnClickListener(new View.OnClickListener() {
+        pands.setOnClickListener(new View.OnClickListener() { //가끔 잘 안먹음.
             @Override
             public void onClick(View view) {
                 if (MainActivity.playingList.size() == 0) {
@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
                     stopService(intent);
                 }
                 if (playingList.size() != 0) {
-                    databaseHandler.deleteAllPlayingList();
+                    databaseHandler.deleteAllPlayingListTest();
                 }
             }
         });
