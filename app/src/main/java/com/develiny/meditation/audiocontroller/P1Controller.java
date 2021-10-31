@@ -114,5 +114,7 @@ public class P1Controller {
         p1p2_2.prepareAsync();
         new p1p1t1().setStop(true);
         new p1p1t2().setStop(true);
+        new p1p2t1().setStop(true);
+        new p1p2t2().setStop(true);
     }
 }

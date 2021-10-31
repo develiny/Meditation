@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.page.item.FavListItem;
@@ -50,18 +51,14 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
     public void onBindViewHolder(@NonNull FavTitleAdapter.CustomViewHolder holder, int position) {
         int i = position;
 
-        if (arrayList.get(i).getIsplay() == 1) {
-            holder.pands.setBackgroundResource(R.drawable.bottom_play);
-        } else {
-            holder.pands.setBackgroundResource(R.drawable.bottom_pause);
-        }
-
         holder.title.setText(arrayList.get(position).getTitle());
 
-        holder.pands.setOnClickListener(new View.OnClickListener() {
+        holder.play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (MainActivity.playingList.size() != 0) {
 
+                }
             }
         });
 
@@ -83,7 +80,7 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(">>>FavTitleAdapter", "onClick");
+
                 if (holder.recyclerView.getVisibility() == View.GONE) {
                     databaseHandler = new DatabaseHandler(context);
                     ArrayList<FavListItem> favListItemArrayList;
@@ -110,6 +107,7 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
         holder.uandd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if (holder.uandd.isChecked()) {
                     databaseHandler = new DatabaseHandler(context);
                     ArrayList<FavListItem> favListItemArrayList;
@@ -140,7 +138,7 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
     public static class CustomViewHolder extends RecyclerView.ViewHolder {
 
         TextView title;
-        Button pands, edit, delete;
+        Button play, edit, delete;
         CheckBox uandd;
         RecyclerView recyclerView;
         LinearLayout linearLayout;
@@ -148,13 +146,18 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
             this.title = itemView.findViewById(R.id.fav_page_item_title);
-            this.pands = itemView.findViewById(R.id.fav_page_item_pands);
+            this.play = itemView.findViewById(R.id.fav_page_item_play);
             this.edit = itemView.findViewById(R.id.fav_page_item_edit);
             this.delete = itemView.findViewById(R.id.fav_page_item_delete);
             this.uandd = itemView.findViewById(R.id.fav_page_item_uandd);
             this.recyclerView = itemView.findViewById(R.id.fav_page_inside_recyclerview);
             this.linearLayout = itemView.findViewById(R.id.fav_page_item_linear);
             this.recyclerView.setVisibility(View.GONE);
+            if (this.uandd.isChecked()) {
+                this.recyclerView.setVisibility(View.VISIBLE);
+            } else {
+                this.recyclerView.setVisibility(View.GONE);
+            }
         }
     }
 }

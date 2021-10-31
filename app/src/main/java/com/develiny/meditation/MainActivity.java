@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         Page2 page2 = new Page2();
         sectionsPagerAdapter.addItem(page2);
         viewPager = findViewById(R.id.main_viewpager);
+        viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(sectionsPagerAdapter);
     }
 

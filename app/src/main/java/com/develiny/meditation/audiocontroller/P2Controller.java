@@ -108,7 +108,9 @@ public class P2Controller {
         p2p2_1.prepareAsync();
         p2p2_2.stop();
         p2p2_2.prepareAsync();
-        new P2Controller.p2p1t1().setStop(true);
-        new P2Controller.p2p1t2().setStop(true);
+        new p2p1t1().setStop(true);
+        new p2p1t2().setStop(true);
+        new p2p2t1().setStop(true);
+        new p2p2t2().setStop(true);
     }
 }

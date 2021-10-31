@@ -70,6 +70,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                 int getpage = arrayList.get(positions).getPage();
                 int index = arrayList.indexOf(arrayList.get(positions));
                 databaseHandler.deletePlayingList(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
+                Log.d(">>>BottomSheetAdapter", "get page: " + arrayList.get(positions).getPage());
                 AudioController.stopPage(arrayList.get(positions).getPage());
 //                MainActivity.playingList.remove(index);
                 arrayList.remove(index);
@@ -115,9 +116,12 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
         if (page == 1) {
             Page1.arrayList.get(position - 1).setIsplay(1);
             Page1.adapter.notifyItemChanged(position - 1);
+//            Page1.adapter.notifyDataSetChanged();
         } else if (page == 2) {
             Page2.arrayList.get(position - 1).setIsplay(1);
             Page2.adapter.notifyItemChanged(position - 1);
+//            Page2.adapter.notifyDataSetChanged();
         }
     }
+
 }
