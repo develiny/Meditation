@@ -557,6 +557,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void deleteAllPlayinglist(ArrayList<Integer> pagelist, ArrayList<Integer> positionlist, String title) {
+        Log.d(">>>DatabaseHandler", "check, title: + " + title);
         sqLiteDatabase = this.getWritableDatabase();
         sqLiteDatabase.execSQL("delete from playing");
         sqLiteDatabase.execSQL("update rain set isplay = 1 where isplay = 2");
@@ -580,6 +581,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void addFavListInPlayinglist(String title) {
+        Log.d(">>>DatabaseHandler", "check, title: " + title);
         sqLiteDatabase = this.getWritableDatabase();
         PageItem pageItem = null;
         Cursor cursor = sqLiteDatabase.rawQuery("select * from favlist where favtitlename = " + "'" + title + "'", null);
@@ -597,8 +599,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             contentValues.put("img", cursor.getBlob(4));
             contentValues.put("seek", cursor.getInt(5));
             contentValues.put("isplay", 2);
-            sqLiteDatabase.insert("playing", null, contentValues);//2개 이상이여도 하나만 추가됨(error)
-            Log.d(">>>DatabaseHandler", "check, count: " + count);
+            sqLiteDatabase.insert("playing", null, contentValues);//2개 이상이여도 하나만 추가됨(error)//1-1만 추가됨(없어도)
             cursor.moveToNext();
         }
         MainActivity.bottomSheetAdapter.notifyItemRangeInserted(0, count);

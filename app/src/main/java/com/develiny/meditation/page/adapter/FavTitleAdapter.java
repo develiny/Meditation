@@ -64,11 +64,11 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
                 if (MainActivity.playingList.size() != 0) {//만약 playinglist에 재생목록이 있다면
                     ArrayList<Integer> pagelist = new ArrayList<>();
                     ArrayList<Integer> positionlist = new ArrayList<>();
-                    for (int i = 0; i < MainActivity.playingList.size(); i++) {
-                        pagelist.add(MainActivity.playingList.get(i).getPage());
-                        positionlist.add(MainActivity.playingList.get(i).getPosition());
-                        AudioController.stopPage(MainActivity.playingList.get(i).getPage());
-                        if (i == MainActivity.playingList.size() - 1) {
+                    for (int ii = 0; ii < MainActivity.playingList.size(); ii++) {
+                        pagelist.add(MainActivity.playingList.get(ii).getPage());
+                        positionlist.add(MainActivity.playingList.get(ii).getPosition());
+                        AudioController.stopPage(MainActivity.playingList.get(ii).getPage());
+                        if (ii == MainActivity.playingList.size() - 1) {
                             MainActivity.playingList.clear();
                             MainActivity.bottomSheetAdapter.notifyItemRangeRemoved(0, MainActivity.playingList.size() - 1);
                             MainActivity.bottomSheetAdapter.notifyDataSetChanged();
@@ -89,7 +89,7 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
                     }
                 }
             }
-        });//가끔 favlist2개 재생시키면 1개만 재생됨
+        });//가끔 favlist2개 재생시키면 1개만 재생됨//1-1만 추가됨(없어도)
 
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
