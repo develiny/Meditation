@@ -11,7 +11,6 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.media.session.MediaSessionCompat;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -19,8 +18,8 @@ import androidx.core.app.NotificationCompat;
 
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
-import com.develiny.meditation.audiocontroller.P1Controller;
-import com.develiny.meditation.audiocontroller.P2Controller;
+import com.develiny.meditation.controller.P1Controller;
+import com.develiny.meditation.controller.P2Controller;
 
 import java.util.List;
 

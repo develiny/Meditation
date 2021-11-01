@@ -10,15 +10,12 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.develiny.meditation.MainActivity;
-import com.develiny.meditation.audiocontroller.AudioController;
+import com.develiny.meditation.controller.AudioController;
 import com.develiny.meditation.dialog.AddTitleDialog;
 import com.develiny.meditation.dialog.EditFavTitleDialog;
-import com.develiny.meditation.notification.NotificationService;
 import com.develiny.meditation.page.FavPage;
 import com.develiny.meditation.page.Page1;
 import com.develiny.meditation.page.Page2;
-import com.develiny.meditation.page.adapter.BottomSheetAdapter;
-import com.develiny.meditation.page.adapter.PageAdapter;
 import com.develiny.meditation.page.item.FavListItem;
 import com.develiny.meditation.page.item.FavTitleItem;
 import com.develiny.meditation.page.item.PageItem;
@@ -28,7 +25,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -599,7 +595,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             contentValues.put("img", cursor.getBlob(4));
             contentValues.put("seek", cursor.getInt(5));
             contentValues.put("isplay", 2);
-            sqLiteDatabase.insert("playing", null, contentValues);//2개 이상이여도 하나만 추가됨(error)//1-1만 추가됨(없어도)
+            sqLiteDatabase.insert("playing", null, contentValues);
             cursor.moveToNext();
         }
         MainActivity.bottomSheetAdapter.notifyItemRangeInserted(0, count);
@@ -648,6 +644,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         } else {
             return "nul";
         }
+    }
+
+    public void changePageSeek(int page, int progress, int position, String pnp) {
+        sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.execSQL("update playing set seek = " + progress + " where pnp = " + "'" + pnp + "'");
+        sqLiteDatabase.execSQL("update " + getPageName(page) + " set seek = " + progress + " where position = " + position);
+        sqLiteDatabase.execSQL("update favlist set seek = " + progress + " where pnp = " + "'" + pnp + "'");
     }
 
     public ArrayList<String> fav01to20(int i) {

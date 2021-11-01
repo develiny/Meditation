@@ -9,24 +9,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
-import com.develiny.meditation.audiocontroller.AudioController;
-import com.develiny.meditation.audiocontroller.P1Controller;
-import com.develiny.meditation.audiocontroller.P2Controller;
+import com.develiny.meditation.controller.AudioController;
+import com.develiny.meditation.controller.SeekController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
-import com.develiny.meditation.notification.DefaultNofitication;
 import com.develiny.meditation.notification.NotificationService;
-import com.develiny.meditation.page.Page1;
 import com.develiny.meditation.page.item.PageItem;
 
 import java.util.ArrayList;
@@ -36,8 +30,6 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
     ArrayList<PageItem> arrayList;
     Context context;
     DatabaseHandler databaseHandler;
-
-    private final static int MAX_VOLUME = 16;
 
     public PageAdapter(ArrayList<PageItem> arrayList, Context context) {
         this.arrayList = arrayList;
@@ -118,22 +110,23 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
         holder.seekBar.setMax(MainActivity.maxVolumn);
         holder.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                float volume = (float) (1 - (Math.log(MAX_VOLUME - i) / Math.log(MAX_VOLUME)));
-                String pp = arrayList.get(positions).getPnp();
-                changeVolumn(pp, volume);
-//                databaseHandler.updateVolumn(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
-                Log.d(">>>1", "onProgressChanged");
+            public void onStartTrackingTouch(SeekBar seekBar) {//터치
+                SeekController.pageMoving = true;
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                Log.d(">>>2", "onStartTrackingTouch");
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {//변화
+                if (SeekController.pageMoving) {
+                    float volume = (float) (1 - (Math.log(SeekController.MAX_VOLUME - i) / Math.log(SeekController.MAX_VOLUME)));
+                    String pp = arrayList.get(positions).getPnp();
+                    SeekController.changeVolumn(pp, volume);
+                    SeekController.changeSeekInPage(context, arrayList.get(positions), seekBar.getProgress());
+                }
             }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                Log.d(">>>3", "onStopTrackingTouch");
+            public void onStopTrackingTouch(SeekBar seekBar) {//끝
+                SeekController.pageMoving = false;
             }
         });
     }
@@ -172,11 +165,6 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                 context.stopService(new Intent(context, NotificationService.class));
             }
         }
-    }
-
-    private void changeVolumn(String pp, float volumn) {
-        AudioController.playingListindex0_1(pp).setVolume(volumn, volumn);
-        AudioController.playingListindex0_2(pp).setVolume(volumn, volumn);
     }
 
     private int checkPlayinglistPosition(int page) {

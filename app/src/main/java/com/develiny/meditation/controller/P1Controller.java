@@ -1,19 +1,11 @@
-package com.develiny.meditation.audiocontroller;
+package com.develiny.meditation.controller;
 
 import static com.develiny.meditation.page.Page1.p1p1_1;
 import static com.develiny.meditation.page.Page1.p1p1_2;
 import static com.develiny.meditation.page.Page1.p1p2_1;
 import static com.develiny.meditation.page.Page1.p1p2_2;
 
-import android.app.Service;
-import android.content.Intent;
-import android.media.MediaPlayer;
-import android.os.IBinder;
 import android.util.Log;
-
-import androidx.annotation.Nullable;
-
-import com.develiny.meditation.R;
 
 public class P1Controller {
 

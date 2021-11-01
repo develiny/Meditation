@@ -1,16 +1,12 @@
 package com.develiny.meditation.page.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
-import com.develiny.meditation.audiocontroller.AudioController;
+import com.develiny.meditation.controller.AudioController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.dialog.EditFavTitleDialog;
 import com.develiny.meditation.page.Page1;
@@ -89,7 +85,7 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
                     }
                 }
             }
-        });//가끔 favlist2개 재생시키면 1개만 재생됨//1-1만 추가됨(없어도)
+        });
 
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override

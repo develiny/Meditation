@@ -1,8 +1,5 @@
 package com.develiny.meditation.page;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,11 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.develiny.meditation.R;
-import com.develiny.meditation.audiocontroller.AudioController;
+import com.develiny.meditation.controller.AudioController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.page.adapter.PageAdapter;
 import com.develiny.meditation.page.item.PageItem;

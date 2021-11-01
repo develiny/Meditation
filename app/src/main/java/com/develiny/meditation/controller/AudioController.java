@@ -1,16 +1,13 @@
-package com.develiny.meditation.audiocontroller;
+package com.develiny.meditation.controller;
 
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
 
-import com.develiny.meditation.MainActivity;
-import com.develiny.meditation.R;
 import com.develiny.meditation.notification.NotificationService;
 import com.develiny.meditation.page.Page1;
 import com.develiny.meditation.page.Page2;
-import com.develiny.meditation.page.adapter.BottomSheetAdapter;
 
 import java.util.List;
 

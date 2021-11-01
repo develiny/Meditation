@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.develiny.meditation.R;
-import com.develiny.meditation.audiocontroller.AudioController;
+import com.develiny.meditation.controller.AudioController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.page.adapter.PageAdapter;
 import com.develiny.meditation.page.item.PageItem;

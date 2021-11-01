@@ -1,9 +1,5 @@
-package com.develiny.meditation.audiocontroller;
+package com.develiny.meditation.controller;
 
-import static com.develiny.meditation.page.Page1.p1p1_1;
-import static com.develiny.meditation.page.Page1.p1p1_2;
-import static com.develiny.meditation.page.Page1.p1p2_1;
-import static com.develiny.meditation.page.Page1.p1p2_2;
 import static com.develiny.meditation.page.Page2.p2p1_1;
 import static com.develiny.meditation.page.Page2.p2p1_2;
 import static com.develiny.meditation.page.Page2.p2p2_1;

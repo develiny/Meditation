@@ -7,9 +7,9 @@ import android.os.Build;
 
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
-import com.develiny.meditation.audiocontroller.AudioController;
-import com.develiny.meditation.audiocontroller.P1Controller;
-import com.develiny.meditation.audiocontroller.P2Controller;
+import com.develiny.meditation.controller.AudioController;
+import com.develiny.meditation.controller.P1Controller;
+import com.develiny.meditation.controller.P2Controller;
 
 import java.util.ArrayList;
 import java.util.List;

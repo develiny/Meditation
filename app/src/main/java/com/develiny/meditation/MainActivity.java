@@ -10,19 +10,16 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.develiny.meditation.audiocontroller.AudioController;
+import com.develiny.meditation.controller.AudioController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.dialog.AddTitleDialog;
 import com.develiny.meditation.notification.DefaultNofitication;
@@ -34,7 +31,6 @@ import com.develiny.meditation.page.adapter.BottomSheetAdapter;
 import com.develiny.meditation.page.item.PageItem;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

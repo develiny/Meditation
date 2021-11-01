@@ -10,20 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
-import com.develiny.meditation.audiocontroller.AudioController;
-import com.develiny.meditation.audiocontroller.P1Controller;
-import com.develiny.meditation.audiocontroller.P2Controller;
+import com.develiny.meditation.controller.AudioController;
+import com.develiny.meditation.controller.SeekController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.notification.NotificationService;
 import com.develiny.meditation.page.Page1;
@@ -68,6 +64,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
             }
         });
         holder.seekBar.setProgress(arrayList.get(position).getSeek());
+        holder.seekBar.setMax(MainActivity.maxVolumn);
 
         holder.btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +83,28 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                 }
                 changePageItemBackground(getpage, getposition);
                 Log.d(">>>", "size: " + arrayList.size());
+            }
+        });
+
+        holder.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                if (SeekController.bottomMoving) {
+                    float volume = (float) (1 - (Math.log(SeekController.MAX_VOLUME - i) / Math.log(SeekController.MAX_VOLUME)));
+                    String pp = arrayList.get(positions).getPnp();
+                    SeekController.changeVolumn(pp, volume);
+                    SeekController.changeSeekInBottom(context, arrayList.get(positions), seekBar.getProgress());
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                SeekController.bottomMoving = true;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                SeekController.bottomMoving = false;
             }
         });
     }
@@ -129,4 +148,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
         }
     }
 
+    private void changeSeekChange() {
+
+    }
 }
