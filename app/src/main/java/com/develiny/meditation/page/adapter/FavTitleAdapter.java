@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -52,6 +53,16 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
         int i = position;
 
         holder.title.setText(arrayList.get(position).getTitle());
+
+        if (arrayList.get(i).getIsopen() == 1) {
+            holder.recyclerView.setVisibility(View.GONE);
+            holder.uandd.setChecked(false);
+            holder.uandd.setBackgroundResource(R.drawable.bottom_down);
+        } else {
+            holder.recyclerView.setVisibility(View.VISIBLE);
+            holder.uandd.setChecked(true);
+            holder.uandd.setBackgroundResource(R.drawable.bottom_up);
+        }
 
         holder.play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,25 +117,45 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
             @Override
             public void onClick(View view) {
 
-                if (holder.recyclerView.getVisibility() == View.GONE) {
-                    databaseHandler = new DatabaseHandler(context);
+                databaseHandler = new DatabaseHandler(context);
+                if (arrayList.get(i).getIsopen() == 1) {
                     ArrayList<FavListItem> favListItemArrayList;
                     favListItemArrayList = databaseHandler.getFavListItem(arrayList.get(i).getTitle());
+                    databaseHandler.changeIsOpen(arrayList.get(i).getIsopen(), arrayList.get(i).getTitle());
+
+                    for (int ii = 0; ii < arrayList.size(); ii++) {
+                        if (arrayList.get(ii).getIsopen() == 2) {
+                            arrayList.get(ii).setIsopen(1);
+                        }
+                    }
+                    arrayList.get(i).setIsopen(2);
 
                     favListAdapter = new FavListAdapter(favListItemArrayList, context);
                     layoutManager = new LinearLayoutManager(context);
                     holder.recyclerView.setHasFixedSize(true);
                     holder.recyclerView.setLayoutManager(layoutManager);
                     holder.recyclerView.setAdapter(favListAdapter);
-
-                    holder.uandd.setBackgroundResource(R.drawable.bottom_up);
-                    holder.uandd.setChecked(true);
-                    holder.recyclerView.setVisibility(View.VISIBLE);
                 } else {
-                    holder.uandd.setBackgroundResource(R.drawable.bottom_down);
-                    holder.uandd.setChecked(true);
-                    holder.recyclerView.setVisibility(View.GONE);
+                    ArrayList<FavListItem> favListItemArrayList;
+                    favListItemArrayList = databaseHandler.getFavListItem(arrayList.get(i).getTitle());
+                    databaseHandler.changeIsOpen(arrayList.get(i).getIsopen(), arrayList.get(i).getTitle());
+
+                    for (int ii = 0; ii < arrayList.size(); ii++) {
+                        if (arrayList.get(ii).getIsopen() == 2) {
+                            arrayList.get(ii).setIsopen(1);
+                        }
+                    }
+
+                    favListAdapter = new FavListAdapter(favListItemArrayList, context);
+                    layoutManager = new LinearLayoutManager(context);
+                    holder.recyclerView.setHasFixedSize(true);
+                    holder.recyclerView.setLayoutManager(layoutManager);
+                    holder.recyclerView.setAdapter(favListAdapter);
                 }
+
+
+                notifyItemRangeChanged(0, arrayList.size() - 1);
+                notifyDataSetChanged();
             }
         });
 
@@ -133,29 +164,60 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
             @Override
             public void onClick(View view) {
 
-                if (holder.uandd.isChecked()) {
-//
-//                    FavListAdapter favListAdapter = new FavListAdapter(;
-//                    FavListAdapter.arrayList.clear();
-//
-                    databaseHandler = new DatabaseHandler(context);
+                databaseHandler = new DatabaseHandler(context);
+                if (arrayList.get(i).getIsopen() == 1) {
                     ArrayList<FavListItem> favListItemArrayList;
                     favListItemArrayList = databaseHandler.getFavListItem(arrayList.get(i).getTitle());
+                    databaseHandler.changeIsOpen(arrayList.get(i).getIsopen(), arrayList.get(i).getTitle());
+
+                    for (int ii = 0; ii < arrayList.size(); ii++) {
+                        if (arrayList.get(ii).getIsopen() == 2) {
+                            arrayList.get(ii).setIsopen(1);
+                        }
+                    }
+                    arrayList.get(i).setIsopen(2);
 
                     favListAdapter = new FavListAdapter(favListItemArrayList, context);
                     layoutManager = new LinearLayoutManager(context);
                     holder.recyclerView.setHasFixedSize(true);
                     holder.recyclerView.setLayoutManager(layoutManager);
                     holder.recyclerView.setAdapter(favListAdapter);
-
-                    holder.uandd.setBackgroundResource(R.drawable.bottom_up);
-                    holder.recyclerView.setVisibility(View.VISIBLE);
                 } else {
-                    holder.uandd.setBackgroundResource(R.drawable.bottom_down);
-                    holder.recyclerView.setVisibility(View.GONE);
+                    ArrayList<FavListItem> favListItemArrayList;
+                    favListItemArrayList = databaseHandler.getFavListItem(arrayList.get(i).getTitle());
+                    databaseHandler.changeIsOpen(arrayList.get(i).getIsopen(), arrayList.get(i).getTitle());
+
+                    for (int ii = 0; ii < arrayList.size(); ii++) {
+                        if (arrayList.get(ii).getIsopen() == 2) {
+                            arrayList.get(ii).setIsopen(1);
+                        }
+                    }
+
+                    favListAdapter = new FavListAdapter(favListItemArrayList, context);
+                    layoutManager = new LinearLayoutManager(context);
+                    holder.recyclerView.setHasFixedSize(true);
+                    holder.recyclerView.setLayoutManager(layoutManager);
+                    holder.recyclerView.setAdapter(favListAdapter);
                 }
+
+
+                notifyItemRangeChanged(0, arrayList.size() - 1);
+                notifyDataSetChanged();
             }
         });
+
+//        holder.uandd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                if (b) {
+////                    holder.uandd.setBackgroundResource(R.drawable.bottom_up);
+//                    holder.uandd.setBackgroundResource(R.drawable.bottom_down);
+//                } else {
+//                    holder.uandd.setBackgroundResource(R.drawable.bottom_up);
+////                    holder.uandd.setBackgroundResource(R.drawable.bottom_down);
+//                }
+//            }
+//        });
     }
 
 

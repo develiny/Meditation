@@ -72,7 +72,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     //fav
     private static final String FAV_TITLE_TABLE_NAME = "favtitle";
     public static final String COLUMN_FAV_TITLE = "title";
-    public static final String COLUMN_FAV_ISPLAY = "isplay";
+    public static final String COLUMN_FAV_ISPLAY = "isopen";
     private static final String FAV_LIST_TABLE_NAME = "favlist";
     public static final String COLUMN_FAVTITLENAME = "favtitlename";
 
@@ -431,13 +431,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         if (MainActivity.playingList.size() != 0) {
             String pnp = MainActivity.playingList.get(0).getPnp();
-            if (AudioController.playingListindex0_1(pnp).isPlaying() || AudioController.playingListindex0_2(pnp).isPlaying()) {
-                sqLiteDatabase.execSQL("insert into favtitle values (" + "'" + title1 + "'" + "," + 2 + ")");
-                favTitleItem = new FavTitleItem(title1, 2);
-            } else {
-                sqLiteDatabase.execSQL("insert into favtitle values (" + "'" + title1 + "'" + "," + 1 + ")");
-                favTitleItem = new FavTitleItem(title1, 1);
-            }
+            sqLiteDatabase.execSQL("insert into favtitle values (" + "'" + title1 + "'" + "," + 1 + ")");
+            favTitleItem = new FavTitleItem(title1, 1);
             FavPage.favTitleItemArrayList.add(favTitleItem);
             FavPage.adapter.notifyItemInserted(FavPage.favTitleItemArrayList.size() - 1);
             FavPage.adapter.notifyDataSetChanged();
@@ -676,5 +671,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cursor.close();
         closeDatabse();
         return pnpInFavs;
+    }
+
+    public void changeIsOpen(int isopen, String title) {
+        sqLiteDatabase = this.getWritableDatabase();
+        if (isopen == 1) {
+            sqLiteDatabase.execSQL("update favtitle set isopen = 1 where isopen = 2");
+            sqLiteDatabase.execSQL("update favtitle set isopen = 2 where title = " + "'" + title + "'");
+        } else if (isopen == 2) {
+            sqLiteDatabase.execSQL("update favtitle set isopen = 1 where isopen = 2");
+        }
     }
 }

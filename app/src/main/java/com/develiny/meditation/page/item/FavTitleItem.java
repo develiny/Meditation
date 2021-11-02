@@ -2,13 +2,13 @@ package com.develiny.meditation.page.item;
 
 public class FavTitleItem {
     String title;
-    int isplay;
+    int isopen;
 
     public FavTitleItem() {}
 
-    public FavTitleItem(String title, int isplay) {
+    public FavTitleItem(String title, int isopen) {
         this.title = title;
-        this.isplay = isplay;
+        this.isopen = isopen;
     }
 
     public String getTitle() {
@@ -19,11 +19,11 @@ public class FavTitleItem {
         this.title = title;
     }
 
-    public int getIsplay() {
-        return isplay;
+    public int getIsopen() {
+        return isopen;
     }
 
-    public void setIsplay(int isplay) {
-        this.isplay = isplay;
+    public void setIsopen(int isopen) {
+        this.isopen = isopen;
     }
 }
