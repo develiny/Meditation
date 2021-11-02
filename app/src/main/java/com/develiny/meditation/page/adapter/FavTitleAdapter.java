@@ -134,6 +134,10 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
             public void onClick(View view) {
 
                 if (holder.uandd.isChecked()) {
+//
+//                    FavListAdapter favListAdapter = new FavListAdapter(;
+//                    FavListAdapter.arrayList.clear();
+//
                     databaseHandler = new DatabaseHandler(context);
                     ArrayList<FavListItem> favListItemArrayList;
                     favListItemArrayList = databaseHandler.getFavListItem(arrayList.get(i).getTitle());

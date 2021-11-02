@@ -38,10 +38,23 @@ public class SeekController {
             position = Page1.arrayList.indexOf(pageItem);
         }
 
-        if (MainActivity.playingList.contains(pageItem)) {
-            MainActivity.playingList.get(position).setSeek(progress);
-            MainActivity.bottomSheetAdapter.notifyItemChanged(position);
-            MainActivity.bottomSheetAdapter.notifyDataSetChanged();
+        if (MainActivity.playingList.size() != 0 ) {
+            for (int i = 0; i < MainActivity.playingList.size(); i++) {
+                if (MainActivity.playingList.get(i).getPnp().equals(pageItem.getPnp())) {
+                    MainActivity.playingList.get(position).setSeek(progress);
+                    MainActivity.bottomSheetAdapter.notifyItemChanged(position);
+                    MainActivity.bottomSheetAdapter.notifyDataSetChanged();
+                    break;
+                }
+            }
+        }
+
+        for (int i = 0; i < FavListAdapter.arrayList.size(); i++) {
+            if (FavListAdapter.arrayList.get(i).getPnp().equals(pageItem.getPnp())) {
+                FavListAdapter.arrayList.get(i).setSeek(progress);
+                FavTitleAdapter.favListAdapter.notifyItemChanged(i);
+                FavTitleAdapter.favListAdapter.notifyDataSetChanged();
+            }
         }
 
         databaseHandler = new DatabaseHandler(context);
