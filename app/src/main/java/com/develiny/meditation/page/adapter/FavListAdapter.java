@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
+import com.develiny.meditation.controller.SeekController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.page.item.FavListItem;
 import com.develiny.meditation.page.item.PageItem;
@@ -44,6 +45,7 @@ public class FavListAdapter extends RecyclerView.Adapter<FavListAdapter.CustomVi
 
     @Override
     public void onBindViewHolder(@NonNull FavListAdapter.CustomViewHolder holder, int position) {
+        int positions = position;
 
         Log.d(">>>FavListAdapter", "onBindViewHolder");
 //        databaseHandler = new DatabaseHandler(context);
@@ -54,6 +56,25 @@ public class FavListAdapter extends RecyclerView.Adapter<FavListAdapter.CustomVi
 
         holder.seekBar.setProgress(arrayList.get(position).getSeek());
         holder.seekBar.setMax(MainActivity.maxVolumn);
+
+        holder.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                if (SeekController.favMoving) {
+                    SeekController.changeSeekInFavList(context, arrayList.get(positions), i);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                SeekController.favMoving = true;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                SeekController.favMoving = false;
+            }
+        });
     }
 
     @Override
