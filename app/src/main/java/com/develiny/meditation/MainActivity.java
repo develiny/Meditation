@@ -29,6 +29,7 @@ import com.develiny.meditation.page.Page1;
 import com.develiny.meditation.page.Page2;
 import com.develiny.meditation.page.adapter.BottomSheetAdapter;
 import com.develiny.meditation.page.item.PageItem;
+import com.develiny.meditation.service.GetStateKillApp;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
@@ -58,12 +59,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        startGetStateKillApp();
+
         setAudioManager();
 
         setDatabaseHandler();
         setViewPager();
         setButtonSheet();
 
+    }
+
+    private void startGetStateKillApp() {
+        databaseHandler = new DatabaseHandler(MainActivity.this);
+        databaseHandler.whenAppKillTask();
+        startService(new Intent(MainActivity.this, GetStateKillApp.class));
     }
 
     private void setAudioManager() {
@@ -149,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        pands.setOnClickListener(new View.OnClickListener() { //가끔 잘 안먹음.
+        pands.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (MainActivity.playingList.size() == 0) {

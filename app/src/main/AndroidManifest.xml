@@ -27,8 +27,9 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".notification.NotificationService"/>
+        <service android:name=".notification.NotificationService" android:stopWithTask="true"/>
         <receiver android:name=".notification.NotificationActionService"/>
+        <service android:name=".service.GetStateKillApp" />
     </application>
 
 </manifest>

@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.media.session.MediaSessionCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -18,9 +19,11 @@ import androidx.core.app.NotificationCompat;
 
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
+import com.develiny.meditation.controller.AudioController;
 import com.develiny.meditation.controller.P1Controller;
 import com.develiny.meditation.controller.P2Controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationService extends Service {
@@ -41,7 +44,6 @@ public class NotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         isPlaying = true;
-        Toast.makeText(getApplicationContext(), "service start", Toast.LENGTH_SHORT).show();
         startForgroundService(getApplicationContext());
         return super.onStartCommand(intent, flags, startId);
     }
@@ -49,7 +51,18 @@ public class NotificationService extends Service {
     @Override
     public void onDestroy() {
         isPlaying = false;
-        Toast.makeText(getApplicationContext(), "service stop", Toast.LENGTH_SHORT).show();
+        Log.d("NotificationService>>>", "onDestroy");
+        //여기서 재생중인곡 있으면 종료하기
+        if (MainActivity.playingList.size() != 0 && AudioController.checkIsPlaying(MainActivity.playingList.get(0).getPnp())) {//재생중
+            MainActivity.pands.setBackgroundResource(R.drawable.bottom_play);
+            List<Integer> page = new ArrayList<>();
+            for (int i = 0; i < MainActivity.playingList.size(); i++) {
+                page.add(MainActivity.playingList.get(i).getPage());
+                if (i == MainActivity.playingList.size() - 1) {
+                    NotificationService.stopPlayingList(page);
+                }
+            }
+        }
         super.onDestroy();
     }
 

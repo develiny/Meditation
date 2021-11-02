@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.controller.AudioController;
 import com.develiny.meditation.dialog.AddTitleDialog;
+import com.develiny.meditation.dialog.DeleteFavTitleDialog;
 import com.develiny.meditation.dialog.EditFavTitleDialog;
 import com.develiny.meditation.page.FavPage;
 import com.develiny.meditation.page.Page1;
@@ -473,6 +474,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("vacuum");
         cursor.close();
         closeDatabse();
+        if (DeleteFavTitleDialog.alertDialog.isShowing()) {
+            DeleteFavTitleDialog.alertDialog.dismiss();
+        }
     }
 
     String getNextFav(int index) {
@@ -681,5 +685,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         } else if (isopen == 2) {
             sqLiteDatabase.execSQL("update favtitle set isopen = 1 where isopen = 2");
         }
+    }
+
+    public void whenAppKillTask() {
+        sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.execSQL("update favtitle set isopen = 1 where isopen = 2");
     }
 }

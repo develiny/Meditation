@@ -18,6 +18,7 @@ import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
 import com.develiny.meditation.controller.AudioController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
+import com.develiny.meditation.dialog.DeleteFavTitleDialog;
 import com.develiny.meditation.dialog.EditFavTitleDialog;
 import com.develiny.meditation.page.Page1;
 import com.develiny.meditation.page.Page2;
@@ -108,8 +109,7 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                databaseHandler = new DatabaseHandler(context);
-                databaseHandler.removeFavList(arrayList.get(i).getTitle());
+                DeleteFavTitleDialog.deleteFavTitleDialog(context, arrayList.get(i).getTitle());
             }
         });
 
