@@ -10,6 +10,8 @@ import com.develiny.meditation.controller.AudioController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.page.Page1;
 import com.develiny.meditation.page.Page2;
+import com.develiny.meditation.page.adapter.FavListAdapter;
+import com.develiny.meditation.page.adapter.FavTitleAdapter;
 import com.develiny.meditation.page.item.FavListItem;
 import com.develiny.meditation.page.item.PageItem;
 
@@ -52,6 +54,14 @@ public class SeekController {
             Page1.arrayList.get(position).setSeek(progress);
             Page1.adapter.notifyItemChanged(position);
             Page1.adapter.notifyDataSetChanged();
+
+            for (int i = 0; i < FavListAdapter.arrayList.size(); i++) {
+                if (FavListAdapter.arrayList.get(i).getPnp().equals(pageItem.getPnp())) {
+                    FavListAdapter.arrayList.get(i).setSeek(progress);
+                    FavTitleAdapter.favListAdapter.notifyItemChanged(i);
+                    FavTitleAdapter.favListAdapter.notifyDataSetChanged();
+                }
+            }
 
         } else if (pageItem.getPage() == 2) {
             Page2.arrayList.get(position).setSeek(progress);

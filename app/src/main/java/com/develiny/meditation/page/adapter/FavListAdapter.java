@@ -14,6 +14,7 @@ import android.widget.SeekBar;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.page.item.FavListItem;
@@ -24,11 +25,11 @@ import java.util.ArrayList;
 public class FavListAdapter extends RecyclerView.Adapter<FavListAdapter.CustomViewHolder> {
 //    String title;
     Context context;
-    ArrayList<FavListItem> arrayList = new ArrayList<>();
+    public static ArrayList<FavListItem> arrayList = new ArrayList<>();
     DatabaseHandler databaseHandler;
 
     public FavListAdapter(ArrayList<FavListItem> arrayList, Context context) {
-        this.arrayList = arrayList;
+        FavListAdapter.arrayList = arrayList;
         this.context = context;
     }
 
@@ -50,7 +51,9 @@ public class FavListAdapter extends RecyclerView.Adapter<FavListAdapter.CustomVi
 
         Bitmap bitmap1 = BitmapFactory.decodeByteArray(arrayList.get(position).getImgdefault(), 0, arrayList.get(position).getImgdefault().length);
         holder.button.setImageBitmap(bitmap1);
+
         holder.seekBar.setProgress(arrayList.get(position).getSeek());
+        holder.seekBar.setMax(MainActivity.maxVolumn);
     }
 
     @Override

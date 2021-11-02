@@ -31,7 +31,7 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
     Context context;
     DatabaseHandler databaseHandler;
     RecyclerView.LayoutManager layoutManager;
-    FavListAdapter favListAdapter;
+    public static FavListAdapter favListAdapter;
 
     public FavTitleAdapter(ArrayList<FavTitleItem> arrayList, Context context) {
         this.arrayList = arrayList;
