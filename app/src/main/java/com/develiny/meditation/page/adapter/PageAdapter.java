@@ -137,7 +137,7 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
     }
 
     public static class CustomViewHolder extends RecyclerView.ViewHolder {
-        public ImageView button;
+        ImageView button;
         SeekBar seekBar;
 
         public CustomViewHolder(@NonNull View itemView) {

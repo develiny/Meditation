@@ -6,7 +6,10 @@ import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 
+import com.develiny.meditation.databasehandler.DatabaseHandler;
+
 public class GetStateKillApp extends Service {
+    DatabaseHandler databaseHandler;
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -21,6 +24,8 @@ public class GetStateKillApp extends Service {
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         //my code
+        databaseHandler = new DatabaseHandler(getApplicationContext());
+        databaseHandler.whenAppKillTask();
         stopSelf();
     }
 }

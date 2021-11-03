@@ -11,8 +11,10 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -24,7 +26,9 @@ import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.dialog.AddTitleDialog;
 import com.develiny.meditation.notification.DefaultNofitication;
 import com.develiny.meditation.notification.NotificationService;
+import com.develiny.meditation.page.ChakraPage;
 import com.develiny.meditation.page.FavPage;
+import com.develiny.meditation.page.HzPage;
 import com.develiny.meditation.page.Page1;
 import com.develiny.meditation.page.Page2;
 import com.develiny.meditation.page.adapter.BottomSheetAdapter;
@@ -32,6 +36,7 @@ import com.develiny.meditation.page.item.PageItem;
 import com.develiny.meditation.service.GetStateKillApp;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
     SectionsPagerAdapter sectionsPagerAdapter;
     AudioManager audioManager;
     public static int maxVolumn;
+
+    Button testbtn, testbtn1;
+    MediaPlayer mp;
 
     //bottom sheet
     RelativeLayout bottomSheetTitleBar;
@@ -67,11 +75,10 @@ public class MainActivity extends AppCompatActivity {
         setViewPager();
         setButtonSheet();
 
+        testbtn();
     }
 
     private void startGetStateKillApp() {
-        databaseHandler = new DatabaseHandler(MainActivity.this);
-        databaseHandler.whenAppKillTask();
         startService(new Intent(MainActivity.this, GetStateKillApp.class));
     }
 
@@ -93,6 +100,10 @@ public class MainActivity extends AppCompatActivity {
         sectionsPagerAdapter.addItem(page1);
         Page2 page2 = new Page2();
         sectionsPagerAdapter.addItem(page2);
+        ChakraPage chakraPage = new ChakraPage();
+        sectionsPagerAdapter.addItem(chakraPage);
+        HzPage hzPage = new HzPage();
+        sectionsPagerAdapter.addItem(hzPage);
         viewPager = findViewById(R.id.main_viewpager);
         viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -134,6 +145,44 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 //    }
+
+    private void testbtn() {
+        testbtn = findViewById(R.id.testbtn);
+        testbtn1 = findViewById(R.id.testbtn1);
+        testbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mp == null) {
+                    mp = new MediaPlayer();
+                    mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    try {
+                        mp.setDataSource("https://firebasestorage.googleapis.com/v0/b/meditation-7c5e1.appspot.com/o/cde.wav?alt=media&token=19945e3d-2ac4-4b3b-8a98-8930c8874a03");
+                        mp.prepareAsync();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    mp.setLooping(true);
+                    mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                        @Override
+                        public void onPrepared(MediaPlayer mediaPlayer) {
+                            mp.start();
+                        }
+                    });
+                }
+            }
+        });
+
+        testbtn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mp != null) {
+                    mp.stop();
+                    mp.release();
+                    mp = null;
+                }
+            }
+        });
+    }
 
     private void setButtonSheet() {
         this.bottomSheetTitleBar = findViewById(R.id.bottom_sheet_title_bar);

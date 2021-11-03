@@ -22,6 +22,8 @@ import com.develiny.meditation.controller.AudioController;
 import com.develiny.meditation.controller.SeekController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.notification.NotificationService;
+import com.develiny.meditation.page.ChakraPage;
+import com.develiny.meditation.page.HzPage;
 import com.develiny.meditation.page.Page1;
 import com.develiny.meditation.page.Page2;
 import com.develiny.meditation.page.item.PageItem;
@@ -145,6 +147,12 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
             Page2.arrayList.get(position - 1).setIsplay(1);
             Page2.adapter.notifyItemChanged(position - 1);
 //            Page2.adapter.notifyDataSetChanged();
+        } else if (page == 3) {
+            ChakraPage.arrayList.get(position - 1).setIsplay(1);
+            ChakraPage.adapter.notifyItemChanged(position - 1);
+        } else if (page == 4) {
+            HzPage.arrayList.get(position - 1).setIsplay(1);
+            HzPage.adapter.notifyItemChanged(position - 1);
         }
     }
 

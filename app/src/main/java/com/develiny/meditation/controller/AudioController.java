@@ -6,6 +6,8 @@ import android.media.MediaPlayer;
 import android.os.Build;
 
 import com.develiny.meditation.notification.NotificationService;
+import com.develiny.meditation.page.ChakraPage;
+import com.develiny.meditation.page.HzPage;
 import com.develiny.meditation.page.Page1;
 import com.develiny.meditation.page.Page2;
 
@@ -31,6 +33,10 @@ public class AudioController {
                 Page2.p2p2_1.start();
                 new P2Controller.p2p2t1().start();
             }
+        } else if (page == 3) {
+
+        } else if (page == 4) {
+
         }
     }
 
@@ -66,6 +72,14 @@ public class AudioController {
                 Page2.p2p2_1.start();
                 new P2Controller.p2p2t1().start();
                 break;
+            case "3-1":
+                break;
+            case "3-2":
+                break;
+            case  "4-1":
+                break;
+            case "4-2":
+                break;
         }
     }
 
@@ -94,6 +108,14 @@ public class AudioController {
                 return Page2.p2p1_1;
             case "2-2":
                 return Page2.p2p2_1;
+            case "3-1":
+                return ChakraPage.p3p1;
+            case "3-2":
+                return ChakraPage.p3p2;
+            case "4-1":
+                return HzPage.p4p1;
+            case "4-2":
+                return HzPage.p4p2;
             default:
                 return null;
         }
@@ -109,6 +131,14 @@ public class AudioController {
                 return Page2.p2p1_2;
             case "2-2":
                 return Page2.p2p2_2;
+            case "3-1":
+                return ChakraPage.p3p1;
+            case "3-2":
+                return ChakraPage.p3p2;
+            case "4-1":
+                return HzPage.p4p1;
+            case "4-2":
+                return HzPage.p4p2;
             default:
                 return null;
         }
@@ -119,6 +149,10 @@ public class AudioController {
             P1Controller.stopPage1();
         } else if (page == 2) {
             P2Controller.stopPage2();
+        } else if (page == 3) {
+
+        } else if (page == 4) {
+
         }
     }
 

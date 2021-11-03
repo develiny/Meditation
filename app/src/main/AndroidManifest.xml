@@ -18,7 +18,7 @@
         android:largeHeap="true"
         android:hardwareAccelerated="false">
         <activity
-            android:name=".MainActivity"
+            android:name=".Splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,6 +27,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".MainActivity"/>
         <service android:name=".notification.NotificationService" android:stopWithTask="true"/>
         <receiver android:name=".notification.NotificationActionService"/>
         <service android:name=".service.GetStateKillApp" />

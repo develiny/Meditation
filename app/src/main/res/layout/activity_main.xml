@@ -15,6 +15,20 @@
             android:layout_height="250dp"
             android:background="@drawable/main_head">
 
+            <Button
+                android:id="@+id/testbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="textbtn"
+                android:layout_centerInParent="true"/>
+            <Button
+                android:id="@+id/testbtn1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="stop"
+                android:layout_centerInParent="true"
+                android:layout_toRightOf="@+id/testbtn"/>
+
         </RelativeLayout>
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/main_viewpager"
