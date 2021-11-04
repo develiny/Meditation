@@ -75,7 +75,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                 int getpage = arrayList.get(positions).getPage();
                 int index = arrayList.indexOf(arrayList.get(positions));
                 databaseHandler.deletePlayingList(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
-                AudioController.stopPage(arrayList.get(positions).getPage());
+                AudioController.stopPage(arrayList.get(positions).getPage(), arrayList.get(positions).getPnp());
 //                MainActivity.playingList.remove(index);
                 arrayList.remove(index);
                 MainActivity.bottomSheetAdapter.notifyItemRemoved(index);

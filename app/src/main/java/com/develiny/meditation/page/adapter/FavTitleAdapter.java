@@ -75,7 +75,7 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
                     for (int ii = 0; ii < MainActivity.playingList.size(); ii++) {
                         pagelist.add(MainActivity.playingList.get(ii).getPage());
                         positionlist.add(MainActivity.playingList.get(ii).getPosition());
-                        AudioController.stopPage(MainActivity.playingList.get(ii).getPage());
+                        AudioController.stopPage(MainActivity.playingList.get(ii).getPage(), MainActivity.playingList.get(ii).getPnp());
                         if (ii == MainActivity.playingList.size() - 1) {
                             MainActivity.playingList.clear();
                             MainActivity.bottomSheetAdapter.notifyItemRangeRemoved(0, MainActivity.playingList.size() - 1);

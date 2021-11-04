@@ -15,7 +15,7 @@ import java.util.List;
 
 public class AudioController {
 
-    public static void startTrack(Context context, int page, int position) {
+    public static void startTrack(int page, int position) {
 
         if (page == 1) {//page1
             if (position == 1) {
@@ -34,9 +34,11 @@ public class AudioController {
                 new P2Controller.p2p2t1().start();
             }
         } else if (page == 3) {
-
+            String pnp = Integer.toString(page) + "-" + Integer.toString(position);
+            ChakraController.startChakra(pnp);
         } else if (page == 4) {
-
+            String pnp = Integer.toString(page) + "-" + Integer.toString(position);
+            HzController.startHz(pnp);
         }
     }
 
@@ -73,12 +75,16 @@ public class AudioController {
                 new P2Controller.p2p2t1().start();
                 break;
             case "3-1":
+                ChakraController.startChakra(pp);
                 break;
             case "3-2":
+                ChakraController.startChakra(pp);
                 break;
-            case  "4-1":
+            case "4-1":
+                HzController.startHz(pp);
                 break;
             case "4-2":
+                HzController.startHz(pp);
                 break;
         }
     }
@@ -144,15 +150,15 @@ public class AudioController {
         }
     }
 
-    public static void stopPage(int page) {
+    public static void stopPage(int page, String pnp) {
         if (page == 1) {
             P1Controller.stopPage1();
         } else if (page == 2) {
             P2Controller.stopPage2();
         } else if (page == 3) {
-
+            ChakraController.stopChakra(page, pnp);
         } else if (page == 4) {
-
+            HzController.stopHz(page, pnp);
         }
     }
 

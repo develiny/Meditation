@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
 import com.develiny.meditation.controller.AudioController;
+import com.develiny.meditation.controller.ChakraController;
 import com.develiny.meditation.controller.SeekController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.notification.NotificationService;
@@ -25,13 +27,13 @@ import com.develiny.meditation.page.item.PageItem;
 
 import java.util.ArrayList;
 
-public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHolder> {
+public class StorageAdapter extends RecyclerView.Adapter<StorageAdapter.CustomViewHolder> {
 
     ArrayList<PageItem> arrayList;
     Context context;
     DatabaseHandler databaseHandler;
 
-    public PageAdapter(ArrayList<PageItem> arrayList, Context context) {
+    public StorageAdapter(ArrayList<PageItem> arrayList, Context context) {
         this.arrayList = arrayList;
         this.context = context;
     }
@@ -39,7 +41,7 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
     @NonNull
     @Override
     public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int position) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.page_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chakra_page_item, parent, false);
         CustomViewHolder holder = new CustomViewHolder(view);
 
         return holder;
@@ -138,12 +140,14 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
 
     public static class CustomViewHolder extends RecyclerView.ViewHolder {
         ImageView button;
+        ProgressBar progressBar;
         SeekBar seekBar;
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.button = itemView.findViewById(R.id.page_item_toggle_button);
-            this.seekBar = itemView.findViewById(R.id.page_item_seekbar);
+            this.button = itemView.findViewById(R.id.chakra_page_item_toggle_button);
+            this.progressBar = itemView.findViewById(R.id.chakra_page_item_progressbar);
+            this.seekBar = itemView.findViewById(R.id.chakra_page_item_seekbar);
         }
     }
 
