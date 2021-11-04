@@ -2,6 +2,7 @@ package com.develiny.meditation.controller;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.view.View;
 
 import com.develiny.meditation.page.ChakraPage;
 import com.develiny.meditation.page.HzPage;
@@ -12,6 +13,7 @@ public class HzController {
     public static MediaPlayer mp;
 
     public static void startHz(String pnp) {
+        HzPage.load.setVisibility(View.VISIBLE);
         mp = getMediaPlayer(pnp);
         if (mp == null) {
             mp = new MediaPlayer();
@@ -21,12 +23,14 @@ public class HzController {
                 mp.prepareAsync();
             } catch (IOException e) {
                 e.printStackTrace();
+                HzPage.load.setVisibility(View.GONE);
             }
             mp.setLooping(true);
             mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     mp.start();
+                    HzPage.load.setVisibility(View.GONE);
                 }
             });
         }

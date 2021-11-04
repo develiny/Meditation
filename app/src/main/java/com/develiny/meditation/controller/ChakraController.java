@@ -14,6 +14,7 @@ public class ChakraController {
     public static MediaPlayer mp;
 
     public static void startChakra(String pnp) {
+        ChakraPage.load.setVisibility(View.VISIBLE);
         mp = getMediaPlayer(pnp);
         if (mp == null) {
             mp = new MediaPlayer();
@@ -23,12 +24,14 @@ public class ChakraController {
                 mp.prepareAsync();
             } catch (IOException e) {
                 e.printStackTrace();
+                ChakraPage.load.setVisibility(View.GONE);
             }
             mp.setLooping(true);
             mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     mp.start();
+                    ChakraPage.load.setVisibility(View.GONE);
                 }
             });
         }

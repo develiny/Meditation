@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     android:background="#00000000">
 
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -12,9 +14,22 @@
         android:elevation="15dp">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/page2_recyclerview"
+            android:id="@+id/storage_page_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="10dp"/>
+
+        <RelativeLayout
+            android:id="@+id/storage_page_load"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/load_container"
+            android:clickable="true">
+
+            <ProgressBar
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>

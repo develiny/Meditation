@@ -220,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
                         for (int i = 0; i < MainActivity.playingList.size(); i++) {
                             page.add(MainActivity.playingList.get(i).getPage());
                             if (i == MainActivity.playingList.size() - 1) {
+                                AudioController.removeLoad();
                                 NotificationService.stopPlayingList(page);
                                 DefaultNofitication.defauleNotification(MainActivity.this);
                             }

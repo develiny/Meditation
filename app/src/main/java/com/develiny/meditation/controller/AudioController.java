@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
+import android.view.View;
 
 import com.develiny.meditation.notification.NotificationService;
 import com.develiny.meditation.page.ChakraPage;
@@ -227,6 +228,14 @@ public class AudioController {
         } else if (i == 15) {
             AudioController.playingListindex0_1(pp).setVolume(float15, float15);
             AudioController.playingListindex0_2(pp).setVolume(float15, float15);
+        }
+    }
+
+    public static void removeLoad() {
+        if (ChakraPage.load.getVisibility() == View.VISIBLE) {
+            ChakraPage.load.setVisibility(View.GONE);
+        } else if (HzPage.load.getVisibility() == View.VISIBLE) {
+            HzPage.load.setVisibility(View.GONE);
         }
     }
 }

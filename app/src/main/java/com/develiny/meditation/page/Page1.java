@@ -34,7 +34,7 @@ public class Page1 extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.page1, container, false);
+        final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.page, container, false);
 
         setAudio();
 
@@ -53,7 +53,7 @@ public class Page1 extends Fragment {
     }
 
     private void setInit(ViewGroup rootView) {
-        recyclerView = rootView.findViewById(R.id.page1_recyclerview);
+        recyclerView = rootView.findViewById(R.id.page_recyclerview);
     }
 
     private void setDatabaseHandler() {
