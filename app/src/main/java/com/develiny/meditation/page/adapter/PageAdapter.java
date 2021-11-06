@@ -69,7 +69,6 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                         int isplay = arrayList.get(i).getIsplay();
                         if (isplay == 2) {//change
                             int index = checkPlayinglistPosition(arrayList.get(i).getPage());
-                            Log.d(">>>PageAdapter", "index: " + index);
                             MainActivity.playingList.remove(index);
                             MainActivity.bottomSheetAdapter.notifyItemRemoved(index);
                             arrayList.get(i).setIsplay(1);
@@ -85,15 +84,14 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                     MainActivity.playingList.add(arrayList.get(positions));
                     databaseHandler.setPlay1(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
                     MainActivity.bottomSheetAdapter.notifyItemInserted(MainActivity.playingList.size());
+                    List<String> pp = new ArrayList<>();
                     for (int ii = 0; ii < MainActivity.playingList.size(); ii++) {
-                        List<String> pp = new ArrayList<>();
                         pp.add(MainActivity.playingList.get(ii).getPnp());
                         if (ii == MainActivity.playingList.size() - 1) {
                             AudioController.startPlayingList(context, pp);
                         }
                     }
                     checkOpenService();
-                    Log.d(">>>PageAdapter", "size: " + MainActivity.playingList.size());
                 } else {//해당 아이템이 playing중일때
                     //remove
                     Bitmap bitmapadd = BitmapFactory.decodeByteArray(arrayList.get(positions).getImgdefault(), 0, arrayList.get(positions).getImgdefault().length);
@@ -124,6 +122,9 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {//변화
                 if (SeekController.pageMoving) {
+                    arrayList.get(positions).setSeek(seekBar.getProgress());
+                    notifyItemChanged(positions);
+                    notifyDataSetChanged();
                     float volume = (float) (1 - (Math.log(SeekController.MAX_VOLUME - i) / Math.log(SeekController.MAX_VOLUME)));
                     String pp = arrayList.get(positions).getPnp();
                     SeekController.changeVolumn(pp, volume);

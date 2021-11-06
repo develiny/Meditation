@@ -159,13 +159,13 @@ public class AudioController {
             case "2-2":
                 return Page2.p2p2_2;
             case "3-1":
-                return ChakraPage.p3p1;
+                return ChakraController.mp;
             case "3-2":
-                return ChakraPage.p3p2;
+                return ChakraController.mp;
             case "4-1":
-                return HzPage.p4p1;
+                return HzController.mp;
             case "4-2":
-                return HzPage.p4p2;
+                return HzController.mp;
             default:
                 return null;
         }

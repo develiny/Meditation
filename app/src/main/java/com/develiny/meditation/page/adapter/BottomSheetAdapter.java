@@ -62,7 +62,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(">>>BottomSheetAdapter", "getposition: " + positions);
+
             }
         });
         holder.seekBar.setProgress(arrayList.get(position).getSeek());
@@ -84,7 +84,6 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                     stopServiceWhenPlaylistZero(context);
                 }
                 changePageItemBackground(getpage, getposition);
-                Log.d(">>>", "size: " + arrayList.size());
             }
         });
 
@@ -92,6 +91,9 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 if (SeekController.bottomMoving) {
+                    arrayList.get(positions).setSeek(seekBar.getProgress());
+                    notifyItemChanged(positions);
+                    notifyDataSetChanged();
                     float volume = (float) (1 - (Math.log(SeekController.MAX_VOLUME - i) / Math.log(SeekController.MAX_VOLUME)));
                     String pp = arrayList.get(positions).getPnp();
                     SeekController.changeVolumn(pp, volume);
