@@ -19,6 +19,7 @@ public class ChakraController {
         if (mp == null) {
             mp = new MediaPlayer();
             mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            setVolumn(pnp);
             try {
                 mp.setDataSource(getPath(pnp));
                 mp.prepareAsync();
@@ -62,6 +63,14 @@ public class ChakraController {
             mp.stop();
             mp.release();
             mp = null;
+        }
+    }
+
+    public static void setVolumn(String pnp) {
+        for (int i = 0; i < ChakraPage.arrayList.size(); i++) {
+            if (ChakraPage.arrayList.get(i).getPnp().equals(pnp)) {
+                AudioController.setVolumn(pnp, ChakraPage.arrayList.get(i).getSeek());
+            }
         }
     }
 }

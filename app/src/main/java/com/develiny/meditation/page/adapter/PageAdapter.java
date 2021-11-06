@@ -84,11 +84,16 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                     MainActivity.playingList.add(arrayList.get(positions));
                     databaseHandler.setPlay1(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
                     MainActivity.bottomSheetAdapter.notifyItemInserted(MainActivity.playingList.size());
-                    List<String> pp = new ArrayList<>();
-                    for (int ii = 0; ii < MainActivity.playingList.size(); ii++) {
-                        pp.add(MainActivity.playingList.get(ii).getPnp());
-                        if (ii == MainActivity.playingList.size() - 1) {
-                            AudioController.startPlayingList(context, pp);
+
+                    if (AudioController.checkIsPlaying(MainActivity.playingList.get(0).getPnp())) {//이미 재생중인게 있을때
+                        AudioController.startTrack(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
+                    } else {//재생중인게 없을때
+                        List<String> pp = new ArrayList<>();
+                        for (int ii = 0; ii < MainActivity.playingList.size(); ii++) {
+                            pp.add(MainActivity.playingList.get(ii).getPnp());
+                            if (ii == MainActivity.playingList.size() - 1) {
+                                AudioController.startPlayingList(context, pp);
+                            }
                         }
                     }
                     checkOpenService();
