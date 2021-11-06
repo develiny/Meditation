@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 
 import com.develiny.meditation.notification.NotificationService;
@@ -11,7 +12,9 @@ import com.develiny.meditation.page.ChakraPage;
 import com.develiny.meditation.page.HzPage;
 import com.develiny.meditation.page.Page1;
 import com.develiny.meditation.page.Page2;
+import com.develiny.meditation.page.item.PageItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AudioController {
@@ -102,7 +105,24 @@ public class AudioController {
     }
 
     public static boolean checkIsPlaying(String pp) {
-        return playingListindex0_1(pp).isPlaying() || playingListindex0_2(pp).isPlaying();
+        List<String> pnpList = new ArrayList<>();
+        pnpList.add("1-1");
+        pnpList.add("1-2");
+        pnpList.add("2-1");
+        pnpList.add("2-2");
+        if (pnpList.contains(pp)) {
+            Log.d("AudioController>>>", "1");
+            return playingListindex0_1(pp).isPlaying() || playingListindex0_2(pp).isPlaying();
+        } else {
+            if (playingListindex0_1(pp) == null) {
+                Log.d("AudioController>>>", "2");
+                return false;
+            } else {
+                Log.d("AudioController>>>", "3");
+                return true;
+            }
+        }
+
     }
 
     public static MediaPlayer playingListindex0_1(String pp) {
@@ -116,13 +136,13 @@ public class AudioController {
             case "2-2":
                 return Page2.p2p2_1;
             case "3-1":
-                return ChakraPage.p3p1;
+                return ChakraController.mp;
             case "3-2":
-                return ChakraPage.p3p2;
+                return ChakraController.mp;
             case "4-1":
-                return HzPage.p4p1;
+                return HzController.mp;
             case "4-2":
-                return HzPage.p4p2;
+                return HzController.mp;
             default:
                 return null;
         }
@@ -236,6 +256,20 @@ public class AudioController {
             ChakraPage.load.setVisibility(View.GONE);
         } else if (HzPage.load.getVisibility() == View.VISIBLE) {
             HzPage.load.setVisibility(View.GONE);
+        }
+    }
+
+    public static void stopPlayingList(ArrayList<PageItem> pageItem) {//playinglist에 있는 목록만 stop(page)
+        for (int i = 0; i < pageItem.size(); i++) {
+            if (pageItem.get(i).getPage() == 1) {
+                P1Controller.stopPage1();
+            } else if (pageItem.get(i).getPage() == 2) {
+                P2Controller.stopPage2();
+            } else if (pageItem.get(i).getPage() == 3) {
+                ChakraController.stopChakra(pageItem.get(i).getPage(), pageItem.get(i).getPnp());
+            } else if (pageItem.get(i).getPage() == 4) {
+                HzController.stopHz(pageItem.get(i).getPage(), pageItem.get(i).getPnp());
+            }
         }
     }
 }

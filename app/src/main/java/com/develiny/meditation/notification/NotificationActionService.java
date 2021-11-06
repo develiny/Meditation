@@ -10,6 +10,7 @@ import com.develiny.meditation.R;
 import com.develiny.meditation.controller.AudioController;
 import com.develiny.meditation.controller.P1Controller;
 import com.develiny.meditation.controller.P2Controller;
+import com.develiny.meditation.page.item.PageItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +24,11 @@ public class NotificationActionService extends BroadcastReceiver {
                 checkOpenService(context);
                 if (AudioController.checkIsPlaying(MainActivity.playingList.get(0).getPnp())) {//재생중
                     MainActivity.pands.setBackgroundResource(R.drawable.bottom_play);
-                    List<Integer> page = new ArrayList<>();
+                    ArrayList<PageItem> page = new ArrayList<>();
                     for (int i = 0; i < MainActivity.playingList.size(); i++) {
-                        page.add(MainActivity.playingList.get(i).getPage());
+                        page.add(MainActivity.playingList.get(i));
                         if (i == MainActivity.playingList.size() - 1) {
-                            NotificationService.stopPlayingList(page);
+                            AudioController.stopPlayingList(page);
                             DefaultNofitication.defauleNotification(context);
                         }
                     }

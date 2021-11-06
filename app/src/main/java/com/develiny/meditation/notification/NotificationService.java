@@ -20,8 +20,10 @@ import androidx.core.app.NotificationCompat;
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
 import com.develiny.meditation.controller.AudioController;
+import com.develiny.meditation.controller.ChakraController;
 import com.develiny.meditation.controller.P1Controller;
 import com.develiny.meditation.controller.P2Controller;
+import com.develiny.meditation.page.item.PageItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,11 +57,11 @@ public class NotificationService extends Service {
         //여기서 재생중인곡 있으면 종료하기
         if (MainActivity.playingList.size() != 0 && AudioController.checkIsPlaying(MainActivity.playingList.get(0).getPnp())) {//재생중
             MainActivity.pands.setBackgroundResource(R.drawable.bottom_play);
-            List<Integer> page = new ArrayList<>();
+            ArrayList<PageItem> page = new ArrayList<>();
             for (int i = 0; i < MainActivity.playingList.size(); i++) {
-                page.add(MainActivity.playingList.get(i).getPage());
+                page.add(MainActivity.playingList.get(i));
                 if (i == MainActivity.playingList.size() - 1) {
-                    NotificationService.stopPlayingList(page);
+                    AudioController.stopPlayingList(page);
                 }
             }
         }
@@ -119,13 +121,4 @@ public class NotificationService extends Service {
         }
     }
 
-    public static void stopPlayingList(List<Integer> page) {//playinglist에 있는 목록만 stop(page)
-        for (int i = 0; i < page.size(); i++) {
-            if (page.get(i) == 1) {
-                P1Controller.stopPage1();
-            } else if (page.get(i) == 2) {
-                P2Controller.stopPage2();
-            }
-        }
-    }
 }

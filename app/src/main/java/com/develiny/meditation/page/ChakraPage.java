@@ -50,7 +50,6 @@ public class ChakraPage extends Fragment {
     private void setAudio() {
         p3p1 = new MediaPlayer();
         p3p2 = new MediaPlayer();
-
     }
 
     private void setInit(ViewGroup rootView) {

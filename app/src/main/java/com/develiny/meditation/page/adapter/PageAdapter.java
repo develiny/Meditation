@@ -24,6 +24,7 @@ import com.develiny.meditation.notification.NotificationService;
 import com.develiny.meditation.page.item.PageItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHolder> {
 
@@ -61,10 +62,10 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
             @Override
             public void onClick(View view) {
                 databaseHandler = new DatabaseHandler(context);
-                if (arrayList.get(positions).getIsplay() == 1) {
+                if (arrayList.get(positions).getIsplay() == 1) {//해당 아이템이 playing중이 아닐때
                     Bitmap bitmapremove = BitmapFactory.decodeByteArray(arrayList.get(positions).getImg(), 0, arrayList.get(positions).getImg().length);
                     holder.button.setImageBitmap(bitmapremove);
-                    for(int i = 0; i < arrayList.size(); i++) {
+                    for (int i = 0; i < arrayList.size(); i++) {//같은 page에 재생중인게 있으면 없애기
                         int isplay = arrayList.get(i).getIsplay();
                         if (isplay == 2) {//change
                             int index = checkPlayinglistPosition(arrayList.get(i).getPage());
@@ -84,15 +85,21 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
                     MainActivity.playingList.add(arrayList.get(positions));
                     databaseHandler.setPlay1(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
                     MainActivity.bottomSheetAdapter.notifyItemInserted(MainActivity.playingList.size());
-                    AudioController.startTrack(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
+                    for (int ii = 0; ii < MainActivity.playingList.size(); ii++) {
+                        List<String> pp = new ArrayList<>();
+                        pp.add(MainActivity.playingList.get(ii).getPnp());
+                        if (ii == MainActivity.playingList.size() - 1) {
+                            AudioController.startPlayingList(context, pp);
+                        }
+                    }
                     checkOpenService();
                     Log.d(">>>PageAdapter", "size: " + MainActivity.playingList.size());
-                } else {
+                } else {//해당 아이템이 playing중일때
                     //remove
                     Bitmap bitmapadd = BitmapFactory.decodeByteArray(arrayList.get(positions).getImgdefault(), 0, arrayList.get(positions).getImgdefault().length);
                     holder.button.setImageBitmap(bitmapadd);
                     databaseHandler.deletePlayingList(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
-                    for(int i = 0; i < MainActivity.playingList.size(); i++) {
+                    for (int i = 0; i < MainActivity.playingList.size(); i++) {
                         if (MainActivity.playingList.get(i).getPnp().equals(arrayList.get(positions).getPnp())) {
                             MainActivity.playingList.remove(i);
                             MainActivity.bottomSheetAdapter.notifyItemRemoved(i);
@@ -159,7 +166,7 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
     }
 
     private void stopServiceWhenPlaylistZero(Context context) {
-        if (MainActivity.playingList.size() == 0){
+        if (MainActivity.playingList.size() == 0) {
             MainActivity.pands.setBackgroundResource(R.drawable.bottom_play);
             if (NotificationService.isPlaying) {
                 context.stopService(new Intent(context, NotificationService.class));

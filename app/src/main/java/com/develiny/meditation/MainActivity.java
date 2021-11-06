@@ -215,17 +215,19 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     checkOpenService();
                     if (AudioController.checkIsPlaying(playingList.get(0).getPnp())) {//재생중
+                        Log.d("MainActivity>>>", "1");
                         pands.setBackgroundResource(R.drawable.bottom_play);
-                        List<Integer> page = new ArrayList<>();
+                        ArrayList<PageItem> page = new ArrayList<>();
                         for (int i = 0; i < MainActivity.playingList.size(); i++) {
-                            page.add(MainActivity.playingList.get(i).getPage());
+                            page.add(MainActivity.playingList.get(i));
                             if (i == MainActivity.playingList.size() - 1) {
                                 AudioController.removeLoad();
-                                NotificationService.stopPlayingList(page);
+                                AudioController.stopPlayingList(page);
                                 DefaultNofitication.defauleNotification(MainActivity.this);
                             }
                         }
                     } else {//재생중 아님
+                        Log.d("MainActivity>>>", "2");
                         pands.setBackgroundResource(R.drawable.bottom_pause);
                         List<String> pp = new ArrayList<>();
                         for (int i = 0; i < MainActivity.playingList.size(); i++) {
