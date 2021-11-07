@@ -22,6 +22,8 @@ import com.develiny.meditation.controller.AudioController;
 import com.develiny.meditation.controller.SeekController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.notification.NotificationService;
+import com.develiny.meditation.page.ChakraPage;
+import com.develiny.meditation.page.HzPage;
 import com.develiny.meditation.page.item.PageItem;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -157,7 +159,7 @@ public class StoragePageAdapter extends RecyclerView.Adapter<StoragePageAdapter.
         holder.download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setOnClickDownload(holder.progressBar, holder.button, holder.download, arrayList.get(positions).getPnp());
+                setOnClickDownload(holder.progressBar, holder.button, holder.download, arrayList.get(positions).getPnp(), arrayList.get(positions).getPage());
             }
         });
     }
@@ -245,7 +247,7 @@ public class StoragePageAdapter extends RecyclerView.Adapter<StoragePageAdapter.
         Log.d("StoragePageAdapter>>>", "finished");
     }
 
-    private void setOnClickDownload(ProgressBar progressBar, ImageView button, ImageView download, String pnp) {
+    private void setOnClickDownload(ProgressBar progressBar, ImageView button, ImageView download, String pnp, int page) {
         progressBar.setVisibility(View.VISIBLE);
         button.setEnabled(false);
         download.setEnabled(false);
@@ -263,6 +265,7 @@ public class StoragePageAdapter extends RecyclerView.Adapter<StoragePageAdapter.
                     if (from.exists()) {
                         from.renameTo(to);
                     }
+                    resetMediaPlayer(page);
                     button.setEnabled(true);
                     download.setVisibility(View.GONE);
                     progressBar.setVisibility(View.GONE);
@@ -278,6 +281,16 @@ public class StoragePageAdapter extends RecyclerView.Adapter<StoragePageAdapter.
             });
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void resetMediaPlayer(int page) {
+        if (page == 3) {
+            ChakraPage.setAudio(context);
+            ChakraPage.setChakraVolumn();
+        } else if (page == 4) {
+            HzPage.setAudio(context);
+            HzPage.setHzVolumn();
         }
     }
 }

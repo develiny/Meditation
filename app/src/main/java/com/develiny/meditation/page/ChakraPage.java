@@ -58,6 +58,7 @@ public class ChakraPage extends Fragment {
         String path3_2 = context.getApplicationInfo().dataDir + "/cache/audio3-2.mp3";
         setDataSourceAudio(p3p1, path3_1);
         setDataSourceAudio(p3p2, path3_2);
+
     }
 
     private static void setDataSourceAudio(MediaPlayer mp, String path) {
@@ -92,7 +93,7 @@ public class ChakraPage extends Fragment {
         setChakraVolumn();
     }
 
-    private void setChakraVolumn() {
+    public static void setChakraVolumn() {
         AudioController.setVolumn("3-1", arrayList.get(0).getSeek());
         AudioController.setVolumn("3-2", arrayList.get(1).getSeek());
     }
