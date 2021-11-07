@@ -1,5 +1,6 @@
 package com.develiny.meditation;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -12,8 +13,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -34,8 +37,14 @@ import com.develiny.meditation.page.Page2;
 import com.develiny.meditation.page.adapter.BottomSheetAdapter;
 import com.develiny.meditation.page.item.PageItem;
 import com.develiny.meditation.service.GetStateKillApp;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,8 +56,7 @@ public class MainActivity extends AppCompatActivity {
     AudioManager audioManager;
     public static int maxVolumn;
 
-    Button testbtn, testbtn1;
-    MediaPlayer mp;
+    Button testbtn0, testbtn, testbtn1;
 
     //bottom sheet
     RelativeLayout bottomSheetTitleBar;
@@ -147,27 +155,54 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     private void testbtn() {
+        testbtn0 = findViewById(R.id.testbtn0);
         testbtn = findViewById(R.id.testbtn);
         testbtn1 = findViewById(R.id.testbtn1);
+
+        String path = getApplicationInfo().dataDir + "/cache/audio1-1";
+        File file2 = new File(path);
+        Log.d("MainActivity>>>", "get path: " + path);
+//        File file = new File(path + "/audios");
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
+        Log.d("MainActivity>>>", "get path2: " + file.getPath());
+
+        testbtn0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (file2.exists()) {
+                    Log.d("MainActivity>>>", "have");
+                } else {
+                    Log.d("MainActivity>>>", "null");
+                }
+            }
+        });
+
         testbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mp == null) {
-                    mp = new MediaPlayer();
-                    mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                    try {
-                        mp.setDataSource("https://firebasestorage.googleapis.com/v0/b/meditation-7c5e1.appspot.com/o/cde.wav?alt=media&token=19945e3d-2ac4-4b3b-8a98-8930c8874a03");
-                        mp.prepareAsync();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    mp.setLooping(true);
-                    mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference reference = storage.getReference();
+                File localFile;
+                try {
+                    localFile = File.createTempFile("audio", "1-1");
+                    reference.child("cde.wav").getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
-                        public void onPrepared(MediaPlayer mediaPlayer) {
-                            mp.start();
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            Log.d("MainAcativity>>>", "success: " + localFile.getName());
+                            File from = new File(getApplicationInfo().dataDir + "/cache", localFile.getName());
+                            File to = new File(getApplicationInfo().dataDir + "/cache", "audio1-1");
+                            if (from.exists()) {
+                                from.renameTo(to);
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d("MainActivity>>>", "failed");
                         }
                     });
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -175,11 +210,7 @@ public class MainActivity extends AppCompatActivity {
         testbtn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mp != null) {
-                    mp.stop();
-                    mp.release();
-                    mp = null;
-                }
+
             }
         });
     }

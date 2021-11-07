@@ -16,16 +16,24 @@
             android:background="@drawable/main_head">
 
             <Button
+                android:id="@+id/testbtn0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="check"
+                android:layout_toLeftOf="@+id/testbtn"
+                android:layout_centerVertical="true"/>
+
+            <Button
                 android:id="@+id/testbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="textbtn"
+                android:text="create"
                 android:layout_centerInParent="true"/>
             <Button
                 android:id="@+id/testbtn1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="stop"
+                android:text="delete"
                 android:layout_centerInParent="true"
                 android:layout_toRightOf="@+id/testbtn"/>
 

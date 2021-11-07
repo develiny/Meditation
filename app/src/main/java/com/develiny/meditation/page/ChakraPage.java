@@ -17,6 +17,7 @@ import com.develiny.meditation.R;
 import com.develiny.meditation.controller.AudioController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.page.adapter.PageAdapter;
+import com.develiny.meditation.page.adapter.StoragePageAdapter;
 import com.develiny.meditation.page.item.PageItem;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class ChakraPage extends Fragment {
     public static MediaPlayer p3p1, p3p2;
 
     RecyclerView recyclerView;
-    public static PageAdapter adapter;
+    public static StoragePageAdapter adapter;
     public static ArrayList<PageItem> arrayList = new ArrayList<>();
     RecyclerView.LayoutManager layoutManager;
     DatabaseHandler databaseHandler;
@@ -65,7 +66,7 @@ public class ChakraPage extends Fragment {
 
     private void setRecyclerView() {
         arrayList = databaseHandler.chakraList();
-        adapter = new PageAdapter(arrayList, getActivity());
+        adapter = new StoragePageAdapter(arrayList, getActivity());
         layoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);

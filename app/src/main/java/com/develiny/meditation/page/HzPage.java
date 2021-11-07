@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.develiny.meditation.R;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.page.adapter.PageAdapter;
+import com.develiny.meditation.page.adapter.StoragePageAdapter;
 import com.develiny.meditation.page.item.PageItem;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class HzPage extends Fragment {
     public static MediaPlayer p4p1, p4p2;
 
     RecyclerView recyclerView;
-    public static PageAdapter adapter;
+    public static StoragePageAdapter adapter;
     public static ArrayList<PageItem> arrayList = new ArrayList<>();
     RecyclerView.LayoutManager layoutManager;
     DatabaseHandler databaseHandler;
@@ -65,7 +66,7 @@ public class HzPage extends Fragment {
 
     private void setRecyclerView() {
         arrayList = databaseHandler.hzList();
-        adapter = new PageAdapter(arrayList, getActivity());
+        adapter = new StoragePageAdapter(arrayList, getActivity());
         layoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
