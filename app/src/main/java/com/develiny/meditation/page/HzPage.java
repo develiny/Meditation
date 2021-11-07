@@ -1,5 +1,6 @@
 package com.develiny.meditation.page;
 
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -41,7 +42,7 @@ public class HzPage extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.page, container, false);
 
-        setAudio();
+        setAudio(getActivity());
 
         setInit(rootView);
         setDatabaseHandler();
@@ -50,16 +51,16 @@ public class HzPage extends Fragment {
         return rootView;
     }
 
-    private void setAudio() {
+    public static void setAudio(Context context) {
         p4p1 = new MediaPlayer();
         p4p2 = new MediaPlayer();
-        String path3_1 = getActivity().getApplicationInfo().dataDir + "/cache/audio4-1.mp3";
-        String path3_2 = getActivity().getApplicationInfo().dataDir + "/cache/audio4-2.mp3";
-        setDataSourceAudio(p4p1, path3_1);
-        setDataSourceAudio(p4p2, path3_2);
+        String path4_1 = context.getApplicationInfo().dataDir + "/cache/audio4-1.mp3";
+        String path4_2 = context.getApplicationInfo().dataDir + "/cache/audio4-2.mp3";
+        setDataSourceAudio(p4p1, path4_1);
+        setDataSourceAudio(p4p2, path4_2);
     }
 
-    private void setDataSourceAudio(MediaPlayer mp, String path) {
+    private static void setDataSourceAudio(MediaPlayer mp, String path) {
         File file = new File(path);
         if (file.exists()) {
             try {

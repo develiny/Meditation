@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         HzPage hzPage = new HzPage();
         sectionsPagerAdapter.addItem(hzPage);
         viewPager = findViewById(R.id.main_viewpager);
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(4);
         viewPager.setAdapter(sectionsPagerAdapter);
     }
 

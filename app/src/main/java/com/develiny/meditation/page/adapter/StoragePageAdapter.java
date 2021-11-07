@@ -254,7 +254,7 @@ public class StoragePageAdapter extends RecyclerView.Adapter<StoragePageAdapter.
         StorageReference reference = storage.getReference();
         File localFile;
         try {
-            localFile = File.createTempFile("audio", "1-1");
+            localFile = File.createTempFile("audio", "0");
             reference.child(fileName).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {

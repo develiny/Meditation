@@ -23,8 +23,15 @@ public class ChakraController {
 
     public static void stopChakra(int page, String pnp) {
         if (pnp.equals("3-1")) {
-            ChakraPage.p3p1.stop();
-            ChakraPage.p3p1.prepareAsync();
+            if (ChakraPage.p3p1 != null) {
+                ChakraPage.p3p1.stop();
+                ChakraPage.p3p1.prepareAsync();
+            }
+        } else if (pnp.equals("3-2")) {
+            if (ChakraPage.p3p2 != null) {
+                ChakraPage.p3p2.stop();
+                ChakraPage.p3p2.prepareAsync();
+            }
         }
     }
 }

@@ -18,6 +18,7 @@ import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
 import com.develiny.meditation.controller.AudioController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
+import com.develiny.meditation.dialog.AskDownloadDialog;
 import com.develiny.meditation.dialog.DeleteFavTitleDialog;
 import com.develiny.meditation.dialog.EditFavTitleDialog;
 import com.develiny.meditation.page.Page1;
@@ -25,6 +26,7 @@ import com.develiny.meditation.page.Page2;
 import com.develiny.meditation.page.item.FavListItem;
 import com.develiny.meditation.page.item.FavTitleItem;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.CustomViewHolder>{
@@ -68,34 +70,7 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
         holder.play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                databaseHandler = new DatabaseHandler(context);
-                if (MainActivity.playingList.size() != 0) {//만약 playinglist에 재생목록이 있다면
-                    ArrayList<Integer> pagelist = new ArrayList<>();
-                    ArrayList<Integer> positionlist = new ArrayList<>();
-                    for (int ii = 0; ii < MainActivity.playingList.size(); ii++) {
-                        pagelist.add(MainActivity.playingList.get(ii).getPage());
-                        positionlist.add(MainActivity.playingList.get(ii).getPosition());
-                        AudioController.stopPage(MainActivity.playingList.get(ii).getPage(), MainActivity.playingList.get(ii).getPnp());
-                        if (ii == MainActivity.playingList.size() - 1) {
-                            MainActivity.playingList.clear();
-                            MainActivity.bottomSheetAdapter.notifyItemRangeRemoved(0, MainActivity.playingList.size() - 1);
-                            MainActivity.bottomSheetAdapter.notifyDataSetChanged();
-                            databaseHandler.deleteAllPlayinglist(pagelist, positionlist, arrayList.get(i).getTitle());
-                        }
-                    }
-                } else {//playinglist에 기존목록 없다면
-                    databaseHandler.addFavListInPlayinglist(arrayList.get(i).getTitle());
-                }
-                ArrayList<String> pnplist = new ArrayList<>();
-                for (int i = 0; i < MainActivity.playingList.size(); i++) {
-                    pnplist.add(MainActivity.playingList.get(i).getPnp());
-                    changePageImage(MainActivity.playingList.get(i).getPage(), MainActivity.playingList.get(i).getPosition() - 1);
-                    if (i == MainActivity.playingList.size() - 1) {
-                        AudioController.startPlayingList(context, pnplist);
-                        AudioController.checkOpenService(context);
-                        MainActivity.pands.setBackgroundResource(R.drawable.bottom_pause);
-                    }
-                }
+                checkDownloadAready(arrayList.get(i).getTitle(), i);
             }
         });
 
@@ -261,6 +236,60 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
             Page2.arrayList.get(position).setIsplay(2);
             Page2.adapter.notifyItemChanged(position);
             Page2.adapter.notifyDataSetChanged();
+        }
+    }
+
+    private void checkDownloadAready(String title, int position) {
+        databaseHandler = new DatabaseHandler(context);
+        ArrayList<FavListItem> favListItems = new ArrayList<>();
+        favListItems = databaseHandler.getFavListItem(title);
+        ArrayList<String> pnps = new ArrayList<>();
+        for (int i = 0; i < favListItems.size(); i++) {
+            if (favListItems.get(i).getPage() == 3 || favListItems.get(i).getPage() == 4) {
+                String path = context.getApplicationInfo().dataDir + "/cache/audio" + favListItems.get(i).getPnp() + ".mp3";
+                File file = new File(path);
+                if (!file.exists()) {
+                    pnps.add(favListItems.get(i).getPnp());
+                }
+            }
+            if (i == favListItems.size() - 1) {
+                if (pnps.size() != 0) {
+                    AskDownloadDialog.askDownloadDialog(context, pnps, position);
+                } else {
+                    favListPlay(position);
+                }
+            }
+        }
+    }
+
+    public void favListPlay(int position) {
+        databaseHandler = new DatabaseHandler(context);
+        if (MainActivity.playingList.size() != 0) {//만약 playinglist에 재생목록이 있다면
+            ArrayList<Integer> pagelist = new ArrayList<>();
+            ArrayList<Integer> positionlist = new ArrayList<>();
+            for (int ii = 0; ii < MainActivity.playingList.size(); ii++) {
+                pagelist.add(MainActivity.playingList.get(ii).getPage());
+                positionlist.add(MainActivity.playingList.get(ii).getPosition());
+                AudioController.stopPage(MainActivity.playingList.get(ii).getPage(), MainActivity.playingList.get(ii).getPnp());
+                if (ii == MainActivity.playingList.size() - 1) {
+                    MainActivity.playingList.clear();
+                    MainActivity.bottomSheetAdapter.notifyItemRangeRemoved(0, MainActivity.playingList.size() - 1);
+                    MainActivity.bottomSheetAdapter.notifyDataSetChanged();
+                    databaseHandler.deleteAllPlayinglist(pagelist, positionlist, arrayList.get(position).getTitle());
+                }
+            }
+        } else {//playinglist에 기존목록 없다면
+            databaseHandler.addFavListInPlayinglist(arrayList.get(position).getTitle());
+        }
+        ArrayList<String> pnplist = new ArrayList<>();
+        for (int i = 0; i < MainActivity.playingList.size(); i++) {
+            pnplist.add(MainActivity.playingList.get(i).getPnp());
+            changePageImage(MainActivity.playingList.get(i).getPage(), MainActivity.playingList.get(i).getPosition() - 1);
+            if (i == MainActivity.playingList.size() - 1) {
+                AudioController.startPlayingList(context, pnplist);
+                AudioController.checkOpenService(context);
+                MainActivity.pands.setBackgroundResource(R.drawable.bottom_pause);
+            }
         }
     }
 }

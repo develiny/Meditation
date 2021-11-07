@@ -74,6 +74,10 @@ public class SeekController {
             ChakraPage.arrayList.get(position).setSeek(progress);
             ChakraPage.adapter.notifyItemChanged(position);
             ChakraPage.adapter.notifyDataSetChanged();
+        } else if (pageItem.getPage() == 4) {
+            HzPage.arrayList.get(position).setSeek(progress);
+            HzPage.adapter.notifyItemChanged(position);
+            HzPage.adapter.notifyDataSetChanged();
         }
 
         for (int i = 0; i < FavListAdapter.arrayList.size(); i++) {
