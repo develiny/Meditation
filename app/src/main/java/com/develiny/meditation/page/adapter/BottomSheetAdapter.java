@@ -35,7 +35,6 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
     Context context;
     ArrayList<PageItem> arrayList;
     DatabaseHandler databaseHandler;
-    private SQLiteDatabase sqLiteDatabase;
 
     public BottomSheetAdapter(ArrayList<PageItem> arrayList, Context context) {
         this.arrayList = arrayList;
@@ -75,7 +74,6 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                 int getpage = arrayList.get(positions).getPage();
                 int index = arrayList.indexOf(arrayList.get(positions));
                 databaseHandler.deletePlayingList(arrayList.get(positions).getPage(), arrayList.get(positions).getPosition());
-                AudioController.removeLoad();
                 AudioController.stopPage(arrayList.get(positions).getPage(), arrayList.get(positions).getPnp());
                 arrayList.remove(index);
                 MainActivity.bottomSheetAdapter.notifyItemRemoved(index);

@@ -96,7 +96,6 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
                         MainActivity.pands.setBackgroundResource(R.drawable.bottom_pause);
                     }
                 }
-                AudioController.removeLoad();
             }
         });
 

@@ -110,6 +110,10 @@ public class AudioController {
         pnpList.add("1-2");
         pnpList.add("2-1");
         pnpList.add("2-2");
+        pnpList.add("3-1");
+        pnpList.add("3-2");
+        pnpList.add("4-1");
+        pnpList.add("4-2");
         if (pnpList.contains(pp)) {
             Log.d("AudioController>>>", "1");
             return playingListindex0_1(pp).isPlaying() || playingListindex0_2(pp).isPlaying();
@@ -136,13 +140,13 @@ public class AudioController {
             case "2-2":
                 return Page2.p2p2_1;
             case "3-1":
-                return ChakraController.mp;
+                return ChakraPage.p3p1;
             case "3-2":
-                return ChakraController.mp;
+                return ChakraPage.p3p2;
             case "4-1":
-                return HzController.mp;
+                return HzPage.p4p1;
             case "4-2":
-                return HzController.mp;
+                return HzPage.p4p2;
             default:
                 return null;
         }
@@ -159,13 +163,13 @@ public class AudioController {
             case "2-2":
                 return Page2.p2p2_2;
             case "3-1":
-                return ChakraController.mp;
+                return ChakraPage.p3p1;
             case "3-2":
-                return ChakraController.mp;
+                return ChakraPage.p3p2;
             case "4-1":
-                return HzController.mp;
+                return HzPage.p4p1;
             case "4-2":
-                return HzController.mp;
+                return HzPage.p4p2;
             default:
                 return null;
         }

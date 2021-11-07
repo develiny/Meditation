@@ -20,6 +20,8 @@ import com.develiny.meditation.page.adapter.PageAdapter;
 import com.develiny.meditation.page.adapter.StoragePageAdapter;
 import com.develiny.meditation.page.item.PageItem;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ChakraPage extends Fragment {
@@ -37,9 +39,9 @@ public class ChakraPage extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.storage_page, container, false);
+        final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.page, container, false);
 
-//        setAudio();
+        setAudio();
 
         setInit(rootView);
         setDatabaseHandler();
@@ -51,12 +53,27 @@ public class ChakraPage extends Fragment {
     private void setAudio() {
         p3p1 = new MediaPlayer();
         p3p2 = new MediaPlayer();
+        String path3_1 = getActivity().getApplicationInfo().dataDir + "/cache/audio3-1.mp3";
+        String path3_2 = getActivity().getApplicationInfo().dataDir + "/cache/audio3-2.mp3";
+        setDataSourceAudio(p3p1, path3_1);
+        setDataSourceAudio(p3p2, path3_2);
+    }
+
+    private void setDataSourceAudio(MediaPlayer mp, String path) {
+        File file = new File(path);
+        if (file.exists()) {
+            try {
+                mp.setDataSource(path);
+                mp.setLooping(true);
+                mp.prepareAsync();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void setInit(ViewGroup rootView) {
-        recyclerView = rootView.findViewById(R.id.storage_page_recyclerview);
-        load = rootView.findViewById(R.id.storage_page_load);
-        load.setVisibility(View.GONE);
+        recyclerView = rootView.findViewById(R.id.page_recyclerview);
     }
 
     private void setDatabaseHandler() {
@@ -75,7 +92,7 @@ public class ChakraPage extends Fragment {
     }
 
     private void setChakraVolumn() {
-        AudioController.setVolumn("1-1", arrayList.get(0).getSeek());
-        AudioController.setVolumn("1-2", arrayList.get(1).getSeek());
+        AudioController.setVolumn("3-1", arrayList.get(0).getSeek());
+        AudioController.setVolumn("3-2", arrayList.get(1).getSeek());
     }
 }
