@@ -7,10 +7,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -18,7 +21,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -35,7 +41,9 @@ import com.develiny.meditation.page.HzPage;
 import com.develiny.meditation.page.Page1;
 import com.develiny.meditation.page.Page2;
 import com.develiny.meditation.page.adapter.BottomSheetAdapter;
+import com.develiny.meditation.page.adapter.TabsAdapter;
 import com.develiny.meditation.page.item.PageItem;
+import com.develiny.meditation.page.item.TabsItem;
 import com.develiny.meditation.service.DownloadService;
 import com.develiny.meditation.service.GetStateKillApp;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -52,7 +60,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    ViewPager viewPager;
+    RecyclerView tabs;
+
+    public static ViewPager viewPager;
     SectionsPagerAdapter sectionsPagerAdapter;
     AudioManager audioManager;
     public static int maxVolumn;
@@ -82,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
         setDatabaseHandler();
         setViewPager();
+        setTabs();
         setButtonSheet();
 
         testbtn();
@@ -116,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.main_viewpager);
         viewPager.setOffscreenPageLimit(4);
         viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setCurrentItem(1);
     }
 
     private void testbtn() {
@@ -125,21 +137,16 @@ public class MainActivity extends AppCompatActivity {
 
         String path = getApplicationInfo().dataDir + "/cache/audio1-1";
         File file2 = new File(path);
-        Log.d("MainActivity>>>", "get path: " + path);
 //        File file = new File(path + "/audios");
         File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
-        Log.d("MainActivity>>>", "get path2: " + file.getPath());
 
         testbtn0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, DownloadService.class);
-                Log.d("MainActivity>>>", "1");
                 if (DownloadService.isDownloadOpen) {
-                    Log.d("MainActivity>>>", "2");
                     stopService(intent);
                 } else {
-                    Log.d("MainActivity>>>", "3");
                 }
             }
         });
@@ -182,6 +189,22 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            if (bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED) {
+
+                Rect outRect = new Rect();
+                bottomSheetTitleBar.getGlobalVisibleRect(outRect);
+
+                if(!outRect.contains((int)ev.getRawX(), (int)ev.getRawY()))
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        }
+
+        return super.dispatchTouchEvent(ev);
+    }
+
     private void setButtonSheet() {
         this.bottomSheetTitleBar = findViewById(R.id.bottom_sheet_title_bar);
         this.pands = findViewById(R.id.bottom_sheet_pands);
@@ -191,6 +214,16 @@ public class MainActivity extends AppCompatActivity {
         this.bottomRecyclerView = findViewById(R.id.bottom_recyclerview);
         linearLayout = findViewById(R.id.bottom_sheet_id);
         bottomSheetBehavior = BottomSheetBehavior.from(linearLayout);
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int y = (int)(size.y * 0.4);
+//        ViewGroup.LayoutParams params = bottomRecyclerView.getLayoutParams();
+//        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+//        params.height = y;
+//        bottomRecyclerView.setLayoutParams(params);
+        bottomRecyclerView.setMinimumHeight(y);
 
         bottomSheetTitleBar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -314,5 +347,45 @@ public class MainActivity extends AppCompatActivity {
         public int getCount() {
             return items.size();
         }
+    }
+
+    private void setTabs() {
+        tabs = findViewById(R.id.tablayout);
+        ArrayList<TabsItem> tabsList = new ArrayList<>();
+        tabsList.add(new TabsItem(R.drawable.bottom_play, "fav", false));
+        tabsList.add(new TabsItem(R.drawable.bottom_pause, "rain", true));
+        tabsList.add(new TabsItem(R.drawable.bottom_up, "wind", false));
+        tabsList.add(new TabsItem(R.drawable.delete_playinglist, "chakra", false));
+        tabsList.add(new TabsItem(R.drawable.playlist_play, "mandra", false));
+        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL);
+        tabs.setLayoutManager(layoutManager);
+        TabsAdapter tabsAdapter =new TabsAdapter(tabsList, MainActivity.this);
+        tabs.setAdapter(tabsAdapter);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                for (int i = 0; i < tabsList.size(); i++) {
+                    if (i != position) {
+                        tabsList.get(i).setOpen(false);
+                        tabsAdapter.notifyItemChanged(i);
+                    } else {
+                        tabsList.get(position).setOpen(true);
+                        tabsAdapter.notifyItemChanged(position);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 }

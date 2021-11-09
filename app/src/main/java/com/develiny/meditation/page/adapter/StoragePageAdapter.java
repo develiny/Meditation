@@ -245,19 +245,15 @@ public class StoragePageAdapter extends RecyclerView.Adapter<StoragePageAdapter.
 
     private void checkHaveAudio2(ProgressBar progressBar, ImageView button, ImageView download, String filePath) {
         File file = new File(filePath);
-        Log.d("StoragePageAdapter>>>", "check path: " + filePath);
         if (file.exists()) {
-            Log.d("StoragePageAdapter>>>", "exists");
             download.setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);
             button.setEnabled(true);
         } else {
-            Log.d("StoragePageAdapter>>>", "no exists");
             download.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
             button.setEnabled(false);
         }
-        Log.d("StoragePageAdapter>>>", "finished");
     }
 
 //    private void setOnClickDownload(ProgressBar progressBar, ImageView button, ImageView download, String pnp, int page) {

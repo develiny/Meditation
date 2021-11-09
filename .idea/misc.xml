@@ -12,6 +12,8 @@
         <entry key="..\:/Users/kmj65/AndroidStudioProjects/Meditation/app/src/main/res/drawable/load_container.xml" value="0.3875" />
         <entry key="..\:/Users/kmj65/AndroidStudioProjects/Meditation/app/src/main/res/drawable/main_head.xml" value="0.275" />
         <entry key="..\:/Users/kmj65/AndroidStudioProjects/Meditation/app/src/main/res/drawable/page_container.xml" value="0.275" />
+        <entry key="..\:/Users/kmj65/AndroidStudioProjects/Meditation/app/src/main/res/drawable/tab_bg_choice.xml" value="0.38153846153846155" />
+        <entry key="..\:/Users/kmj65/AndroidStudioProjects/Meditation/app/src/main/res/drawable/tab_bg_default.xml" value="0.38153846153846155" />
         <entry key="..\:/Users/kmj65/AndroidStudioProjects/Meditation/app/src/main/res/layout/activity_main.xml" value="0.24427083333333333" />
         <entry key="..\:/Users/kmj65/AndroidStudioProjects/Meditation/app/src/main/res/layout/add_title_dialog.xml" value="0.37135416666666665" />
         <entry key="..\:/Users/kmj65/AndroidStudioProjects/Meditation/app/src/main/res/layout/ask_download_dialog.xml" value="0.37135416666666665" />
@@ -31,6 +33,7 @@
         <entry key="..\:/Users/kmj65/AndroidStudioProjects/Meditation/app/src/main/res/layout/playing_item.xml" value="0.25271739130434784" />
         <entry key="..\:/Users/kmj65/AndroidStudioProjects/Meditation/app/src/main/res/layout/splash.xml" value="0.37135416666666665" />
         <entry key="..\:/Users/kmj65/AndroidStudioProjects/Meditation/app/src/main/res/layout/storage_page.xml" value="0.37135416666666665" />
+        <entry key="..\:/Users/kmj65/AndroidStudioProjects/Meditation/app/src/main/res/layout/tab_item.xml" value="0.37135416666666665" />
       </map>
     </option>
   </component>
