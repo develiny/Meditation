@@ -30,7 +30,7 @@ import java.util.List;
 
 public class NotificationService extends Service {
 
-    public static final String CHANNEL_ID = "channel1";
+    public static final String CHANNEL_ID = "audio";
 
     public static final String ACTION_PLAY = "actionplay";
     public static final String ACTION_CLOSE = "actionclose";

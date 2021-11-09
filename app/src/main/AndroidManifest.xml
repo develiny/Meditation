@@ -31,6 +31,7 @@
         <service android:name=".notification.NotificationService" android:stopWithTask="true"/>
         <receiver android:name=".notification.NotificationActionService"/>
         <service android:name=".service.GetStateKillApp" />
+        <service android:name=".service.DownloadService"/>
     </application>
 
 </manifest>

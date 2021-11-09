@@ -36,6 +36,7 @@ import com.develiny.meditation.page.Page1;
 import com.develiny.meditation.page.Page2;
 import com.develiny.meditation.page.adapter.BottomSheetAdapter;
 import com.develiny.meditation.page.item.PageItem;
+import com.develiny.meditation.service.DownloadService;
 import com.develiny.meditation.service.GetStateKillApp;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -117,43 +118,6 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
     }
 
-//    private void testFirebasePlayAudio() {
-//        btn1 = findViewById(R.id.btn1);
-//        btn2 = findViewById(R.id.btn2);
-//
-//        btn1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (mp1 == null) {
-//                    mp1 = new MediaPlayer();
-//                    mp1.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//                    try {
-//                        mp1.setDataSource("https://firebasestorage.googleapis.com/v0/b/meditation-7c5e1.appspot.com/o/testaudio.mp3?alt=media&token=951a7cce-5635-4501-8c22-c1e695e7b926");
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                    mp1.prepareAsync();
-//                    mp1.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//                        @Override
-//                        public void onPrepared(MediaPlayer mediaPlayer) {
-//                            mp1.start();
-//                        }
-//                    });
-//                }
-//            }
-//        });
-//        btn2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (mp1 != null) {
-//                    mp1.stop();
-//                    mp1.release();
-//                    mp1 = null;
-//                }
-//            }
-//        });
-//    }
-
     private void testbtn() {
         testbtn0 = findViewById(R.id.testbtn0);
         testbtn = findViewById(R.id.testbtn);
@@ -169,10 +133,13 @@ public class MainActivity extends AppCompatActivity {
         testbtn0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (file2.exists()) {
-                    Log.d("MainActivity>>>", "have");
+                Intent intent = new Intent(MainActivity.this, DownloadService.class);
+                Log.d("MainActivity>>>", "1");
+                if (DownloadService.isDownloadOpen) {
+                    Log.d("MainActivity>>>", "2");
+                    stopService(intent);
                 } else {
-                    Log.d("MainActivity>>>", "null");
+                    Log.d("MainActivity>>>", "3");
                 }
             }
         });

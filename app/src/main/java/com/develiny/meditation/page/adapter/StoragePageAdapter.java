@@ -25,6 +25,7 @@ import com.develiny.meditation.notification.NotificationService;
 import com.develiny.meditation.page.ChakraPage;
 import com.develiny.meditation.page.HzPage;
 import com.develiny.meditation.page.item.PageItem;
+import com.develiny.meditation.service.DownloadService;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
@@ -159,7 +160,8 @@ public class StoragePageAdapter extends RecyclerView.Adapter<StoragePageAdapter.
         holder.download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setOnClickDownload(holder.progressBar, holder.button, holder.download, arrayList.get(positions).getPnp(), arrayList.get(positions).getPage());
+//                setOnClickDownload(holder.progressBar, holder.button, holder.download, arrayList.get(positions).getPnp(), arrayList.get(positions).getPage());
+                openDownloadService(context, holder.progressBar, holder.button, holder.download, arrayList.get(positions).getPnp(), arrayList.get(positions).getPage());
             }
         });
     }
@@ -191,6 +193,16 @@ public class StoragePageAdapter extends RecyclerView.Adapter<StoragePageAdapter.
             } else {
                 context.startService(intent);
             }
+        }
+    }
+
+    private void openDownloadService(Context context, ProgressBar progressBar, ImageView button, ImageView download, String pnp, int page) {
+        DownloadService downloadService = new DownloadService(progressBar, button, download, pnp, page);
+        Intent intent = new Intent(context, downloadService.getClass());
+        if (Build.VERSION.SDK_INT >= 26) {
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
         }
     }
 
@@ -247,42 +259,42 @@ public class StoragePageAdapter extends RecyclerView.Adapter<StoragePageAdapter.
         Log.d("StoragePageAdapter>>>", "finished");
     }
 
-    private void setOnClickDownload(ProgressBar progressBar, ImageView button, ImageView download, String pnp, int page) {
-        progressBar.setVisibility(View.VISIBLE);
-        button.setEnabled(false);
-        download.setEnabled(false);
-        String fileName = "audio" + pnp + ".mp3";
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference reference = storage.getReference();
-        File localFile;
-        try {
-            localFile = File.createTempFile("audio", "0");
-            reference.child(fileName).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    File from = new File(context.getApplicationInfo().dataDir + "/cache", localFile.getName());
-                    File to = new File(context.getApplicationInfo().dataDir + "/cache", fileName);
-                    if (from.exists()) {
-                        from.renameTo(to);
-                    }
-                    resetMediaPlayer(page);
-                    button.setEnabled(true);
-                    download.setVisibility(View.GONE);
-                    progressBar.setVisibility(View.GONE);
-                    Log.d("StoragePageAdapter>>>", "download success");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d("StoragePageAdapter>>>", "download failed: " + e.toString());
-                    download.setEnabled(true);
-                    progressBar.setVisibility(View.GONE);
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void setOnClickDownload(ProgressBar progressBar, ImageView button, ImageView download, String pnp, int page) {
+//        progressBar.setVisibility(View.VISIBLE);
+//        button.setEnabled(false);
+//        download.setEnabled(false);
+//        String fileName = "audio" + pnp + ".mp3";
+//        FirebaseStorage storage = FirebaseStorage.getInstance();
+//        StorageReference reference = storage.getReference();
+//        File localFile;
+//        try {
+//            localFile = File.createTempFile("audio", "0");
+//            reference.child(fileName).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+//                @Override
+//                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+//                    File from = new File(context.getApplicationInfo().dataDir + "/cache", localFile.getName());
+//                    File to = new File(context.getApplicationInfo().dataDir + "/cache", fileName);
+//                    if (from.exists()) {
+//                        from.renameTo(to);
+//                    }
+//                    resetMediaPlayer(page);
+//                    button.setEnabled(true);
+//                    download.setVisibility(View.GONE);
+//                    progressBar.setVisibility(View.GONE);
+//                    Log.d("StoragePageAdapter>>>", "download success");
+//                }
+//            }).addOnFailureListener(new OnFailureListener() {
+//                @Override
+//                public void onFailure(@NonNull Exception e) {
+//                    Log.d("StoragePageAdapter>>>", "download failed: " + e.toString());
+//                    download.setEnabled(true);
+//                    progressBar.setVisibility(View.GONE);
+//                }
+//            });
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private void resetMediaPlayer(int page) {
         if (page == 3) {
