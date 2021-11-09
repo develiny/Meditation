@@ -110,16 +110,7 @@ public class DownloadService extends Service {
             startForeground(2, notification.build());
             Log.d("DownloadService>>>", "ok");
 
-//            setOnClickDownload(context, progressBar, button, download, pnp, page);
-
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    stopSelf();
-                    SuccessDownloadNotification.successDownloadNotification(context);
-                }
-            }, 2000);
+            setOnClickDownload(context, progressBar, button, download, pnp, page);
         }
     }
 

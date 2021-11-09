@@ -1,6 +1,8 @@
 package com.develiny.meditation.dialog;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -13,9 +15,11 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.develiny.meditation.R;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
+import com.develiny.meditation.notification.NotificationService;
 import com.develiny.meditation.page.ChakraPage;
 import com.develiny.meditation.page.HzPage;
 import com.develiny.meditation.page.adapter.FavTitleAdapter;
+import com.develiny.meditation.service.DownloadsService;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
@@ -31,9 +35,6 @@ public class AskDownloadDialog {
     private static Button okbtn, cancel;
     private static ProgressBar progressBar;
     private static TextView count;
-
-    private static FirebaseStorage storage;
-    private static StorageReference reference;
 
     public static void askDownloadDialog(Context context, ArrayList<String> pnps, int position) {
         LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -51,52 +52,18 @@ public class AskDownloadDialog {
         progressBar.setVisibility(View.INVISIBLE);
         count.setVisibility(View.INVISIBLE);
 
-        storage = FirebaseStorage.getInstance();
-        reference = storage.getReference();
-
-        final int[] counter = {0};
-
         okbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressBar.setVisibility(View.VISIBLE);
-                count.setVisibility(View.VISIBLE);
-                progressBar.setMax(pnps.size());
-                count.setText("0 / " + pnps.size());
-//                int counter = 0;
-                progressBar.setProgress(counter[0]);
-                for (int i = 0; i < pnps.size(); i++) {
-                    String fileName = "audio" + pnps.get(i) + ".mp3";
-                    try {
-                        File localFile = File.createTempFile("audio", "0");
-                        reference.child(fileName).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                ChakraPage.adapter.notifyDataSetChanged();
-                                HzPage.adapter.notifyDataSetChanged();
-                                File from = new File(context.getApplicationInfo().dataDir + "/cache", localFile.getName());
-                                File to = new File(context.getApplicationInfo().dataDir + "/cache", fileName);
-                                if (from.exists()) {
-                                    from.renameTo(to);
-                                }
-                                counter[0] += 1;
-                                count.setText(counter[0] + " / " + pnps.size());
-                                progressBar.setProgress(counter[0]);
-                                if (counter[0] == pnps.size()) {
-                                    ChakraPage.setAudio(context);
-                                    HzPage.setAudio(context);
-                                    alertDialog.dismiss();
-                                }
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                alertDialog.setCancelable(false);
+                okbtn.setEnabled(false);
+                cancel.setEnabled(false);
+                Intent intent = new Intent(context, DownloadsService.class);
+                if (Build.VERSION.SDK_INT >= 26) {
+                    context.startForegroundService(intent);
+                    DownloadsService.downloads(context, progressBar, count, pnps);
+                } else {
+                    context.startService(intent);
                 }
             }
         });
