@@ -162,6 +162,7 @@ public class StoragePageAdapter extends RecyclerView.Adapter<StoragePageAdapter.
             public void onClick(View view) {
 //                setOnClickDownload(holder.progressBar, holder.button, holder.download, arrayList.get(positions).getPnp(), arrayList.get(positions).getPage());
                 openDownloadService(context, holder.progressBar, holder.button, holder.download, arrayList.get(positions).getPnp(), arrayList.get(positions).getPage());
+                DownloadService.setOnClickDownload(context, holder.progressBar, holder.button, holder.download, arrayList.get(positions).getPnp(), arrayList.get(positions).getPage());
             }
         });
     }

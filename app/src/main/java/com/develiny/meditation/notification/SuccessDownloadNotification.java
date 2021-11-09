@@ -19,7 +19,7 @@ import com.develiny.meditation.R;
 
 public class SuccessDownloadNotification {
 
-    public static final String CHANNEL_ID = "download";
+    public static final String CHANNEL_ID = "success";
 
     public static void successDownloadNotification(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
@@ -90,7 +90,7 @@ public class SuccessDownloadNotification {
             notification.setContentIntent(pIntent);
             notification.setPriority(NotificationCompat.PRIORITY_LOW);//PRIORITY_LOW
 
-            notificationManagerCompat.notify(2, notification.build());
+            notificationManagerCompat.notify(3, notification.build());
             Log.d("DownloadService>>>", "ok");
         }
     }

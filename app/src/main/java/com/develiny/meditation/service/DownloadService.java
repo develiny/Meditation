@@ -110,20 +110,20 @@ public class DownloadService extends Service {
             startForeground(2, notification.build());
             Log.d("DownloadService>>>", "ok");
 
-            setOnClickDownload(context, progressBar, button, download, pnp, page);
+//            setOnClickDownload(context, progressBar, button, download, pnp, page);
 
-//            Handler handler = new Handler();
-//            handler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    stopSelf();
-//                    SuccessDownloadNotification.successDownloadNotification(context);
-//                }
-//            }, 2000);
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    stopSelf();
+                    SuccessDownloadNotification.successDownloadNotification(context);
+                }
+            }, 2000);
         }
     }
 
-    private void setOnClickDownload(Context context, ProgressBar progressBar, ImageView button, ImageView download, String pnp, int page) {
+    public static void setOnClickDownload(Context context, ProgressBar progressBar, ImageView button, ImageView download, String pnp, int page) {
         progressBar.setVisibility(View.VISIBLE);
         button.setEnabled(false);
         download.setEnabled(false);
@@ -145,7 +145,9 @@ public class DownloadService extends Service {
                     button.setEnabled(true);
                     download.setVisibility(View.GONE);
                     progressBar.setVisibility(View.GONE);
-                    stopSelf();
+//                    stopSelf();
+                    Intent intent = new Intent(context, DownloadService.class);
+                    context.stopService(intent);
                     SuccessDownloadNotification.successDownloadNotification(context);
                     Log.d("StoragePageAdapter>>>", "download success");
                 }
@@ -164,7 +166,7 @@ public class DownloadService extends Service {
         }
     }
 
-    private void resetMediaPlayer(Context context, int page) {
+    private static void resetMediaPlayer(Context context, int page) {
         if (page == 3) {
             ChakraPage.setAudio(context);
             ChakraPage.setChakraVolumn();
