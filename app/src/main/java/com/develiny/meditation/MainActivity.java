@@ -189,21 +189,21 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            if (bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED) {
-
-                Rect outRect = new Rect();
-                bottomSheetTitleBar.getGlobalVisibleRect(outRect);
-
-                if(!outRect.contains((int)ev.getRawX(), (int)ev.getRawY()))
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-            }
-        }
-
-        return super.dispatchTouchEvent(ev);
-    }
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent ev) {
+//        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+//            if (bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED) {
+//
+//                Rect outRect = new Rect();
+//                bottomSheetTitleBar.getGlobalVisibleRect(outRect);
+//
+//                if(!outRect.contains((int)ev.getRawX(), (int)ev.getRawY()))
+//                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+//            }
+//        }
+//
+//        return super.dispatchTouchEvent(ev);
+//    }
 
     private void setButtonSheet() {
         this.bottomSheetTitleBar = findViewById(R.id.bottom_sheet_title_bar);

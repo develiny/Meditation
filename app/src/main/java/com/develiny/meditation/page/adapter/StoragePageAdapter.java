@@ -142,8 +142,6 @@ public class StoragePageAdapter extends RecyclerView.Adapter<StoragePageAdapter.
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {//변화
                 if (SeekController.pageMoving) {
                     arrayList.get(positions).setSeek(seekBar.getProgress());
-                    notifyItemChanged(positions);
-                    notifyDataSetChanged();
                     float volume = (float) (1 - (Math.log(SeekController.MAX_VOLUME - i) / Math.log(SeekController.MAX_VOLUME)));
                     String pp = arrayList.get(positions).getPnp();
                     SeekController.changeVolumn(pp, volume);
@@ -153,6 +151,8 @@ public class StoragePageAdapter extends RecyclerView.Adapter<StoragePageAdapter.
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {//끝
+                notifyItemChanged(positions);
+                notifyDataSetChanged();
                 SeekController.pageMoving = false;
             }
         });

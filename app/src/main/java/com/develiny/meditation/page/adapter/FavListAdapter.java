@@ -62,8 +62,6 @@ public class FavListAdapter extends RecyclerView.Adapter<FavListAdapter.CustomVi
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 if (SeekController.favMoving) {
                     arrayList.get(positions).setSeek(seekBar.getProgress());
-                    notifyItemChanged(positions);
-                    notifyDataSetChanged();
                     float volume = (float) (1 - (Math.log(SeekController.MAX_VOLUME - i) / Math.log(SeekController.MAX_VOLUME)));
                     String pp = arrayList.get(positions).getPnp();
                     SeekController.changeVolumn(pp, volume);
@@ -78,6 +76,8 @@ public class FavListAdapter extends RecyclerView.Adapter<FavListAdapter.CustomVi
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                notifyItemChanged(positions);
+                notifyDataSetChanged();
                 SeekController.favMoving = false;
             }
         });

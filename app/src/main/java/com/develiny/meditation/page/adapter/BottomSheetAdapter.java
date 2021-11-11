@@ -90,8 +90,6 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 if (SeekController.bottomMoving) {
                     arrayList.get(positions).setSeek(seekBar.getProgress());
-                    notifyItemChanged(positions);
-                    notifyDataSetChanged();
                     float volume = (float) (1 - (Math.log(SeekController.MAX_VOLUME - i) / Math.log(SeekController.MAX_VOLUME)));
                     String pp = arrayList.get(positions).getPnp();
                     SeekController.changeVolumn(pp, volume);
@@ -106,6 +104,8 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                notifyItemChanged(positions);
+                notifyDataSetChanged();
                 SeekController.bottomMoving = false;
             }
         });

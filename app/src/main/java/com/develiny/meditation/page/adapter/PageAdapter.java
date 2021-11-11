@@ -128,8 +128,8 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {//변화
                 if (SeekController.pageMoving) {
                     arrayList.get(positions).setSeek(seekBar.getProgress());
-                    notifyItemChanged(positions);
-                    notifyDataSetChanged();
+//                    notifyItemChanged(positions);
+//                    notifyDataSetChanged();
                     float volume = (float) (1 - (Math.log(SeekController.MAX_VOLUME - i) / Math.log(SeekController.MAX_VOLUME)));
                     String pp = arrayList.get(positions).getPnp();
                     SeekController.changeVolumn(pp, volume);
@@ -139,6 +139,8 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.CustomViewHold
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {//끝
+                notifyItemChanged(positions);
+                notifyDataSetChanged();
                 SeekController.pageMoving = false;
             }
         });
