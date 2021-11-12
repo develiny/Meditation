@@ -1,17 +1,13 @@
 package com.develiny.meditation.controller;
 
 import android.content.Context;
-import android.util.Log;
-
-import androidx.fragment.app.Fragment;
 
 import com.develiny.meditation.MainActivity;
-import com.develiny.meditation.controller.AudioController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.page.ChakraPage;
 import com.develiny.meditation.page.HzPage;
-import com.develiny.meditation.page.Page1;
-import com.develiny.meditation.page.Page2;
+import com.develiny.meditation.page.RainPage;
+import com.develiny.meditation.page.WindPage;
 import com.develiny.meditation.page.adapter.FavListAdapter;
 import com.develiny.meditation.page.adapter.FavTitleAdapter;
 import com.develiny.meditation.page.item.FavListItem;
@@ -63,13 +59,13 @@ public class SeekController {
     public static void changeSeekInBottom(Context context, PageItem pageItem, int progress) {
         int position = pageItem.getPosition() - 1;
         if (pageItem.getPage() == 1) {
-            Page1.arrayList.get(position).setSeek(progress);
-            Page1.adapter.notifyItemChanged(position);
-            Page1.adapter.notifyDataSetChanged();
+            RainPage.arrayList.get(position).setSeek(progress);
+            RainPage.adapter.notifyItemChanged(position);
+            RainPage.adapter.notifyDataSetChanged();
         } else if (pageItem.getPage() == 2) {
-            Page2.arrayList.get(position).setSeek(progress);
-            Page2.adapter.notifyItemChanged(position);
-            Page2.adapter.notifyDataSetChanged();
+            WindPage.arrayList.get(position).setSeek(progress);
+            WindPage.adapter.notifyItemChanged(position);
+            WindPage.adapter.notifyDataSetChanged();
         } else if (pageItem.getPage() == 3) {
             ChakraPage.arrayList.get(position).setSeek(progress);
             ChakraPage.adapter.notifyItemChanged(position);
@@ -94,13 +90,13 @@ public class SeekController {
     public static void changeSeekInFavList(Context context, FavListItem favListItem, int progress) {
         int position = favListItem.getPosition() - 1;
         if (favListItem.getPage() == 1) {
-            Page1.arrayList.get(position).setSeek(progress);
-            Page1.adapter.notifyItemChanged(position);
-            Page1.adapter.notifyDataSetChanged();
+            RainPage.arrayList.get(position).setSeek(progress);
+            RainPage.adapter.notifyItemChanged(position);
+            RainPage.adapter.notifyDataSetChanged();
         } else if (favListItem.getPage() == 2) {
-            Page2.arrayList.get(position).setSeek(progress);
-            Page2.adapter.notifyItemChanged(position);
-            Page2.adapter.notifyDataSetChanged();
+            WindPage.arrayList.get(position).setSeek(progress);
+            WindPage.adapter.notifyItemChanged(position);
+            WindPage.adapter.notifyDataSetChanged();
         }
 
         if (MainActivity.playingList.size() != 0) {

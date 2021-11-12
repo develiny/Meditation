@@ -12,7 +12,6 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -20,13 +19,9 @@ import androidx.core.app.NotificationCompat;
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
 import com.develiny.meditation.controller.AudioController;
-import com.develiny.meditation.controller.ChakraController;
-import com.develiny.meditation.controller.P1Controller;
-import com.develiny.meditation.controller.P2Controller;
 import com.develiny.meditation.page.item.PageItem;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class NotificationService extends Service {
 

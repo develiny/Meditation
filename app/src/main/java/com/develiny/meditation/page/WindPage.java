@@ -20,14 +20,14 @@ import com.develiny.meditation.page.item.PageItem;
 
 import java.util.ArrayList;
 
-public class Page1 extends Fragment {
+public class WindPage extends Fragment {
 
-    public static MediaPlayer p1p1_1, p1p1_2;
-    public static MediaPlayer p1p2_1, p1p2_2;
+    public static MediaPlayer p2p1_1, p2p1_2;
+    public static MediaPlayer p2p2_1, p2p2_2;
 
     RecyclerView recyclerView;
-    public static PageAdapter adapter;
     public static ArrayList<PageItem> arrayList = new ArrayList<>();
+    public static PageAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
     DatabaseHandler databaseHandler;
 
@@ -46,10 +46,10 @@ public class Page1 extends Fragment {
     }
 
     private void setAudio() {
-        p1p1_1 = MediaPlayer.create(getActivity(), R.raw.p1p1);
-        p1p1_2 = MediaPlayer.create(getActivity(), R.raw.p1p1);
-        p1p2_1 = MediaPlayer.create(getActivity(), R.raw.p1p2);
-        p1p2_2 = MediaPlayer.create(getActivity(), R.raw.p1p2);
+        p2p1_1 = MediaPlayer.create(getActivity(), R.raw.p2p1);
+        p2p1_2 = MediaPlayer.create(getActivity(), R.raw.p2p1);
+        p2p2_1 = MediaPlayer.create(getActivity(), R.raw.p2p2);
+        p2p2_2 = MediaPlayer.create(getActivity(), R.raw.p2p2);
     }
 
     private void setInit(ViewGroup rootView) {
@@ -62,17 +62,17 @@ public class Page1 extends Fragment {
     }
 
     private void setRecyclerView() {
-        arrayList = databaseHandler.rainList();
+        arrayList = databaseHandler.windList();
         adapter = new PageAdapter(arrayList, getActivity());
         layoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-        setPage1Volumn();
+        setPage2Volumn();
     }
 
-    private void setPage1Volumn() {
-        AudioController.setVolumn("1-1", arrayList.get(0).getSeek());
-        AudioController.setVolumn("1-2", arrayList.get(1).getSeek());
+    private void setPage2Volumn() {
+        AudioController.setVolumn("2-1", arrayList.get(0).getSeek());
+        AudioController.setVolumn("2-2", arrayList.get(1).getSeek());
     }
 }

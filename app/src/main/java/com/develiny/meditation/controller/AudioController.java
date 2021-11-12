@@ -10,8 +10,8 @@ import android.view.View;
 import com.develiny.meditation.notification.NotificationService;
 import com.develiny.meditation.page.ChakraPage;
 import com.develiny.meditation.page.HzPage;
-import com.develiny.meditation.page.Page1;
-import com.develiny.meditation.page.Page2;
+import com.develiny.meditation.page.RainPage;
+import com.develiny.meditation.page.WindPage;
 import com.develiny.meditation.page.item.PageItem;
 
 import java.util.ArrayList;
@@ -21,27 +21,25 @@ public class AudioController {
 
     public static void startTrack(int page, int position) {
 
+        String pnp = page + "-" + position;
+
         if (page == 1) {//page1
             if (position == 1) {
-                Page1.p1p1_1.start();
-                new P1Controller.p1p1t1().start();
+                RainPage.p1p1_1.start();
             } else if (position == 2) {
-                Page1.p1p2_1.start();
-                new P1Controller.p1p2t1().start();
+                RainPage.p1p2_1.start();
             }
+            new RainController.p1t1(pnp).start();
         } else if (page == 2) {//page2
             if (position == 1) {
-                Page2.p2p1_1.start();
-                new P2Controller.p2p1t1().start();
+                WindPage.p2p1_1.start();
             } else if (position == 2) {
-                Page2.p2p2_1.start();
-                new P2Controller.p2p2t1().start();
+                WindPage.p2p2_1.start();
             }
+            new WindController.p2t1(pnp).start();
         } else if (page == 3) {
-            String pnp = Integer.toString(page) + "-" + Integer.toString(position);
             ChakraController.startChakra(pnp);
         } else if (page == 4) {
-            String pnp = Integer.toString(page) + "-" + Integer.toString(position);
             HzController.startHz(pnp);
         }
     }
@@ -63,20 +61,20 @@ public class AudioController {
         }
         switch (pp) {
             case "1-1":
-                Page1.p1p1_1.start();
-                new P1Controller.p1p1t1().start();
+                RainPage.p1p1_1.start();
+                new RainController.p1t1(pp).start();
                 break;
             case "1-2":
-                Page1.p1p2_1.start();
-                new P1Controller.p1p2t1().start();
+                RainPage.p1p2_1.start();
+                new RainController.p1t1(pp).start();
                 break;
             case "2-1":
-                Page2.p2p1_1.start();
-                new P2Controller.p2p1t1().start();
+                WindPage.p2p1_1.start();
+                new WindController.p2t1(pp).start();
                 break;
             case "2-2":
-                Page2.p2p2_1.start();
-                new P2Controller.p2p2t1().start();
+                WindPage.p2p2_1.start();
+                new WindController.p2t1(pp).start();
                 break;
             case "3-1":
                 ChakraController.startChakra(pp);
@@ -132,13 +130,13 @@ public class AudioController {
     public static MediaPlayer playingListindex0_1(String pp) {
         switch (pp) {
             case "1-1":
-                return Page1.p1p1_1;
+                return RainPage.p1p1_1;
             case "1-2":
-                return Page1.p1p2_1;
+                return RainPage.p1p2_1;
             case "2-1":
-                return Page2.p2p1_1;
+                return WindPage.p2p1_1;
             case "2-2":
-                return Page2.p2p2_1;
+                return WindPage.p2p2_1;
             case "3-1":
                 return ChakraPage.p3p1;
             case "3-2":
@@ -155,13 +153,13 @@ public class AudioController {
     public static MediaPlayer playingListindex0_2(String pp) {
         switch (pp) {
             case "1-1":
-                return Page1.p1p1_2;
+                return RainPage.p1p1_2;
             case "1-2":
-                return Page1.p1p2_2;
+                return RainPage.p1p2_2;
             case "2-1":
-                return Page2.p2p1_2;
+                return WindPage.p2p1_2;
             case "2-2":
-                return Page2.p2p2_2;
+                return WindPage.p2p2_2;
             case "3-1":
                 return ChakraPage.p3p1;
             case "3-2":
@@ -177,9 +175,9 @@ public class AudioController {
 
     public static void stopPage(int page, String pnp) {
         if (page == 1) {
-            P1Controller.stopPage1();
+            RainController.stopPage1();
         } else if (page == 2) {
-            P2Controller.stopPage2();
+            WindController.stopPage2();
         } else if (page == 3) {
             ChakraController.stopChakra(page, pnp);
         } else if (page == 4) {
@@ -266,9 +264,9 @@ public class AudioController {
     public static void stopPlayingList(ArrayList<PageItem> pageItem) {//playinglist에 있는 목록만 stop(page)
         for (int i = 0; i < pageItem.size(); i++) {
             if (pageItem.get(i).getPage() == 1) {
-                P1Controller.stopPage1();
+                RainController.stopPage1();
             } else if (pageItem.get(i).getPage() == 2) {
-                P2Controller.stopPage2();
+                WindController.stopPage2();
             } else if (pageItem.get(i).getPage() == 3) {
                 ChakraController.stopChakra(pageItem.get(i).getPage(), pageItem.get(i).getPnp());
             } else if (pageItem.get(i).getPage() == 4) {

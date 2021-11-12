@@ -8,8 +8,8 @@ import android.os.Build;
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
 import com.develiny.meditation.controller.AudioController;
-import com.develiny.meditation.controller.P1Controller;
-import com.develiny.meditation.controller.P2Controller;
+import com.develiny.meditation.controller.RainController;
+import com.develiny.meditation.controller.WindController;
 import com.develiny.meditation.page.item.PageItem;
 
 import java.util.ArrayList;
@@ -64,9 +64,9 @@ public class NotificationActionService extends BroadcastReceiver {
 
     private void stopPage(int page) {
         if (page == 1) {
-            P1Controller.stopPage1();
+            RainController.stopPage1();
         } else if (page == 2) {
-            P2Controller.stopPage2();
+            WindController.stopPage2();
         }
     }
 

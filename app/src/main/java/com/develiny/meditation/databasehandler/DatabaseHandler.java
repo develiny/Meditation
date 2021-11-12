@@ -10,13 +10,12 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.develiny.meditation.MainActivity;
-import com.develiny.meditation.controller.AudioController;
 import com.develiny.meditation.dialog.AddTitleDialog;
 import com.develiny.meditation.dialog.DeleteFavTitleDialog;
 import com.develiny.meditation.dialog.EditFavTitleDialog;
 import com.develiny.meditation.page.FavPage;
-import com.develiny.meditation.page.Page1;
-import com.develiny.meditation.page.Page2;
+import com.develiny.meditation.page.RainPage;
+import com.develiny.meditation.page.WindPage;
 import com.develiny.meditation.page.item.FavListItem;
 import com.develiny.meditation.page.item.FavTitleItem;
 import com.develiny.meditation.page.item.PageItem;
@@ -440,14 +439,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         for (int i = 0; i < pagelist.size(); i++) {
             if (pagelist.get(i) == 1) {
                 sqLiteDatabase.execSQL("update rain set isplay = 2 where position = " + positionlist.get(i));
-                Page1.arrayList.get(positionlist.get(i) - 1).setIsplay(1);
-                Page1.adapter.notifyItemChanged(positionlist.get(i) - 1);
-                Page1.adapter.notifyDataSetChanged();
+                RainPage.arrayList.get(positionlist.get(i) - 1).setIsplay(1);
+                RainPage.adapter.notifyItemChanged(positionlist.get(i) - 1);
+                RainPage.adapter.notifyDataSetChanged();
             } else if (pagelist.get(i) == 2) {
                 sqLiteDatabase.execSQL("update wind set isplay = 2 where position = " + positionlist.get(i));
-                Page2.arrayList.get(positionlist.get(i) - 1).setIsplay(1);
-                Page2.adapter.notifyItemChanged(positionlist.get(i) - 1);
-                Page2.adapter.notifyDataSetChanged();
+                WindPage.arrayList.get(positionlist.get(i) - 1).setIsplay(1);
+                WindPage.adapter.notifyItemChanged(positionlist.get(i) - 1);
+                WindPage.adapter.notifyDataSetChanged();
             }
         }
         sqLiteDatabase.execSQL("vacuum");

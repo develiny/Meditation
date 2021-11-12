@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,8 +20,8 @@ import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.dialog.AskDownloadDialog;
 import com.develiny.meditation.dialog.DeleteFavTitleDialog;
 import com.develiny.meditation.dialog.EditFavTitleDialog;
-import com.develiny.meditation.page.Page1;
-import com.develiny.meditation.page.Page2;
+import com.develiny.meditation.page.RainPage;
+import com.develiny.meditation.page.WindPage;
 import com.develiny.meditation.page.item.FavListItem;
 import com.develiny.meditation.page.item.FavTitleItem;
 
@@ -229,13 +228,13 @@ public class FavTitleAdapter extends RecyclerView.Adapter<FavTitleAdapter.Custom
 
     private void changePageImage(int page, int position) {
         if (page == 1) {
-            Page1.arrayList.get(position).setIsplay(2);
-            Page1.adapter.notifyItemChanged(position);
-            Page1.adapter.notifyDataSetChanged();
+            RainPage.arrayList.get(position).setIsplay(2);
+            RainPage.adapter.notifyItemChanged(position);
+            RainPage.adapter.notifyDataSetChanged();
         } else if (page == 2) {
-            Page2.arrayList.get(position).setIsplay(2);
-            Page2.adapter.notifyItemChanged(position);
-            Page2.adapter.notifyDataSetChanged();
+            WindPage.arrayList.get(position).setIsplay(2);
+            WindPage.adapter.notifyItemChanged(position);
+            WindPage.adapter.notifyDataSetChanged();
         }
     }
 

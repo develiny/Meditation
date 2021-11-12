@@ -2,10 +2,8 @@ package com.develiny.meditation.page.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +22,8 @@ import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.notification.NotificationService;
 import com.develiny.meditation.page.ChakraPage;
 import com.develiny.meditation.page.HzPage;
-import com.develiny.meditation.page.Page1;
-import com.develiny.meditation.page.Page2;
+import com.develiny.meditation.page.RainPage;
+import com.develiny.meditation.page.WindPage;
 import com.develiny.meditation.page.item.PageItem;
 
 import java.util.ArrayList;
@@ -140,12 +138,12 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 
     private void changePageItemBackground(int page, int position) {
         if (page == 1) {
-            Page1.arrayList.get(position - 1).setIsplay(1);
-            Page1.adapter.notifyItemChanged(position - 1);
+            RainPage.arrayList.get(position - 1).setIsplay(1);
+            RainPage.adapter.notifyItemChanged(position - 1);
 //            Page1.adapter.notifyDataSetChanged();
         } else if (page == 2) {
-            Page2.arrayList.get(position - 1).setIsplay(1);
-            Page2.adapter.notifyItemChanged(position - 1);
+            WindPage.arrayList.get(position - 1).setIsplay(1);
+            WindPage.adapter.notifyItemChanged(position - 1);
 //            Page2.adapter.notifyDataSetChanged();
         } else if (page == 3) {
             ChakraPage.arrayList.get(position - 1).setIsplay(1);
