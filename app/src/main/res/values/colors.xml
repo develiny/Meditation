@@ -8,7 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-
-    <color name="light_background_color">#F8F5FC</color>
-    <color name="night_background_color">#24123A</color>
+    <color name="palette_1"></color>
+    <color name="palette_2"></color>
+    <color name="palette_3"></color>
+    <color name="palette_4"></color>
+    <color name="palette_5"></color>
 </resources>

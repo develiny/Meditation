@@ -14,8 +14,9 @@
 
 
         <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@color/light_background_color</item>
-        <item name="android:textColor">@color/black</item>
+<!--        <item name="android:windowBackground">@color/light_background_color</item>-->
+<!--        <item name="android:textColor">@color/black</item>-->
     </style>
+
     <color name="button_bg">#F10D0D</color>
 </resources>

@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         setTabs();
         setButtonSheet();
 
-        testbtn();
+//        testbtn();
     }
 
     private void startGetStateKillApp() {
@@ -125,80 +125,6 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setCurrentItem(1);
     }
 
-    private void testbtn() {
-        testbtn0 = findViewById(R.id.testbtn0);
-        testbtn = findViewById(R.id.testbtn);
-        testbtn1 = findViewById(R.id.testbtn1);
-
-        String path = getApplicationInfo().dataDir + "/cache/audio1-1";
-        File file2 = new File(path);
-//        File file = new File(path + "/audios");
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
-
-        testbtn0.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, DownloadService.class);
-                if (DownloadService.isDownloadOpen) {
-                    stopService(intent);
-                } else {
-                }
-            }
-        });
-
-        testbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseStorage storage = FirebaseStorage.getInstance();
-                StorageReference reference = storage.getReference();
-                File localFile;
-                try {
-                    localFile = File.createTempFile("audio", "1-1");
-                    reference.child("cde.wav").getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            Log.d("MainAcativity>>>", "success: " + localFile.getName());
-                            File from = new File(getApplicationInfo().dataDir + "/cache", localFile.getName());
-                            File to = new File(getApplicationInfo().dataDir + "/cache", "audio1-1");
-                            if (from.exists()) {
-                                from.renameTo(to);
-                            }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("MainActivity>>>", "failed");
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        testbtn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-    }
-
-//    @Override
-//    public boolean dispatchTouchEvent(MotionEvent ev) {
-//        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-//            if (bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED) {
-//
-//                Rect outRect = new Rect();
-//                bottomSheetTitleBar.getGlobalVisibleRect(outRect);
-//
-//                if(!outRect.contains((int)ev.getRawX(), (int)ev.getRawY()))
-//                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-//            }
-//        }
-//
-//        return super.dispatchTouchEvent(ev);
-//    }
 
     private void setButtonSheet() {
         this.bottomSheetTitleBar = findViewById(R.id.bottom_sheet_title_bar);
