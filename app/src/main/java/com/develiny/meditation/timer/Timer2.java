@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
+import com.develiny.meditation.notification.DefaultNofitication;
 import com.develiny.meditation.service.TimerService;
 
 public class Timer2 extends Fragment {
@@ -69,10 +70,10 @@ public class Timer2 extends Fragment {
         btn_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TimerDialog.viewPager.setCurrentItem(0);
                 TimerService.isCount = false;
                 getActivity().stopService(new Intent(getActivity(), TimerService.class));
                 Timer1.mTimerRunning = false;
+                DefaultNofitication.defauleNotification(getActivity());
             }
         });
 

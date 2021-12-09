@@ -20,9 +20,12 @@ import androidx.core.app.NotificationCompat;
 
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
+import com.develiny.meditation.controller.AudioController;
+import com.develiny.meditation.notification.DefaultNofitication;
 import com.develiny.meditation.notification.NotificationActionService;
 import com.develiny.meditation.notification.NotificationService;
 import com.develiny.meditation.timer.Timer2;
+import com.develiny.meditation.timer.TimerDialog;
 
 public class TimerService extends Service {
 
@@ -80,6 +83,7 @@ public class TimerService extends Service {
                     String newtimeset = "";
 
                     if (newtime.equals("0:0:0")) {
+                        newtimeset = "0:0:0";
                     } else if ((String.valueOf(hours).length() == 1) && (String.valueOf(minutes).length() == 1) && (String.valueOf(seconds).length() == 1)) {
                         newtimeset = "0" + hours + ":0" + minutes + ":0" + seconds;
                     } else if ((String.valueOf(hours).length() == 1) && (String.valueOf(minutes).length() == 1)) {
@@ -118,6 +122,9 @@ public class TimerService extends Service {
                     NotificationService.closeNotification(getApplicationContext());
 
                     //stop audio
+                    if (NotificationService.isPlaying) {
+                        stopService(new Intent(getApplicationContext(), NotificationService.class));
+                    }
 
                     MainActivity.maincount.setText("");
                     MainActivity.maincount.setVisibility(View.GONE);
@@ -133,13 +140,19 @@ public class TimerService extends Service {
 
     @Override
     public void onDestroy() {
+        TimerDialog.viewPager.setCurrentItem(0);
         isCount = false;
         cdt.cancel();
-        Log.d("TimerService>>>", "onDestroy");
+        Log.d("TimerService>>>", "onDestroy, " + NotificationService.isPlaying);
 
         MainActivity.maincount.setText("");
         MainActivity.maincount.setVisibility(View.GONE);
         MainActivity.cancel.setVisibility(View.GONE);
+
+
+        if (NotificationService.isPlaying) {
+            DefaultNofitication.defauleNotification(getApplicationContext());
+        }
 
         super.onDestroy();
     }
@@ -151,8 +164,9 @@ public class TimerService extends Service {
     }
 
     public void startForegroundService(Context context, String time) {
-        Log.d("TimerService>>>", "startForegroundService");
+        Log.d("TimerService>>>", "startForegroundService, " + time);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            Log.d("TimerService>>>", "startForegroundService,1 " + time);
             MediaSessionCompat mediaSessionCompat = new MediaSessionCompat(context, "tag");
             Bitmap icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.main_head);
 

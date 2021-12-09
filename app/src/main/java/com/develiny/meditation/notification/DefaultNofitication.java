@@ -16,6 +16,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
+import com.develiny.meditation.controller.AudioController;
 
 public class DefaultNofitication {
 
@@ -62,7 +63,12 @@ public class DefaultNofitication {
             notification.setOnlyAlertOnce(true);//show notification for only first time
             notification.setShowWhen(false);
 
-            notification.addAction(R.drawable.bottom_play, "Play", pendingIntentPlay);
+            if (AudioController.checkIsPlaying(MainActivity.playingList.get(0).getPnp())) {
+                notification.addAction(R.drawable.bottom_pause, "Play", pendingIntentPlay);
+            } else {
+                notification.addAction(R.drawable.bottom_play, "Play", pendingIntentPlay);
+            }
+//            notification.addAction(R.drawable.bottom_play, "Play", pendingIntentPlay);
             notification.addAction(R.drawable.notification_close, "close", pendingIntentClose);
 
             notification.setContentIntent(pIntent);
