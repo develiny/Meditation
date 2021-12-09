@@ -8,9 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="palette_1"></color>
-    <color name="palette_2"></color>
-    <color name="palette_3"></color>
-    <color name="palette_4"></color>
-    <color name="palette_5"></color>
+    <color name="palette_1">#171a46</color>
+    <color name="palette_2">#2c2653</color>
+    <color name="palette_3">#2b307b</color>
+    <color name="palette_4">#e5c8ec</color>
+    <color name="palette_5">#e6e3f7</color>
 </resources>

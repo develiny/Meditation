@@ -1,6 +1,5 @@
 package com.develiny.meditation;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -16,18 +15,19 @@ import android.graphics.Point;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.develiny.meditation.controller.AudioController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.dialog.AddTitleDialog;
+import com.develiny.meditation.service.TimerService;
+import com.develiny.meditation.timer.TimerDialog;
 import com.develiny.meditation.notification.DefaultNofitication;
 import com.develiny.meditation.notification.NotificationService;
 import com.develiny.meditation.page.ChakraPage;
@@ -39,17 +39,9 @@ import com.develiny.meditation.page.adapter.BottomSheetAdapter;
 import com.develiny.meditation.page.adapter.TabsAdapter;
 import com.develiny.meditation.page.item.PageItem;
 import com.develiny.meditation.page.item.TabsItem;
-import com.develiny.meditation.service.DownloadService;
 import com.develiny.meditation.service.GetStateKillApp;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,10 +56,15 @@ public class MainActivity extends AppCompatActivity {
 
     Button testbtn0, testbtn, testbtn1;
 
+    //top button
+    Button setting, timer;
+    public static TextView maincount;
+    public static Button cancel;
+
     //bottom sheet
     RelativeLayout bottomSheetTitleBar;
     BottomSheetBehavior bottomSheetBehavior;
-    LinearLayout linearLayout;
+    RelativeLayout linearLayout, pandsoutline;
     public static Button pands;
     Button upAndDown, deletePlayingList, addfav;
     public static RecyclerView bottomRecyclerView;
@@ -86,11 +83,34 @@ public class MainActivity extends AppCompatActivity {
         setAudioManager();
 
         setDatabaseHandler();
+        setTopButton();
         setViewPager();
         setTabs();
         setButtonSheet();
 
 //        testbtn();
+    }
+
+    private void setTopButton() {
+        setting = findViewById(R.id.setting);
+        timer = findViewById(R.id.timer);
+        maincount = findViewById(R.id.maincount);
+        cancel = findViewById(R.id.timer_cancel);
+
+        if (TimerService.isCount) {
+            cancel.setVisibility(View.VISIBLE);
+            maincount.setVisibility(View.VISIBLE);
+        } else {
+            cancel.setVisibility(View.GONE);
+            maincount.setVisibility(View.GONE);
+        }
+
+        timer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, TimerDialog.class));
+            }
+        });
     }
 
     private void startGetStateKillApp() {
@@ -134,6 +154,8 @@ public class MainActivity extends AppCompatActivity {
         this.deletePlayingList = findViewById(R.id.bottom_delete_playing_list);
         this.bottomRecyclerView = findViewById(R.id.bottom_recyclerview);
         linearLayout = findViewById(R.id.bottom_sheet_id);
+        pandsoutline = findViewById(R.id.bottom_sheet_pands_outline);
+        pandsoutline.bringToFront();
         bottomSheetBehavior = BottomSheetBehavior.from(linearLayout);
 
         Display display = getWindowManager().getDefaultDisplay();
@@ -222,6 +244,12 @@ public class MainActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(MainActivity.this);
         bottomRecyclerView.setLayoutManager(layoutManager);
         bottomRecyclerView.setAdapter(bottomSheetAdapter);
+
+        if (playingList.size() == 0) {
+            pands.setBackgroundResource(R.drawable.bottom_play_default);
+        } else {
+            pands.setBackgroundResource(R.drawable.bottom_play);
+        }
 
         deletePlayingList.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -33,6 +33,8 @@
         <service android:name=".service.GetStateKillApp" />
         <service android:name=".service.DownloadService"/>
         <service android:name=".service.DownloadsService"/>
+        <activity android:name=".timer.TimerDialog" android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert"/>
+        <service android:name=".service.TimerService"/>
     </application>
 
 </manifest>

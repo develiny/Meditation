@@ -15,6 +15,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.develiny.meditation.MainActivity;
 import com.develiny.meditation.R;
@@ -116,4 +117,8 @@ public class NotificationService extends Service {
         }
     }
 
+    public static void closeNotification(Context context) {
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+        notificationManagerCompat.cancelAll();
+    }
 }
