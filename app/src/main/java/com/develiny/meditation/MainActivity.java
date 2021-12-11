@@ -27,6 +27,7 @@ import com.develiny.meditation.controller.AudioController;
 import com.develiny.meditation.databasehandler.DatabaseHandler;
 import com.develiny.meditation.dialog.AddTitleDialog;
 import com.develiny.meditation.service.TimerService;
+import com.develiny.meditation.setting.SettingDialog;
 import com.develiny.meditation.timer.TimerDialog;
 import com.develiny.meditation.notification.DefaultNofitication;
 import com.develiny.meditation.notification.NotificationService;
@@ -109,6 +110,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, TimerDialog.class));
+            }
+        });
+
+        setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, SettingDialog.class));
             }
         });
     }

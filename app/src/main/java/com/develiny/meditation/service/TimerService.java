@@ -160,7 +160,7 @@ public class TimerService extends Service {
     public void setProgress(int startTime, int endTime) {
         Timer2.progressBarView.setMax(endTime);
         Timer2.progressBarView.setSecondaryProgress(endTime);
-        Timer2.progressBarView.setProgress(startTime);
+        Timer2.progressBarView.setProgress(startTime);  
     }
 
     public void startForegroundService(Context context, String time) {

@@ -110,7 +110,7 @@ public class DownloadService extends Service {
             startForeground(2, notification.build());
             Log.d("DownloadService>>>", "ok");
 
-            setOnClickDownload(context, progressBar, button, download, pnp, page);
+//            setOnClickDownload(context, progressBar, button, download, pnp, page);
         }
     }
 
